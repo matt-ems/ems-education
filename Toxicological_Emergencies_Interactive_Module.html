@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toxicological Emergencies — BLS Interactive Learning Module</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0f14;
+  --bg-elevated: #151921;
+  --bg-card: #1a1f2b;
+  --bg-hover: #222837;
+  --border: #2a3042;
+  --border-active: #4a6fa5;
+  --text-primary: #e8ecf2;
+  --text-secondary: #8b95a8;
+  --text-muted: #5a6477;
+  --accent-blue: #4a9eff;
+  --accent-blue-dim: #2a5a9e;
+  --accent-red: #ff6b6b;
+  --accent-red-dim: #7a2a2a;
+  --accent-amber: #f5a623;
+  --accent-amber-dim: #7a5a1a;
+  --accent-green: #4ae0a0;
+  --accent-green-dim: #1a5a3a;
+  --accent-purple: #b07aff;
+  --accent-purple-dim: #4a2a7a;
+  --accent-cyan: #5de5e5;
+  --radius: 10px;
+  --radius-lg: 16px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.3);
+  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'DM Sans', -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  line-height: 1.65;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── NAV ─── */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(12,15,20,0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+}
+.nav-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nav-inner::-webkit-scrollbar { display: none; }
+.nav-btn {
+  flex-shrink: 0;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+.nav-btn:hover { color: var(--text-secondary); background: var(--bg-hover); }
+.nav-btn.active {
+  color: var(--accent-blue);
+  background: rgba(74,159,255,0.08);
+  border-color: rgba(74,159,255,0.2);
+}
+.nav-progress {
+  margin-left: auto;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+.progress-ring {
+  width: 28px; height: 28px;
+}
+.progress-ring circle {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+.progress-ring .bg { stroke: var(--border); }
+.progress-ring .fg { stroke: var(--accent-green); transition: stroke-dashoffset 0.5s ease; transform: rotate(-90deg); transform-origin: center; }
+
+/* ─── MAIN ─── */
+.container { max-width: 780px; margin: 0 auto; padding: 32px 20px 100px; }
+
+/* ─── SECTIONS ─── */
+.section { display: none; animation: fadeIn 0.35s ease; }
+.section.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ─── TYPOGRAPHY ─── */
+h1 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1.8rem, 5vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+h2 {
+  font-family: 'Fraunces', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 40px 0 16px;
+  color: var(--text-primary);
+}
+h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 28px 0 10px;
+  color: var(--text-primary);
+}
+p { margin-bottom: 14px; color: var(--text-secondary); font-size: 0.95rem; }
+strong { color: var(--text-primary); font-weight: 600; }
+
+.subtitle {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  margin-bottom: 28px;
+  font-style: italic;
+  font-family: 'Fraunces', serif;
+}
+
+/* ─── SCENE HOOK ─── */
+.scene-hook {
+  background: linear-gradient(135deg, rgba(74,159,255,0.06), rgba(176,122,255,0.06));
+  border: 1px solid rgba(74,159,255,0.15);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+}
+.scene-hook::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px; height: 100%;
+  background: linear-gradient(180deg, var(--accent-blue), var(--accent-purple));
+  border-radius: 4px 0 0 4px;
+}
+.scene-hook .label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-blue);
+  margin-bottom: 10px;
+}
+.scene-hook p { color: var(--text-primary); margin-bottom: 0; font-size: 0.95rem; }
+
+/* ─── CLINICAL PEARL ─── */
+.pearl {
+  background: rgba(245,166,35,0.06);
+  border: 1px solid rgba(245,166,35,0.15);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin: 18px 0;
+  position: relative;
+}
+.pearl::before {
+  content: '💡';
+  position: absolute;
+  top: 14px; left: 16px;
+  font-size: 1rem;
+}
+.pearl .pearl-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-amber);
+  margin-bottom: 6px;
+  padding-left: 26px;
+}
+.pearl p { margin-bottom: 0; padding-left: 26px; font-size: 0.9rem; }
+
+/* ─── MYTH BUSTER ─── */
+.myth {
+  background: rgba(255,107,107,0.06);
+  border: 1px solid rgba(255,107,107,0.15);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin: 18px 0;
+}
+.myth .myth-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-red);
+  margin-bottom: 6px;
+}
+.myth .wrong { color: var(--accent-red); text-decoration: line-through; opacity: 0.7; font-size: 0.9rem; }
+.myth .right { color: var(--accent-green); font-size: 0.9rem; }
+
+/* ─── ACCORDION / PROGRESSIVE DISCLOSURE ─── */
+.accordion {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin: 12px 0;
+  overflow: hidden;
+  transition: var(--transition);
+}
+.accordion:hover { border-color: var(--border-active); }
+.accordion-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background: var(--bg-card);
+  cursor: pointer;
+  user-select: none;
+  transition: var(--transition);
+  border: none;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+.accordion-header:hover { background: var(--bg-hover); }
+.accordion-icon {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.85rem;
+}
+.accordion-arrow {
+  margin-left: auto;
+  color: var(--text-muted);
+  transition: transform 0.3s ease;
+  font-size: 0.8rem;
+}
+.accordion.open .accordion-arrow { transform: rotate(180deg); }
+.accordion-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+.accordion.open .accordion-body { max-height: 2000px; }
+.accordion-content { padding: 16px 18px; border-top: 1px solid var(--border); }
+
+/* ─── TABLES ─── */
+.table-wrap {
+  overflow-x: auto;
+  margin: 18px 0;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+th {
+  background: var(--bg-card);
+  font-weight: 600;
+  text-align: left;
+  padding: 10px 14px;
+  color: var(--text-primary);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--border);
+}
+td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(74,159,255,0.03); }
+
+/* ─── QUIZ ─── */
+.quiz-block {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin: 24px 0;
+}
+.quiz-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-cyan);
+  margin-bottom: 10px;
+}
+.quiz-question {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  font-weight: 500;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+.quiz-options { display: flex; flex-direction: column; gap: 8px; }
+.quiz-opt {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-family: inherit;
+  text-align: left;
+  width: 100%;
+}
+.quiz-opt:hover:not(.disabled) { border-color: var(--border-active); background: var(--bg-hover); }
+.quiz-opt .letter {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  min-width: 22px;
+}
+.quiz-opt.correct {
+  border-color: var(--accent-green);
+  background: rgba(74,224,160,0.08);
+}
+.quiz-opt.correct .letter { color: var(--accent-green); }
+.quiz-opt.incorrect {
+  border-color: var(--accent-red);
+  background: rgba(255,107,107,0.06);
+}
+.quiz-opt.incorrect .letter { color: var(--accent-red); }
+.quiz-opt.disabled { cursor: default; opacity: 0.6; }
+.quiz-opt.correct.disabled { opacity: 1; }
+.quiz-feedback {
+  margin-top: 14px;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  display: none;
+}
+.quiz-feedback.show { display: block; }
+.quiz-feedback.correct-fb { background: rgba(74,224,160,0.08); border: 1px solid rgba(74,224,160,0.2); color: var(--accent-green); }
+.quiz-feedback.incorrect-fb { background: rgba(255,107,107,0.06); border: 1px solid rgba(255,107,107,0.15); color: var(--accent-red); }
+
+/* ─── TAG BADGES ─── */
+.tag {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+.tag-pcp { background: rgba(74,224,160,0.12); color: var(--accent-green); }
+.tag-acp { background: rgba(176,122,255,0.12); color: var(--accent-purple); }
+.tag-bls { background: rgba(74,159,255,0.12); color: var(--accent-blue); }
+
+/* ─── TOXIDROME CARDS ─── */
+.toxidrome-grid { display: flex; flex-direction: column; gap: 12px; margin: 18px 0; }
+.tox-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.tox-card:hover { border-color: var(--border-active); }
+.tox-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.tox-card-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+.tox-card.open .tox-card-body { max-height: 1200px; }
+.tox-card-content { padding: 0 18px 18px; }
+.tox-card-content p { font-size: 0.88rem; }
+.tox-card .tox-row { display: flex; gap: 8px; margin-bottom: 6px; }
+.tox-card .tox-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  min-width: 80px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding-top: 2px;
+}
+.tox-card .tox-val { font-size: 0.88rem; color: var(--text-secondary); }
+
+/* ─── CASCADE DIAGRAM ─── */
+.cascade {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  margin: 24px 0;
+}
+.cascade-step {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 20px;
+  text-align: center;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  width: 100%;
+  max-width: 400px;
+}
+.cascade-arrow {
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  line-height: 1;
+  padding: 4px 0;
+}
+
+/* ─── NEXT SHIFT ─── */
+.next-shift {
+  background: linear-gradient(135deg, rgba(74,224,160,0.06), rgba(93,229,229,0.06));
+  border: 1px solid rgba(74,224,160,0.15);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin: 28px 0;
+}
+.next-shift .ns-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-green);
+  margin-bottom: 10px;
+}
+.next-shift p { color: var(--text-primary); margin-bottom: 0; }
+.next-shift ul { margin: 8px 0 0 18px; color: var(--text-secondary); font-size: 0.9rem; }
+.next-shift li { margin-bottom: 4px; }
+
+/* ─── CHEAT SHEET ─── */
+.cheatsheet {
+  background: var(--bg-elevated);
+  border: 2px solid var(--accent-blue-dim);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin: 24px 0;
+}
+.cheatsheet h3 {
+  color: var(--accent-blue);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 0 0 16px;
+}
+.cheatsheet ol { margin-left: 20px; color: var(--text-secondary); font-size: 0.9rem; }
+.cheatsheet li { margin-bottom: 8px; }
+
+/* ─── FOOTER NAV ─── */
+.section-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.section-nav button {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.section-nav button:hover { background: var(--bg-hover); border-color: var(--border-active); }
+.section-nav button:disabled { opacity: 0.3; cursor: default; }
+
+/* ─── SCORE BAR ─── */
+.score-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 16px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin: 24px 0;
+  font-size: 0.88rem;
+}
+.score-item { text-align: center; }
+.score-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+.score-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+
+/* ─── SPACED REVIEW ─── */
+.review-schedule {
+  display: flex;
+  gap: 12px;
+  margin: 16px 0;
+  flex-wrap: wrap;
+}
+.review-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 18px;
+  flex: 1;
+  min-width: 90px;
+}
+.review-badge .when {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent-blue);
+}
+.review-badge .what {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 4px;
+}
+
+@media (max-width: 600px) {
+  .container { padding: 20px 14px 80px; }
+  h1 { font-size: 1.6rem; }
+  h2 { font-size: 1.25rem; }
+  .scene-hook, .quiz-block, .cheatsheet, .next-shift { padding: 18px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="goTo(0)">Hook</button>
+    <button class="nav-btn" onclick="goTo(1)">Detective</button>
+    <button class="nav-btn" onclick="goTo(2)">Systems</button>
+    <button class="nav-btn" onclick="goTo(3)">Toxidromes</button>
+    <button class="nav-btn" onclick="goTo(4)">CO</button>
+    <button class="nav-btn" onclick="goTo(5)">Response</button>
+    <button class="nav-btn" onclick="goTo(6)">Review</button>
+    <div class="nav-progress">
+      <svg class="progress-ring" viewBox="0 0 36 36">
+        <circle class="bg" cx="18" cy="18" r="15"/>
+        <circle class="fg" id="progressCircle" cx="18" cy="18" r="15" stroke-dasharray="94.25" stroke-dashoffset="94.25"/>
+      </svg>
+      <span id="progressText">0/7</span>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- ═══════════════════ SECTION 0: HOOK ═══════════════════ -->
+<div class="section active" id="sec-0">
+  <h1>Toxicological Emergencies</h1>
+  <p class="subtitle">You don't need to be a toxicologist. You need to be a systematic assessor who protects the airway, anticipates deterioration, and gathers the intel that saves lives downstream.</p>
+
+  <div class="scene-hook">
+    <div class="label">📟 Dispatch</div>
+    <p><strong>0247h — "Unknown medical, 23-year-old male, found unresponsive in apartment."</strong></p>
+    <p style="margin-top:10px;">You walk in. The patient is on the bathroom floor, snoring respirations, GCS 6. His buddy says he was "partying" and went quiet about 30 minutes ago. There's a small baggie of white powder on the counter. No medication bottles visible. SpO₂ reads 91% and falling.</p>
+    <p style="margin-top:10px; color: var(--accent-amber);"><em>What are you thinking? What do you do first? What are you preparing for?</em></p>
+  </div>
+
+  <p>Keep this scene in the back of your mind as you work through this module. By the end, you'll have a systematic framework for this call — and every tox call after it.</p>
+
+  <h2>Why This Matters on the Truck</h2>
+  <p>Tox calls are unpredictable. The substance may be unknown, the patient can't tell you what they took, and the clinical picture changes fast. But here's the key insight:</p>
+  <p><strong>Toxins don't invent new problems — they attack the same body systems you already know how to assess.</strong></p>
+  <p>Your BLS assessment framework already gives you every tool you need. This module will show you <em>why</em> each step matters and help you connect the dots between the toxin and what's happening to your patient.</p>
+
+  <div class="quiz-block" id="quiz-0">
+    <div class="quiz-label">🧠 Check Yourself</div>
+    <div class="quiz-question">Back to our dispatch call: the patient is unresponsive (GCS 6) with snoring respirations and SpO₂ of 91%. What is your <strong>immediate</strong> first priority?</div>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="checkQuiz('quiz-0', this, false)"><span class="letter">A</span> Identify the substance in the baggie</button>
+      <button class="quiz-opt" onclick="checkQuiz('quiz-0', this, false)"><span class="letter">B</span> Check for track marks to confirm injection use</button>
+      <button class="quiz-opt" onclick="checkQuiz('quiz-0', this, true)"><span class="letter">C</span> Open the airway and support ventilation</button>
+      <button class="quiz-opt" onclick="checkQuiz('quiz-0', this, false)"><span class="letter">D</span> Obtain a full set of vitals before intervening</button>
+    </div>
+    <div class="quiz-feedback correct-fb">Airway first, always. A GCS of 6 with snoring respirations means this patient has lost protective reflexes. Identifying the substance matters — but a dead patient can't benefit from detective work. Open the airway, suction if needed, and ventilate. <span class="tag tag-bls">BLS PCS: Altered LOC Standard, p. 72</span></div>
+    <div class="quiz-feedback incorrect-fb">Not quite. With a GCS of 6 and snoring respirations, this patient's airway is at immediate risk. Everything else can wait until the airway is managed. Remember the cascade: CNS depression → lost reflexes → airway compromise → respiratory arrest → cardiac arrest. Interrupt it early.</div>
+  </div>
+
+  <div class="section-nav">
+    <button disabled>← Previous</button>
+    <button onclick="goTo(1)">Next: The Detective Work →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ SECTION 1: DETECTIVE ═══════════════════ -->
+<div class="section" id="sec-1">
+  <h1>Step 1: The Detective Work</h1>
+  <p class="subtitle">Before you can predict what's going to go wrong, you need to understand what got in and how it got in.</p>
+  <p><span class="tag tag-bls">BLS PCS p. 101, Items 1–2</span></p>
+
+  <p>The BLS Toxicological Emergency Standard opens with intelligence gathering for a reason. You're trying to answer four questions: <strong>What agent? How much? When? Which route?</strong></p>
+
+  <h2>Route of Exposure — Speed Matters</h2>
+  <p>The route tells you how fast the toxin will hit and which systems get targeted first.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Route</th><th>Speed</th><th>Why It Matters</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Injection / IV</strong></td><td>Seconds–minutes</td><td>Bypasses all barriers. Hits the bloodstream immediately. Fastest onset, hardest to reverse.</td></tr>
+        <tr><td><strong>Inhalation</strong></td><td>Seconds–minutes</td><td>Massive lung surface area → rapid absorption. Think CO, fentanyl vapour, volatile chemicals.</td></tr>
+        <tr><td><strong>Ingestion</strong></td><td>Minutes–hours</td><td>Must pass through the GI tract. Onset depends on stomach contents and formulation. <em>Extended-release is a trap.</em></td></tr>
+        <tr><td><strong>Absorption</strong></td><td>Minutes–hours</td><td>Slower but insidious. Patient may not realize they've been exposed. Think organophosphates, fentanyl powder, chemical spills.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pearl">
+    <div class="pearl-label">Clinical Pearl</div>
+    <p><strong>The prescription bottle check</strong> — BLS item 2 (p. 101) asks you to find the prescription date and count what's left. If a patient was prescribed 60 tablets of 1 mg lorazepam two days ago and only 10 remain, you've just estimated the dose without the patient saying a word: 50 tablets × 1 mg = <strong>50 mg ingested</strong>. That's what you communicate to the receiving facility. Be the investigator.</p>
+  </div>
+
+  <div class="myth">
+    <div class="myth-label">⚠️ Common Trap</div>
+    <p class="wrong">"The patient says they only took a couple of pills, so it's probably not serious."</p>
+    <p class="right" style="margin-top:6px;">Patients under-report, especially intentional overdoses. Always verify with the pill count. And with extended-release formulations (look for <strong>XR, ER, or CR</strong> on the label), a patient who looks stable now can crash hours later as the drug continues to absorb.</p>
+  </div>
+
+  <div class="quiz-block" id="quiz-1">
+    <div class="quiz-label">🧠 Check Yourself</div>
+    <div class="quiz-question">You arrive at a call for a 45-year-old female. Her husband says she swallowed "a bunch of pills" about 90 minutes ago. She's currently alert but drowsy. You find a nearly empty bottle of extended-release verapamil (a calcium channel blocker) prescribed 5 days ago, 30 tablets, 4 remaining. The label reads "verapamil <strong>ER</strong>" — look for <strong>XR, ER, or CR</strong> on the bottle, which all mean extended-release. Why should you be <strong>more</strong> concerned, not less, that she's currently stable?</div>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="checkQuiz('quiz-1', this, false)"><span class="letter">A</span> Calcium channel blockers always cause a delayed reaction</button>
+      <button class="quiz-opt" onclick="checkQuiz('quiz-1', this, true)"><span class="letter">B</span> Extended-release means the drug is still being absorbed — the full effect hasn't hit yet</button>
+      <button class="quiz-opt" onclick="checkQuiz('quiz-1', this, false)"><span class="letter">C</span> The bottle was prescribed 5 days ago so the pills might have expired</button>
+      <button class="quiz-opt" onclick="checkQuiz('quiz-1', this, false)"><span class="letter">D</span> She's alert, so the overdose was probably not significant</button>
+    </div>
+    <div class="quiz-feedback correct-fb">Extended-release formulations are a trap. The drug is designed to release slowly over hours. This patient may have ~26 tablets of verapamil on board and the peak effect hasn't arrived yet. Anticipate cardiovascular collapse — profound bradycardia and hypotension. This is a time-critical transport. Communicate the estimated dose and formulation type to the receiving facility early.</div>
+    <div class="quiz-feedback incorrect-fb">The key issue is the extended-release formulation. These drugs release over hours, meaning the full dose hasn't been absorbed yet. A "stable" patient with an ER overdose can deteriorate rapidly. The estimated 26-tablet ingestion of a calcium channel blocker is a life-threatening dose regardless of current presentation.</div>
+  </div>
+
+  <div class="section-nav">
+    <button onclick="goTo(0)">← Previous</button>
+    <button onclick="goTo(2)">Next: Systems Under Attack →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ SECTION 2: SYSTEMS ═══════════════════ -->
+<div class="section" id="sec-2">
+  <h1>Step 2: Body Systems Under Attack</h1>
+  <p class="subtitle">Toxins attack four systems. Know them, and you can anticipate what's coming before it arrives.</p>
+  <p><span class="tag tag-bls">BLS PCS p. 101, Item 4</span></p>
+
+  <p>The BLS Tox Standard lists specific problems to prepare for. This isn't a random list — it's organized around the four body systems that toxins most commonly attack. Click each system below to learn the mechanism.</p>
+
+  <div class="accordion" onclick="toggleAccordion(this)">
+    <button class="accordion-header">
+      <span class="accordion-icon" style="background:rgba(176,122,255,0.15);color:var(--accent-purple);">🧠</span>
+      Central Nervous System (CNS)
+      <span class="accordion-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <div class="accordion-content">
+        <p><strong>What you'll find:</strong> Altered or changing LOC, agitation, confusion, sudden violent behaviour, seizures. GCS may be fluctuating.</p>
+        <p><strong>Why it happens:</strong> The brain is exquisitely sensitive to chemical disruption. <strong>Depressants</strong> (opioids, benzos, alcohol) enhance inhibitory neurotransmitters like GABA — the CNS slows down through drowsiness, unconsciousness, and eventually respiratory arrest. <strong>Stimulants</strong> (cocaine, amphetamines) flood the brain with catecholamines, causing agitation, psychosis, hyperthermia, and seizures.</p>
+        <p>The BLS specifically asks you to watch for "sudden violent behaviour" — that's recognizing sympathomimetic toxicity.</p>
+        <div class="pearl">
+          <div class="pearl-label">Clinical Pearl</div>
+          <p>A <em>decreasing</em> LOC means the depressant is winning. An <em>escalating</em> agitation means the stimulant is winning. Both paths lead to the same endpoint: <strong>airway compromise</strong>. Protect the airway early.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion" onclick="toggleAccordion(this)">
+    <button class="accordion-header">
+      <span class="accordion-icon" style="background:rgba(74,159,255,0.15);color:var(--accent-blue);">🫁</span>
+      Respiratory System
+      <span class="accordion-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <div class="accordion-content">
+        <p><strong>What you'll find:</strong> Respiratory distress, apnoea, hypoventilation, airway obstruction (loss of gag reflex, emesis, bronchospasm).</p>
+        <p><strong>Three mechanisms of respiratory failure in poisoning:</strong></p>
+        <p>1. <strong>Central depression</strong> — opioids and sedatives suppress the brainstem respiratory centre. The drive to breathe simply shuts off.</p>
+        <p>2. <strong>Airway obstruction</strong> — the patient loses gag reflex, vomits, and aspirates. Or the tongue falls back and blocks the airway.</p>
+        <p>3. <strong>Bronchospasm / chemical injury</strong> — inhaled toxins cause direct irritation, swelling, or spasm of the airways.</p>
+        <p>The BLS listing three separate respiratory problems (obstruction, arrest, distress) reflects these three distinct mechanisms.</p>
+        <div class="pearl">
+          <div class="pearl-label">Clinical Pearl</div>
+          <p>Opioid overdose is the classic respiratory killer. The patient doesn't stop breathing suddenly — they breathe <strong>slower and shallower over time</strong>. Count the rate. If it's dropping, the clock is ticking.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion" onclick="toggleAccordion(this)">
+    <button class="accordion-header">
+      <span class="accordion-icon" style="background:rgba(255,107,107,0.15);color:var(--accent-red);">❤️</span>
+      Cardiovascular System
+      <span class="accordion-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <div class="accordion-content">
+        <p><strong>What you'll find:</strong> Dysrhythmias, tachycardia, bradycardia, hypotension, hypertension, cardiac arrest.</p>
+        <p><strong>Why it happens:</strong> Stimulants cause catecholamine surges → dangerously high HR and BP → dysrhythmias and stroke. Depressants and cardiac toxins (beta-blockers, calcium channel blockers, TCAs) slow conduction, widen the QRS, and cause fatal dysrhythmias or profound hypotension. Some toxins cause vasodilation → distributive shock.</p>
+        <div class="pearl">
+          <div class="pearl-label">Clinical Pearl</div>
+          <p><strong>Cardiac arrest in a young, previously healthy patient with no trauma?</strong> Think toxicological cause. These arrests are potentially reversible if you identify the agent and communicate it early. The Cardiac Arrest Standard (p. 74) directs you to "consider reversible causes" — poisoning is a key one.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion" onclick="toggleAccordion(this)">
+    <button class="accordion-header">
+      <span class="accordion-icon" style="background:rgba(245,166,35,0.15);color:var(--accent-amber);">🌡️</span>
+      GI / Thermoregulation
+      <span class="accordion-arrow">▼</span>
+    </button>
+    <div class="accordion-body">
+      <div class="accordion-content">
+        <p><strong>What you'll find:</strong> Emesis (major airway threat), hyperthermia, hypothermia, abdominal distension or tenderness.</p>
+        <p><strong>Emesis</strong> is the body trying to eject an ingested toxin — protective, but extremely dangerous in a patient with decreased LOC. Emesis + no gag reflex = aspiration. The BLS listing emesis as a potential problem is really saying: <strong>this is an airway threat in disguise.</strong></p>
+        <p><strong>Hyperthermia</strong> from sympathomimetics (cocaine, MDMA, amphetamines) isn't a fever — it's a metabolic fire. Excessive catecholamines drive muscle activity and metabolic rate beyond the body's ability to cool itself. Serotonin syndrome and anticholinergic toxicity also disrupt thermoregulation.</p>
+        <div class="pearl">
+          <div class="pearl-label">Clinical Pearl</div>
+          <p><strong>Have suction ready before the patient vomits, not after.</strong> In a decreased-LOC tox patient, position and prepare. Emesis is when, not if.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>The Deterioration Cascade</h2>
+  <p>These systems don't fail in isolation. They cascade. The BLS lists these problems because it wants you thinking ahead:</p>
+
+  <div class="cascade">
+    <div class="cascade-step" style="border-color: var(--accent-purple-dim);">CNS Depression</div>
+    <div class="cascade-arrow">↓</div>
+    <div class="cascade-step" style="border-color: var(--accent-purple-dim);">Lost Protective Reflexes</div>
+    <div class="cascade-arrow">↓</div>
+    <div class="cascade-step" style="border-color: var(--accent-blue-dim);">Airway Obstruction</div>
+    <div class="cascade-arrow">↓</div>
+    <div class="cascade-step" style="border-color: var(--accent-blue-dim);">Respiratory Arrest</div>
+    <div class="cascade-arrow">↓</div>
+    <div class="cascade-step" style="border-color: var(--accent-red-dim);">Cardiac Arrest</div>
+  </div>
+  <p style="text-align:center; font-size:0.85rem; color:var(--accent-amber);">Your job is to interrupt this cascade as early as possible.</p>
+
+  <div class="quiz-block" id="quiz-2">
+    <div class="quiz-label">🧠 Check Yourself</div>
+    <div class="quiz-question">Your patient, a 30-year-old male, is increasingly agitated after using an unknown stimulant. His HR is 142, BP 188/110, pupils are dilated, skin is hot and diaphoretic, and temperature is 39.8°C. Which body system failure should you be <strong>most</strong> anticipating next?</div>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="checkQuiz('quiz-2', this, false)"><span class="letter">A</span> GI — he's likely to vomit soon</button>
+      <button class="quiz-opt" onclick="checkQuiz('quiz-2', this, true)"><span class="letter">B</span> CNS — seizures from stimulant toxicity</button>
+      <button class="quiz-opt" onclick="checkQuiz('quiz-2', this, false)"><span class="letter">C</span> Respiratory — central depression will stop his breathing</button>
+      <button class="quiz-opt" onclick="checkQuiz('quiz-2', this, false)"><span class="letter">D</span> He's stable and just needs to calm down</button>
+    </div>
+    <div class="quiz-feedback correct-fb">This is a classic sympathomimetic toxidrome. The catecholamine surge is driving HR, BP, and temperature dangerously high. Seizures are the next domino — stimulants lower the seizure threshold, and hyperthermia accelerates the process. After seizures: cardiac dysrhythmias, stroke, and cardiac arrest. Prepare for seizures and prioritize rapid transport. <span class="tag tag-bls">BLS PCS: Seizure Standard, p. 96</span></div>
+    <div class="quiz-feedback incorrect-fb">Look at the whole picture: agitation, tachycardia, hypertension, dilated pupils, hyperthermia, diaphoresis. This is a sympathomimetic toxidrome. Central depression (C) is the opposite — that's depressant toxicity. This patient is "up," not "down." The next risk is seizures from CNS overstimulation, followed by cardiac dysrhythmias.</div>
+  </div>
+
+  <div class="section-nav">
+    <button onclick="goTo(1)">← Previous</button>
+    <button onclick="goTo(3)">Next: Toxidromes →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ SECTION 3: TOXIDROMES ═══════════════════ -->
+<div class="section" id="sec-3">
+  <h1>Step 3: Pattern Recognition</h1>
+  <p class="subtitle">You don't need to identify the exact drug. You need to recognize the pattern.</p>
+
+  <p>A <strong>toxidrome</strong> is a recognizable cluster of signs and symptoms caused by a class of toxin. Each pattern tells you which body system is being targeted and <em>what to expect next</em>. Your BLS assessment findings — pupils, heart rate, respiratory rate, skin, LOC — are building a toxidrome profile every time you assess a patient.</p>
+
+  <p>Click each toxidrome to explore it:</p>
+
+  <div class="toxidrome-grid">
+    <div class="tox-card" onclick="toggleAccordion(this)" style="border-left: 3px solid var(--accent-blue);">
+      <div class="tox-card-header">
+        <span>💤 Opioid / Sedative</span>
+        <span class="accordion-arrow" style="color:var(--text-muted); font-size:0.8rem;">▼</span>
+      </div>
+      <div class="tox-card-body">
+        <div class="tox-card-content">
+          <div class="tox-row"><span class="tox-label">Signs</span><span class="tox-val">Decreased LOC, <strong>pinpoint pupils</strong>, slow/shallow respirations, hypotension, bradycardia</span></div>
+          <div class="tox-row"><span class="tox-label">Causes</span><span class="tox-val">Fentanyl, heroin, morphine, oxycodone, benzodiazepines, alcohol</span></div>
+          <div class="tox-row"><span class="tox-label">Expect</span><span class="tox-val" style="color:var(--accent-red);">Respiratory arrest → airway obstruction → aspiration → cardiac arrest</span></div>
+          <div class="tox-row"><span class="tox-label">Key</span><span class="tox-val">The patient is "down." Everything is slowing. Protect the airway and ventilate.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tox-card" onclick="toggleAccordion(this)" style="border-left: 3px solid var(--accent-red);">
+      <div class="tox-card-header">
+        <span>⚡ Sympathomimetic</span>
+        <span class="accordion-arrow" style="color:var(--text-muted); font-size:0.8rem;">▼</span>
+      </div>
+      <div class="tox-card-body">
+        <div class="tox-card-content">
+          <div class="tox-row"><span class="tox-label">Signs</span><span class="tox-val">Agitation, <strong>dilated pupils</strong>, tachycardia, hypertension, hyperthermia, seizures, diaphoresis</span></div>
+          <div class="tox-row"><span class="tox-label">Causes</span><span class="tox-val">Cocaine, meth, amphetamines, MDMA/ecstasy</span></div>
+          <div class="tox-row"><span class="tox-label">Expect</span><span class="tox-val" style="color:var(--accent-red);">Seizures → cardiac dysrhythmias → stroke → hyperthermia → cardiac arrest</span></div>
+          <div class="tox-row"><span class="tox-label">Key</span><span class="tox-val">The patient is "up." Everything is accelerating. Prepare for seizures. Rapid transport.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tox-card" onclick="toggleAccordion(this)" style="border-left: 3px solid var(--accent-green);">
+      <div class="tox-card-header">
+        <span>💧 Cholinergic (SLUDGE)</span>
+        <span class="accordion-arrow" style="color:var(--text-muted); font-size:0.8rem;">▼</span>
+      </div>
+      <div class="tox-card-body">
+        <div class="tox-card-content">
+          <div class="tox-row"><span class="tox-label">Signs</span><span class="tox-val"><strong>S</strong>alivation, <strong>L</strong>acrimation, <strong>U</strong>rination, <strong>D</strong>efecation, <strong>G</strong>I distress, <strong>E</strong>mesis, bradycardia, miosis (constricted pupils)</span></div>
+          <div class="tox-row"><span class="tox-label">Causes</span><span class="tox-val">Organophosphates, carbamates, nerve agents</span></div>
+          <div class="tox-row"><span class="tox-label">Expect</span><span class="tox-val" style="color:var(--accent-red);">Bronchospasm → respiratory failure → seizures → bradycardia</span></div>
+          <div class="tox-row"><span class="tox-label">Key</span><span class="tox-val">Everything is "wet." Secretions everywhere. <strong>Scene safety is critical</strong> — you can be secondarily exposed.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tox-card" onclick="toggleAccordion(this)" style="border-left: 3px solid var(--accent-amber);">
+      <div class="tox-card-header">
+        <span>🔥 Anticholinergic</span>
+        <span class="accordion-arrow" style="color:var(--text-muted); font-size:0.8rem;">▼</span>
+      </div>
+      <div class="tox-card-body">
+        <div class="tox-card-content">
+          <div class="tox-row"><span class="tox-label">Signs</span><span class="tox-val"><strong>Hot</strong> as a hare, <strong>blind</strong> as a bat (dilated pupils), <strong>dry</strong> as a bone, <strong>red</strong> as a beet, <strong>mad</strong> as a hatter (delirium)</span></div>
+          <div class="tox-row"><span class="tox-label">Causes</span><span class="tox-val">Antihistamines (diphenhydramine), tricyclic antidepressants, atropine, jimsonweed</span></div>
+          <div class="tox-row"><span class="tox-label">Expect</span><span class="tox-val" style="color:var(--accent-red);">Seizures → dysrhythmias → hyperthermia → agitation/delirium</span></div>
+          <div class="tox-row"><span class="tox-label">Key</span><span class="tox-val">Everything is "dry." The opposite of cholinergic. Hot, flushed, confused, dilated pupils — but no sweating.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="myth">
+    <div class="myth-label">⚠️ Challenge Your Assumptions</div>
+    <p class="wrong">"I need to know the exact drug to manage a tox patient."</p>
+    <p class="right" style="margin-top:6px;">You don't. Is the patient "up" or "down"? "Wet" or "dry"? That pattern tells you which systems are under attack and what's coming next. That's what drives your management.</p>
+  </div>
+
+  <div class="quiz-block" id="quiz-3">
+    <div class="quiz-label">🧠 Check Yourself</div>
+    <div class="quiz-question">You assess a patient with the following findings: hot, dry, flushed skin; dilated pupils; tachycardia; confused and picking at the air (visual hallucinations). An empty blister pack of diphenhydramine (Benadryl) is on the table. Which toxidrome does this match?</div>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="checkQuiz('quiz-3', this, false)"><span class="letter">A</span> Sympathomimetic</button>
+      <button class="quiz-opt" onclick="checkQuiz('quiz-3', this, true)"><span class="letter">B</span> Anticholinergic</button>
+      <button class="quiz-opt" onclick="checkQuiz('quiz-3', this, false)"><span class="letter">C</span> Cholinergic</button>
+      <button class="quiz-opt" onclick="checkQuiz('quiz-3', this, false)"><span class="letter">D</span> Opioid / Sedative</button>
+    </div>
+    <div class="quiz-feedback correct-fb"><strong>Hot, dry, dilated, confused</strong> — textbook anticholinergic. The key differentiator from sympathomimetic: the skin is <em>dry</em>. Sympathomimetic patients are diaphoretic (sweaty). Diphenhydramine in overdose is a potent anticholinergic. Anticipate seizures and dysrhythmias.</div>
+    <div class="quiz-feedback incorrect-fb">Look at the skin: <strong>dry</strong>. That's your differentiator. Sympathomimetic patients sweat (diaphoresis). This patient is hot but dry — "hot as a hare, dry as a bone, blind as a bat, red as a beet, mad as a hatter." Classic anticholinergic toxidrome. Diphenhydramine (an antihistamine) is a common cause.</div>
+  </div>
+
+  <div class="section-nav">
+    <button onclick="goTo(2)">← Previous</button>
+    <button onclick="goTo(4)">Next: Carbon Monoxide →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ SECTION 4: CO ═══════════════════ -->
+<div class="section" id="sec-4">
+  <h1>Special Focus: Carbon Monoxide</h1>
+  <p class="subtitle">The invisible killer that lies to your monitor.</p>
+  <p><span class="tag tag-bls">BLS PCS p. 102, Guideline</span></p>
+
+  <div class="scene-hook">
+    <div class="label">📟 Scenario</div>
+    <p><strong>You're called to a home in January for a "general illness." Three family members all have headaches and nausea. The furnace has been running all day. SpO₂ on all three patients reads 97–99%.</strong></p>
+    <p style="margin-top:8px; color: var(--accent-amber);"><em>Would you trust those numbers?</em></p>
+  </div>
+
+  <h2>Why CO is Dangerous</h2>
+  <p>Carbon monoxide binds to haemoglobin with <strong>200–250 times the affinity of oxygen</strong>. It forms carboxyhaemoglobin (COHb), which cannot carry oxygen. But it gets worse: CO also shifts the oxygen-haemoglobin dissociation curve to the left, meaning the remaining oxygenated haemoglobin <em>holds onto its O₂ more tightly</em> and won't release it to the tissues.</p>
+  <p>The result: <strong>the blood is full but the cells are starving.</strong></p>
+
+  <div class="myth">
+    <div class="myth-label">⚠️ The Big Lie</div>
+    <p class="wrong">"SpO₂ is 98%, so the patient isn't hypoxic."</p>
+    <p class="right" style="margin-top:6px;">Your pulse oximeter <strong>cannot tell the difference</strong> between oxyhaemoglobin and carboxyhaemoglobin. A patient can read 98% on the monitor and be profoundly hypoxic at the cellular level. <strong>Don't trust the number — trust the scene and the symptoms.</strong></p>
+  </div>
+
+  <h2>Scene Clues — Your Best Diagnostic Tool</h2>
+  <p>The BLS emphasizes scene assessment for a reason. Look for:</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Clue</th><th>Think CO When…</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Enclosed space</strong></td><td>Garage, basement, poorly ventilated room</td></tr>
+        <tr><td><strong>Fuel-burning device</strong></td><td>Furnace, generator, car engine, space heater, fireplace</td></tr>
+        <tr><td><strong>Multiple patients</strong></td><td>Same symptoms in the same location = environmental cause</td></tr>
+        <tr><td><strong>Seasonal pattern</strong></td><td>Heating season (winter) — furnace malfunctions</td></tr>
+        <tr><td><strong>Vague symptoms</strong></td><td>Headache, nausea, weakness, dizziness — mimics flu, food poisoning, migraine</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pearl">
+    <div class="pearl-label">Clinical Pearl</div>
+    <p>CO poisoning mimics everything and presents as nothing specific. The BLS Guideline lists: altered mental status, cardiac dysrhythmias, emesis, headache, light-headedness, nausea, seizures, syncope, weakness, and VSA. If <strong>multiple patients in an enclosed space</strong> share vague symptoms — think CO until proven otherwise.</p>
+  </div>
+
+  <div class="quiz-block" id="quiz-4">
+    <div class="quiz-label">🧠 Check Yourself</div>
+    <div class="quiz-question">Why does the BLS Tox Standard specifically mention "multiple patients" as a clue for carbon monoxide?</div>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="checkQuiz('quiz-4', this, false)"><span class="letter">A</span> CO is contagious between patients</button>
+      <button class="quiz-opt" onclick="checkQuiz('quiz-4', this, true)"><span class="letter">B</span> Multiple patients with similar symptoms in the same location points to an environmental toxin, not individual illness</button>
+      <button class="quiz-opt" onclick="checkQuiz('quiz-4', this, false)"><span class="letter">C</span> Only large-volume CO leaks affect multiple people</button>
+      <button class="quiz-opt" onclick="checkQuiz('quiz-4', this, false)"><span class="letter">D</span> CO detectors are only required in multi-person dwellings</button>
+    </div>
+    <div class="quiz-feedback correct-fb">When several people in the same space develop similar non-specific symptoms (headache, nausea, weakness), it's a powerful clue that the environment is the cause, not an individual disease process. This is epidemiological thinking applied to the scene. Remove patients from the environment and treat with high-flow O₂.</div>
+    <div class="quiz-feedback incorrect-fb">CO isn't contagious — it's an environmental toxin. When multiple people in the same enclosed space develop similar vague symptoms, it points to a shared environmental exposure. That pattern recognition is your diagnostic tool when the monitor can't help you.</div>
+  </div>
+
+  <div class="section-nav">
+    <button onclick="goTo(3)">← Previous</button>
+    <button onclick="goTo(5)">Next: Your BLS Response →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ SECTION 5: RESPONSE ═══════════════════ -->
+<div class="section" id="sec-5">
+  <h1>Your BLS Response Framework</h1>
+  <p class="subtitle">The Tox Standard gives you a clear, systematic framework. Here's each action and the pathophysiology behind it.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Action</th><th>BLS Reference</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Identify agent, quantity, time, route</strong></td>
+          <td>Items 1–2, p. 101</td>
+          <td>Determines which systems are under attack, speed of onset, and what to anticipate</td>
+        </tr>
+        <tr>
+          <td><strong>Refer to Altered LOC Standard if unconscious; protect airway</strong></td>
+          <td>Item 3, p. 101; ALOC p. 72</td>
+          <td>CNS depression = lost protective reflexes. OPA/NPA, suction, and positioning prevent aspiration</td>
+        </tr>
+        <tr>
+          <td><strong>Prepare for cardiac arrest; CPR per Cardiac Arrest Standard</strong></td>
+          <td>Item 4(a), p. 101; Cardiac Arrest p. 74</td>
+          <td>Toxin-induced arrests are <strong>potentially reversible</strong>. Identify the cause early and communicate it</td>
+        </tr>
+        <tr>
+          <td><strong>Manage airway obstruction; ventilate if respiratory failure</strong></td>
+          <td>Items 4(b–d), p. 101; Resp. Failure p. 95</td>
+          <td>Three mechanisms (central depression, obstruction, bronchospasm) — each needs different management</td>
+        </tr>
+        <tr>
+          <td><strong>Prepare for seizures; position and protect</strong></td>
+          <td>Item 4(h), p. 101; Seizure p. 96</td>
+          <td>Many toxins lower seizure threshold. Seizure Standard includes "drug ingestion/withdrawal" as a cause</td>
+        </tr>
+        <tr>
+          <td><strong>Consult poison control; refer to MSDS</strong></td>
+          <td>Guideline, p. 101</td>
+          <td>You're not expected to know every toxin. Use resources — but don't delay patient care or transport</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Putting It All Together — Five Steps</h2>
+  <div class="cheatsheet">
+    <h3>Your Tox Call Framework</h3>
+    <ol>
+      <li><strong>Be the detective</strong> — identify agent, quantity, time, and route (BLS items 1–2)</li>
+      <li><strong>Recognize the pattern</strong> — is the patient UP (stimulant) or DOWN (depressant)? Build a toxidrome profile from your assessment findings</li>
+      <li><strong>Anticipate the cascade</strong> — CNS depression → lost reflexes → airway obstruction → respiratory arrest → cardiac arrest. Where is your patient on this timeline?</li>
+      <li><strong>Protect the airway above all else</strong> — whether the toxin is depressing breathing, causing emesis, or triggering seizures, the airway is always at risk</li>
+      <li><strong>Communicate what you know</strong> — agent, route, estimated dose, time of exposure are critical for ALS and the receiving facility to provide definitive care</li>
+    </ol>
+  </div>
+
+  <div class="scene-hook">
+    <div class="label">📟 Return to Our Opening Call</div>
+    <p><strong>0247h — 23-year-old male, GCS 6, snoring respirations, SpO₂ 91%, white powder at the scene.</strong></p>
+    <p style="margin-top:10px;">Now apply the framework:</p>
+    <p style="margin-top:6px;">1. <strong>Detective:</strong> Unknown white powder (possible opioid/stimulant), route unknown (ingestion? insufflation? injection? — check for track marks, check nares), time ~30 minutes per bystander, quantity unknown.</p>
+    <p>2. <strong>Pattern:</strong> Patient is DOWN — decreased LOC, slow respirations. Pinpoint pupils? Check. This looks like opioid/sedative.</p>
+    <p>3. <strong>Cascade:</strong> Already at "lost protective reflexes" (GCS 6, snoring). Heading toward respiratory arrest if unchecked.</p>
+    <p>4. <strong>Airway:</strong> Open airway (head-tilt chin-lift or jaw thrust), suction, insert OPA/NPA, assist ventilations with BVM. Have suction ready for emesis.</p>
+    <p>5. <strong>Communicate:</strong> Suspected opioid overdose, GCS 6, assisted ventilations, administering naloxone <span class="tag tag-pcp">PCP Scope</span>. Advise receiving facility of estimated timeline and patient response to naloxone.</p>
+  </div>
+
+  <div class="quiz-block" id="quiz-5">
+    <div class="quiz-label">🧠 Check Yourself — Critical Thinking</div>
+    <div class="quiz-question">A 19-year-old was found unresponsive at a party. Friends say she was drinking and "might have taken something." She's breathing at a rate of 6/min with pinpoint pupils. You begin BVM ventilations. Five minutes into transport, she suddenly seizes. What is the <strong>most important</strong> thing this tells you about the toxin?</div>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="checkQuiz('quiz-5', this, true)"><span class="letter">A</span> She may have ingested more than just an opioid — consider a mixed ingestion or a toxin that causes both CNS depression and seizures</button>
+      <button class="quiz-opt" onclick="checkQuiz('quiz-5', this, false)"><span class="letter">B</span> Opioids commonly cause seizures at high doses</button>
+      <button class="quiz-opt" onclick="checkQuiz('quiz-5', this, false)"><span class="letter">C</span> The seizure is from hypoxia — it doesn't change the toxin picture</button>
+      <button class="quiz-opt" onclick="checkQuiz('quiz-5', this, false)"><span class="letter">D</span> The seizure means she's been misdiagnosed — it's actually a stimulant overdose</span></button>
+    </div>
+    <div class="quiz-feedback correct-fb">Opioids alone rarely cause seizures (tramadol is an exception). Seizures in a patient presenting as "down" suggest a mixed ingestion — possibly opioids combined with something that lowers seizure threshold (e.g., tricyclic antidepressants, GHB, alcohol withdrawal). This changes your communication to ALS/hospital: "suspected polysubstance ingestion with mixed presentation." Never assume it's one drug.</div>
+    <div class="quiz-feedback incorrect-fb">Pure opioid overdose rarely causes seizures (with the exception of tramadol). When a patient who looks "opioid" suddenly seizes, it should make you reconsider: could this be a mixed ingestion? Something that causes both CNS depression and seizure activity (e.g., TCAs, GHB, alcohol withdrawal, tramadol)? This changes your communication to ALS and the receiving facility.</div>
+  </div>
+
+  <div class="section-nav">
+    <button onclick="goTo(4)">← Previous</button>
+    <button onclick="goTo(6)">Next: Review & Summary →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ SECTION 6: REVIEW ═══════════════════ -->
+<div class="section" id="sec-6">
+  <h1>Review & Next Steps</h1>
+  <p class="subtitle">Lock it in. The difference between knowing and remembering is retrieval practice.</p>
+
+  <div class="score-bar">
+    <div class="score-item">
+      <div class="score-num" id="scoreCorrect" style="color:var(--accent-green);">0</div>
+      <div class="score-label">Correct</div>
+    </div>
+    <div class="score-item">
+      <div class="score-num" id="scoreTotal">0</div>
+      <div class="score-label">Attempted</div>
+    </div>
+    <div class="score-item">
+      <div class="score-num" id="scoreRemaining" style="color:var(--text-muted);">7</div>
+      <div class="score-label">Remaining</div>
+    </div>
+  </div>
+
+  <h2>5 Must-Know Takeaways</h2>
+  <div class="cheatsheet">
+    <h3>Tox Summary Card — Keep This</h3>
+    <ol>
+      <li><strong>Toxins don't invent new problems</strong> — they attack the same 4 systems (CNS, respiratory, cardiovascular, GI/thermoregulation). Your BLS assessment already covers all of them.</li>
+      <li><strong>Route determines speed</strong> — injection/inhalation = seconds. Ingestion = minutes to hours. Extended-release = a delayed trap.</li>
+      <li><strong>"Up or Down?"</strong> — is the patient stimulated or depressed? This single question identifies the toxidrome pattern and predicts the cascade.</li>
+      <li><strong>Airway is always the priority</strong> — whether the patient is seizing, vomiting, or going unconscious, the airway is the common threat. Suction ready, positioned, protected.</li>
+      <li><strong>Communicate what you know</strong> — agent, route, dose, time. You don't need a diagnosis. You need to relay intelligence that enables definitive care downstream.</li>
+    </ol>
+  </div>
+
+  <h2>Final Challenge — Put It Together</h2>
+  <div class="quiz-block" id="quiz-6">
+    <div class="quiz-label">🧠 Scenario-Based Integration</div>
+    <div class="quiz-question">You respond to a farm call. A 52-year-old agricultural worker was spraying crops and is now found with excessive salivation, tearing, has urinated and defecated on himself, and is vomiting. He's bradycardic at 48 bpm with laboured, wheezy breathing. His pupils are constricted. What is the <strong>most critical</strong> action beyond standard BLS airway management?</div>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="checkQuiz('quiz-6', this, true)"><span class="letter">A</span> Ensure scene safety and avoid secondary contamination — then request ALS for atropine</button>
+      <button class="quiz-opt" onclick="checkQuiz('quiz-6', this, false)"><span class="letter">B</span> Administer high-flow oxygen and transport — this is a straightforward respiratory call</button>
+      <button class="quiz-opt" onclick="checkQuiz('quiz-6', this, false)"><span class="letter">C</span> Focus exclusively on managing the bradycardia</button>
+      <button class="quiz-opt" onclick="checkQuiz('quiz-6', this, false)"><span class="letter">D</span> This is a GI illness from working in the heat — provide supportive care</button>
+    </div>
+    <div class="quiz-feedback correct-fb"><strong>SLUDGE — classic cholinergic toxidrome from organophosphate exposure.</strong> This is the one toxidrome where scene safety is paramount: the same agent that's killing the patient can contaminate you through skin contact. Decontamination matters. Request ALS early — the definitive treatment is atropine (ACP-scope <span class="tag tag-acp">ACP</span>), which blocks the acetylcholine flood. Your BLS priorities: scene safety, decontamination, airway management (these patients drown in their own secretions), and rapid ALS intercept/transport.</div>
+    <div class="quiz-feedback incorrect-fb">Look at the full picture: agricultural worker, spraying crops, SLUDGE symptoms (Salivation, Lacrimation, Urination, Defecation, GI distress, Emesis), bradycardia, miosis, bronchospasm. This is a cholinergic toxidrome from organophosphate exposure. Scene safety is critical — you can be contaminated. The bradycardia and respiratory distress are both caused by the same toxin, and the definitive treatment is atropine (ACP-scope).</div>
+  </div>
+
+  <div class="next-shift">
+    <div class="ns-label">🚑 Next Shift Challenge</div>
+    <p>On your next three calls involving altered LOC or unusual presentations, practice this:</p>
+    <ul>
+      <li>Consciously check <strong>pupils, heart rate, skin (wet or dry?), and respiratory rate</strong> — even if it's not a "tox call." You're building a toxidrome assessment habit.</li>
+      <li>For any medication-related call, do the <strong>prescription bottle check</strong>: date filled, quantity prescribed, quantity remaining.</li>
+      <li>Ask yourself: <strong>"Is this patient UP or DOWN?"</strong> — see how quickly this frames your anticipation of what's coming next.</li>
+    </ul>
+  </div>
+
+  <h2>Spaced Review Schedule</h2>
+  <p>A single pass through this module won't create lasting knowledge. Come back at these intervals:</p>
+  <div class="review-schedule">
+    <div class="review-badge">
+      <span class="when">Day 1</span>
+      <span class="what">Re-read the Summary Card above</span>
+    </div>
+    <div class="review-badge">
+      <span class="when">Day 7</span>
+      <span class="what">Redo the quiz questions without looking at answers</span>
+    </div>
+    <div class="review-badge">
+      <span class="when">Day 30</span>
+      <span class="what">Run through the full module again</span>
+    </div>
+  </div>
+
+  <p style="margin-top:28px; text-align:center; color: var(--text-muted); font-size: 0.8rem;">
+    Based on the Ontario BLS Patient Care Standards v3.4 (March 2023).<br>
+    Review all clinical content for accuracy before using in practice.
+  </p>
+
+  <div class="section-nav">
+    <button onclick="goTo(5)">← Previous</button>
+    <button disabled>Complete ✓</button>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+// ─── STATE ───
+let currentSection = 0;
+const totalSections = 7;
+const visited = new Set([0]);
+const quizResults = {};
+
+// ─── ON LOAD: tag correct answers via data attributes ───
+document.querySelectorAll('.quiz-opt').forEach(function(opt) {
+  const attr = opt.getAttribute('onclick') || '';
+  if (attr.indexOf(', true)') !== -1) {
+    opt.dataset.isCorrect = 'yes';
+  }
+  // Remove inline onclick — we'll use delegated listeners instead
+  opt.removeAttribute('onclick');
+});
+
+// ─── DELEGATED QUIZ CLICK HANDLER ───
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('.quiz-opt');
+  if (!btn) return;
+
+  var block = btn.closest('.quiz-block');
+  if (!block || block.dataset.answered === 'true') return;
+
+  // Lock the quiz
+  block.dataset.answered = 'true';
+
+  var isCorrect = btn.dataset.isCorrect === 'yes';
+
+  // Mark all options
+  block.querySelectorAll('.quiz-opt').forEach(function(o) {
+    o.classList.add('disabled');
+    if (o.dataset.isCorrect === 'yes') {
+      o.classList.add('correct');
+    }
+  });
+
+  // Mark clicked button if wrong
+  if (!isCorrect) {
+    btn.classList.add('incorrect');
+  }
+
+  // Show appropriate feedback
+  block.querySelectorAll('.quiz-feedback').forEach(function(f) {
+    f.classList.remove('show');
+  });
+  if (isCorrect) {
+    block.querySelector('.quiz-feedback.correct-fb').classList.add('show');
+  } else {
+    block.querySelector('.quiz-feedback.incorrect-fb').classList.add('show');
+  }
+
+  // Record result
+  quizResults[block.id] = isCorrect;
+  updateScore();
+});
+
+// ─── NAVIGATION ───
+function goTo(idx) {
+  if (idx < 0 || idx >= totalSections) return;
+  document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('sec-' + idx).classList.add('active');
+  var navBtns = document.querySelectorAll('.nav-btn');
+  for (var i = 0; i < totalSections && i < navBtns.length; i++) {
+    navBtns[i].classList.toggle('active', i === idx);
+  }
+  currentSection = idx;
+  visited.add(idx);
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateProgress() {
+  var pct = visited.size / totalSections;
+  var circle = document.getElementById('progressCircle');
+  var circ = 2 * Math.PI * 15;
+  circle.setAttribute('stroke-dashoffset', String(circ * (1 - pct)));
+  document.getElementById('progressText').textContent = visited.size + '/' + totalSections;
+  updateScore();
+}
+
+// ─── ACCORDION ───
+function toggleAccordion(el) {
+  el.classList.toggle('open');
+}
+
+// ─── SCORE ───
+function updateScore() {
+  var keys = Object.keys(quizResults);
+  var total = keys.length;
+  var correct = 0;
+  for (var i = 0; i < keys.length; i++) {
+    if (quizResults[keys[i]]) correct++;
+  }
+  var remaining = 7 - total;
+  document.getElementById('scoreCorrect').textContent = String(correct);
+  document.getElementById('scoreTotal').textContent = String(total);
+  document.getElementById('scoreRemaining').textContent = String(remaining);
+}
+
+// ─── INIT ───
+updateProgress();
+</script>
+</body>
+</html>
