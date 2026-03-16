@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Subdural Hematoma — PCP Interactive Module</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+
+  :root {
+    --bg: #0f1117;
+    --card-bg: #181b23;
+    --border: #262a35;
+    --text: #c8cdd8;
+    --heading: #e8ecf4;
+    --muted: #6b7280;
+    --accent: #3b82f6;
+    --accent-dim: rgba(59,130,246,0.12);
+    --option-bg: #1a1e28;
+    --option-border: #2a2f3d;
+    --correct-bg: rgba(34,197,94,0.08);
+    --correct-border: #22c55e;
+    --wrong-bg: rgba(239,68,68,0.08);
+    --wrong-border: #ef4444;
+    --warning-color: #e8a735;
+    --warning-bg: rgba(232,167,53,0.1);
+    --warning-dark: #c48a1a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 32px 20px 60px;
+  }
+
+  /* Header */
+  .header-tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .header-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--heading);
+    line-height: 1.2;
+  }
+  .header-sub {
+    font-size: 15px;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+  .header-meta {
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: var(--accent-dim);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--accent);
+    line-height: 1.5;
+  }
+
+  /* Nav */
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 28px;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    padding: 8px 0 12px;
+    z-index: 10;
+  }
+  .nav-btn {
+    background: var(--card-bg);
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s ease;
+  }
+  .nav-btn.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .nav-btn.visited {
+    background: var(--accent-dim);
+    color: var(--accent);
+    border-color: transparent;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 14px;
+  }
+  .card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--heading);
+    margin-bottom: 10px;
+  }
+  .card p { font-size: 14px; line-height: 1.7; }
+  .card-active-border { border-left: 3px solid var(--accent); }
+  .card-danger { border-color: var(--wrong-border); }
+
+  /* Section titles */
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--heading);
+    margin-bottom: 6px;
+  }
+  .section-sub {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: opacity 0.15s;
+  }
+  .btn-primary:hover { opacity: 0.9; }
+  .btn-secondary {
+    background: var(--card-bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  /* Quiz */
+  .quiz-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-top: 20px;
+  }
+  .quiz-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .quiz-q {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+  .quiz-option {
+    background: var(--option-bg);
+    border: 1px solid var(--option-border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    width: 100%;
+    font-family: inherit;
+    margin-bottom: 8px;
+    transition: all 0.15s ease;
+  }
+  .quiz-option:hover:not(.revealed) { border-color: var(--accent); }
+  .quiz-option.correct { background: var(--correct-bg); border-color: var(--correct-border); }
+  .quiz-option.wrong { background: var(--wrong-bg); border-color: var(--wrong-border); }
+  .quiz-option.revealed { cursor: default; }
+  .quiz-option-letter { font-weight: 600; margin-right: 8px; opacity: 0.5; }
+  .quiz-explain {
+    margin-top: 16px;
+    padding: 16px 18px;
+    border-radius: 8px;
+    border-left: 3px solid;
+  }
+  .quiz-explain.correct { background: var(--correct-bg); border-color: var(--correct-border); }
+  .quiz-explain.wrong { background: var(--wrong-bg); border-color: var(--wrong-border); }
+  .quiz-explain-label { font-weight: 700; font-size: 13px; margin-bottom: 6px; }
+  .quiz-explain p { font-size: 14px; line-height: 1.6; }
+
+  /* Callout boxes */
+  .callout-accent {
+    background: var(--accent-dim);
+    border-radius: 10px;
+    padding: 16px 20px;
+    border-left: 3px solid var(--accent);
+  }
+  .callout-accent p { font-size: 14px; font-weight: 600; color: var(--accent); margin: 0; }
+  .callout-danger {
+    background: var(--wrong-bg);
+    border-radius: 10px;
+    padding: 16px 20px;
+    border-left: 3px solid var(--wrong-border);
+  }
+
+  /* Progression stages */
+  .stage-badge {
+    display: inline-block;
+    color: #fff;
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .stage-badge.info { background: var(--accent); }
+  .stage-badge.warning { background: var(--warning-color); }
+  .stage-badge.danger { background: var(--wrong-border); }
+  .stage-label-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .stage-title { font-weight: 700; font-size: 16px; color: var(--heading); }
+  .mini-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+  }
+  .stage-alert {
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    line-height: 1.5;
+    font-weight: 600;
+    margin-top: 10px;
+  }
+  .stage-alert.warning { background: var(--warning-bg); color: var(--warning-dark); }
+  .stage-alert.danger { background: var(--wrong-bg); color: var(--wrong-border); }
+
+  /* Myth cards */
+  .myth-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+  }
+  .myth-card:hover { border-color: var(--muted); }
+  .myth-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .myth-label { font-weight: 700; font-size: 14px; color: var(--wrong-border); }
+  .myth-toggle { color: var(--muted); font-size: 12px; font-weight: 600; }
+  .myth-reveal {
+    margin-top: 10px;
+    padding: 12px 16px;
+    background: var(--correct-bg);
+    border-radius: 8px;
+    border-left: 3px solid var(--correct-border);
+    display: none;
+  }
+  .myth-reveal.open { display: block; }
+  .myth-reveal-label { font-weight: 700; font-size: 12px; color: var(--correct-border); margin-bottom: 4px; }
+  .myth-reveal p { font-size: 14px; line-height: 1.6; }
+
+  /* Grid layouts */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  @media (max-width: 500px) {
+    .two-col { grid-template-columns: 1fr; }
+    .three-col { grid-template-columns: 1fr 1fr 1fr; }
+    .container { padding: 20px 16px 60px; }
+    .header-title { font-size: 24px; }
+    .card { padding: 16px 18px; }
+  }
+
+  /* Progress flow */
+  .flow-steps {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .flow-step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .flow-step.accent { background: var(--accent-dim); color: var(--accent); }
+  .flow-step.danger { background: var(--wrong-bg); color: var(--wrong-border); }
+  .flow-num { opacity: 0.6; font-size: 11px; }
+
+  /* Diff table */
+  .diff-table { width: 100%; border-collapse: collapse; font-size: 13px; line-height: 1.5; }
+  .diff-table th {
+    text-align: left;
+    padding: 8px 10px;
+    color: var(--heading);
+    font-weight: 700;
+    border-bottom: 2px solid var(--border);
+  }
+  .diff-table td {
+    padding: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .diff-table td:first-child { font-weight: 600; color: var(--accent); }
+  .diff-table td:last-child { font-weight: 500; color: var(--heading); }
+
+  /* Risk cards */
+  .risk-card {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .risk-icon { font-size: 28px; line-height: 1; }
+  .risk-title { font-weight: 700; font-size: 15px; color: var(--heading); margin-bottom: 4px; }
+  .risk-text { font-size: 14px; line-height: 1.6; }
+
+  /* Summary */
+  .summary-box {
+    background: var(--card-bg);
+    border: 2px solid var(--accent);
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+  .summary-title { font-size: 18px; font-weight: 800; color: var(--heading); margin-bottom: 16px; text-align: center; }
+  .takeaway-row { display: flex; gap: 14px; margin-bottom: 14px; align-items: flex-start; }
+  .takeaway-num {
+    min-width: 32px; height: 32px; border-radius: 50%; background: var(--accent);
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 15px; flex-shrink: 0;
+  }
+  .takeaway-text { font-size: 14px; line-height: 1.7; padding-top: 4px; }
+
+  /* Herniation ref */
+  .hern-box {
+    background: var(--wrong-bg);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+  }
+  .hern-title { font-weight: 700; font-size: 14px; color: var(--wrong-border); margin-bottom: 6px; }
+  .hern-list { font-size: 13px; line-height: 1.8; }
+
+  .rate-box {
+    background: var(--option-bg);
+    border-radius: 6px;
+    padding: 10px 12px;
+    text-align: center;
+  }
+  .rate-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; }
+  .rate-value { font-size: 16px; font-weight: 800; color: var(--heading); margin-top: 2px; }
+
+  /* Challenge */
+  .challenge-box {
+    background: linear-gradient(135deg, rgba(59,130,246,0.12), rgba(168,85,247,0.08));
+    border: 1px solid var(--accent);
+    border-radius: 14px;
+    padding: 24px 28px;
+  }
+  .challenge-tag {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .challenge-title { font-size: 16px; font-weight: 700; color: var(--heading); margin-bottom: 10px; }
+  .challenge-steps { font-size: 14px; line-height: 1.8; }
+  .challenge-steps p { margin-bottom: 10px; }
+  .challenge-steps p:last-child { margin-bottom: 0; }
+
+  /* Management items */
+  .mgmt-card .mgmt-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+  .mgmt-card .mgmt-action { font-size: 14px; font-weight: 600; color: var(--heading); margin-bottom: 4px; }
+  .mgmt-card .mgmt-why { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .mgmt-card .mgmt-why strong { color: var(--accent); }
+  .mgmt-card.critical .mgmt-title { color: var(--wrong-border); }
+  .mgmt-card:not(.critical) .mgmt-title { color: var(--heading); }
+
+  /* Assessment rows */
+  .assess-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 10px;
+    align-items: flex-start;
+  }
+  .assess-label { min-width: 130px; font-weight: 700; font-size: 13px; color: var(--accent); }
+  .assess-value { font-size: 14px; line-height: 1.5; }
+
+  .sign-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+    align-items: flex-start;
+  }
+  .sign-label { min-width: 160px; font-weight: 700; font-size: 13px; color: var(--heading); }
+  .sign-value { font-size: 13px; line-height: 1.6; }
+
+  .vital-box {
+    background: var(--option-bg);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+  }
+  .vital-box strong { color: var(--accent); font-size: 13px; }
+  .vital-box span { font-size: 13px; line-height: 1.6; }
+
+  /* Footer nav */
+  .footer-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Sections hidden by default */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* "Don't" list */
+  .dont-list { padding-left: 18px; font-size: 14px; line-height: 1.8; }
+  .dont-list li { margin-bottom: 4px; }
+  .dont-list strong { color: var(--text); }
+
+  /* Scenario step */
+  .scenario-step {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    max-height: 0;
+    overflow: hidden;
+  }
+  .scenario-step.visible {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 600px;
+    margin-bottom: 12px;
+  }
+  .scenario-step .step-tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Header -->
+  <div style="margin-bottom:32px">
+    <div class="header-tag">Interactive Learning Module — Ontario PCP</div>
+    <h1 class="header-title">Subdural Hematoma</h1>
+    <p class="header-sub">Recognize it. Understand it. Don't miss it.</p>
+    <div class="header-meta">Based on Ontario BLS PCS v3.4 · Self-paced · ~15 minutes · Embedded clinical decision questions throughout</div>
+  </div>
+
+  <!-- Nav -->
+  <div class="nav" id="nav"></div>
+
+  <!-- SCENARIO -->
+  <div class="section active" id="sec-scenario">
+    <h2 class="section-title">Start Here — A Call That Matters</h2>
+    <p class="section-sub">Before we talk anatomy, walk through this call. It'll change how you read the rest of this module.</p>
+
+    <div class="card card-active-border scenario-step" id="step-0">
+      <div class="step-tag">Dispatch</div>
+      <p>You're dispatched to a long-term care home for an 81-year-old female, "confusion — staff reports patient not acting like herself." Low priority. Staff says she's been "off" for about a week.</p>
+    </div>
+    <div class="card card-active-border scenario-step" id="step-1">
+      <div class="step-tag">On Scene</div>
+      <p>You find Margaret sitting in a wheelchair. GCS 14 (E4 V4 M6). She's oriented to person only. Staff says she's usually sharp — plays cards, remembers everyone's name. Over the past week: increasingly confused, unsteady, stopped going to the dining hall. Her doctor visited 3 days ago and ordered bloodwork for ?UTI, ?dementia.</p>
+    </div>
+    <div class="card card-active-border scenario-step" id="step-2">
+      <div class="step-tag">Key Finding</div>
+      <p>You check her medication list: apixaban 5mg BID. You ask staff about falls — "Oh, she had a little tumble about two weeks ago getting out of bed. Didn't even hit her head that hard. She seemed fine after."</p>
+    </div>
+    <div class="card card-active-border scenario-step" id="step-3">
+      <div class="step-tag">The Question</div>
+      <p>What are you thinking? This isn't a UTI call anymore. Elderly + anticoagulated + fall (even minor, even 2 weeks ago) + progressive confusion = chronic subdural hematoma until proven otherwise. The doctor's dementia workup may have missed it. Your history-taking just changed this patient's trajectory.</p>
+    </div>
+
+    <button class="btn-primary" id="scenario-btn" onclick="advanceScenario()">Continue →</button>
+
+    <div class="callout-accent" id="scenario-conclusion" style="display:none;margin-top:16px">
+      <p>This is why you're here. Margaret's story is the chronic SDH that gets missed every day. Let's learn why it happens and how to catch it.</p>
+      <button class="btn-primary" style="margin-top:12px" onclick="goTo('anatomy')">Next: The Why →</button>
+    </div>
+  </div>
+
+  <!-- ANATOMY -->
+  <div class="section" id="sec-anatomy">
+    <h2 class="section-title">The Why — What's Happening Inside the Skull</h2>
+    <p class="section-sub">You don't need to be a neurosurgeon. You need to understand enough to recognize the threat and explain your clinical reasoning.</p>
+
+    <div class="card">
+      <h3>The Meninges — Three Layers, One Matters Most</h3>
+      <p>The brain is wrapped in three membrane layers: <strong style="color:var(--heading)">dura mater</strong> (tough outer layer), <strong style="color:var(--heading)">arachnoid</strong> (middle), and <strong style="color:var(--heading)">pia mater</strong> (inner, sits on the brain). Between the dura and arachnoid is the <strong style="color:var(--heading)">subdural space</strong> — and that's where the problem is.</p>
+      <p style="margin-top:12px"><strong style="color:var(--heading)">Bridging veins</strong> cross this space, connecting the brain surface to dural drainage channels. They're small, fragile, and the source of subdural bleeding.</p>
+    </div>
+
+    <div class="card">
+      <h3>Venous vs. Arterial — Why SDH Is Sneaky</h3>
+      <p>Epidural hematomas are <em>arterial</em> — fast, high-pressure, dramatic. Subdurals are <strong style="color:var(--heading)">venous</strong> — slower, lower pressure. But the blood spreads like a thin sheet across the entire brain surface instead of forming one focused clot. The danger isn't speed — it's coverage and the false sense of security a "stable" patient gives you.</p>
+    </div>
+
+    <div class="card">
+      <h3>The Monro-Kellie Doctrine — The Rule That Explains Everything</h3>
+      <p style="margin-bottom:12px">The skull is a <strong style="color:var(--heading)">fixed box</strong> containing three things: brain, blood, and CSF. Total volume cannot change. Add something (hematoma) → something else gets squeezed.</p>
+      <div class="flow-steps">
+        <div class="flow-step accent"><span class="flow-num">1</span> CSF pushed out first →</div>
+        <div class="flow-step accent"><span class="flow-num">2</span> Venous blood compressed →</div>
+        <div class="flow-step accent"><span class="flow-num">3</span> Brain compressed → rising ICP →</div>
+        <div class="flow-step danger"><span class="flow-num">4</span> Herniation → death</div>
+      </div>
+      <p style="margin-top:12px;font-size:13px;color:var(--muted)">This is why your patient looks "fine" in Stage 1 — the brain is compensating by pushing CSF out. Once that buffer is gone, pressure rises exponentially. Every assessment concept in this module ties back to this doctrine.</p>
+    </div>
+
+    <div class="card">
+      <h3>Acute vs. Chronic — Two Different Animals</h3>
+      <div class="two-col">
+        <div style="background:var(--wrong-bg);border-radius:8px;padding:14px 16px">
+          <div style="font-weight:700;font-size:13px;color:var(--wrong-border);margin-bottom:6px">ACUTE SDH</div>
+          <p style="font-size:13px;line-height:1.6">Minutes to hours. Significant trauma. Rapid decline. Classic herniation progression. <strong>Mortality 50-90%</strong> without surgery.</p>
+        </div>
+        <div style="background:var(--warning-bg);border-radius:8px;padding:14px 16px">
+          <div style="font-weight:700;font-size:13px;color:var(--warning-dark);margin-bottom:6px">CHRONIC SDH</div>
+          <p style="font-size:13px;line-height:1.6">Days to weeks. Minor or forgotten trauma. Subtle — confusion, personality changes, unsteadiness. <strong>The one you'll miss.</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-card" id="quiz-anatomy"></div>
+
+    <div style="margin-top:20px;text-align:right">
+      <button class="btn-primary" onclick="goTo('who')">Next: Who's at Risk →</button>
+    </div>
+  </div>
+
+  <!-- WHO -->
+  <div class="section" id="sec-who">
+    <h2 class="section-title">High Risk — The Patients Who Need Your Suspicion</h2>
+    <p class="section-sub">Knowing who's at risk changes how you approach the call before you even touch the patient.</p>
+
+    <div class="card"><div class="risk-card">
+      <span class="risk-icon">👴</span>
+      <div><div class="risk-title">Elderly</div><p class="risk-text">Brain shrinks with age → bridging veins stretch across a wider gap → more tension → tear more easily. A minor bump can bleed.</p></div>
+    </div></div>
+
+    <div class="card"><div class="risk-card">
+      <span class="risk-icon">💊</span>
+      <div><div class="risk-title">Anticoagulated</div><p class="risk-text">Warfarin, DOACs (rivaroxiban, apixaban, dabigatran), ASA, clopidogrel — impaired clotting means even small tears bleed more and longer.</p></div>
+    </div></div>
+
+    <div class="card"><div class="risk-card">
+      <span class="risk-icon">🧠</span>
+      <div><div class="risk-title">Alcoholic</div><p class="risk-text">Alcohol causes brain atrophy (same stretching problem as aging) PLUS liver damage impairs clotting factor production. Double risk.</p></div>
+    </div></div>
+
+    <div class="card"><div class="risk-card">
+      <span class="risk-icon">👶</span>
+      <div><div class="risk-title">Infants</div><p class="risk-text">Bridging veins proportionally larger and more fragile. Always consider non-accidental trauma — violent shaking tears bridging veins.</p></div>
+    </div></div>
+
+    <div class="callout-accent" style="margin-top:16px">
+      <p>BLS Anchor (p116): The Head Injury standard tells you to consider intracranial hemorrhage as a threat. Now you know WHY a "minor fall" in a 78-year-old on warfarin is NOT minor. Ask about medications. Ask about falls. Ask about timeline.</p>
+    </div>
+
+    <div class="quiz-card" id="quiz-who"></div>
+
+    <div style="margin-top:20px;text-align:right">
+      <button class="btn-primary" onclick="goTo('assess')">Next: Assessment →</button>
+    </div>
+  </div>
+
+  <!-- ASSESS -->
+  <div class="section" id="sec-assess">
+    <h2 class="section-title">Assessment — What to Look For and Why It Matters</h2>
+    <p class="section-sub">Every observation in the BLS Head Injury Standard (p116-117) is a checkpoint in a progression. Here's what each finding tells you.</p>
+
+    <div class="card">
+      <h3>History — Ask These, Every Time</h3>
+      <div class="assess-row"><div class="assess-label">Mechanism & timing</div><div class="assess-value">Even minor? How long ago? Separates acute from chronic.</div></div>
+      <div class="assess-row"><div class="assess-label">Medications</div><div class="assess-value">Anticoagulants change everything. Always ask.</div></div>
+      <div class="assess-row"><div class="assess-label">Time course</div><div class="assess-value">Sudden = acute. Gradual over days/weeks = chronic.</div></div>
+      <div class="assess-row"><div class="assess-label">Recent falls or bumps</div><div class="assess-value">Elderly may minimize or forget. Ask family/staff.</div></div>
+      <div class="assess-row"><div class="assess-label">Baseline mental status</div><div class="assess-value">Is this confusion new? Compare to their normal.</div></div>
+    </div>
+
+    <div class="card">
+      <h3>Physical Findings — What They Mean</h3>
+      <div class="sign-row"><div class="sign-label">CSF from ears/nose</div><div class="sign-value">Skull fracture created a path outward. Significant trauma. Don't plug it — it's reducing ICP.</div></div>
+      <div class="sign-row"><div class="sign-label">Battle's sign</div><div class="sign-value">Blood tracking from basilar skull fracture. Takes hours — injury is older than reported.</div></div>
+      <div class="sign-row"><div class="sign-label">Raccoon eyes</div><div class="sign-value">Blood tracking forward from basilar fracture. Late sign = significant trauma.</div></div>
+      <div class="sign-row"><div class="sign-label">Abnormal posturing</div><div class="sign-value">Brain compression. Decorticate (arms flexed) = above brainstem. Decerebrate (arms extended) = brainstem. Decerebrate is WORSE — herniation.</div></div>
+      <div class="sign-row"><div class="sign-label">Agitation / fluctuating</div><div class="sign-value">Hematoma pressing on brain. Fluctuation = bleeding active or compensation failing.</div></div>
+      <div class="sign-row"><div class="sign-label">Incontinence</div><div class="sign-value">Brain's inhibitory centres compressed. Significant dysfunction.</div></div>
+      <div class="sign-row"><div class="sign-label">Vomiting</div><div class="sign-value">Rising ICP stimulates vomiting centre. BLS Nausea/Vomiting Standard (p94) lists 'increased ICP' as a threat.</div></div>
+    </div>
+
+    <div class="card">
+      <h3>Vitals & GCS — The Numbers That Talk</h3>
+      <div class="vital-box"><strong>GCS trend: </strong><span>A DROPPING GCS is your most important finding. Single numbers mean nothing — track the trend. GCS &lt;9 + herniation signs = hyperventilate.</span></div>
+      <div class="vital-box"><strong>Pupils: </strong><span>Size, equality, reactivity. Unilateral blown pupil = brain herniating on that side (CN III compression).</span></div>
+      <div class="vital-box"><strong>BP + HR: </strong><span>Rising BP + falling HR = Cushing's response. The brain is forcing blood past rising pressure. LATE sign.</span></div>
+      <div class="vital-box"><strong>Respiratory pattern: </strong><span>Irregular breathing = brainstem compression. Prepare for respiratory arrest.</span></div>
+    </div>
+
+    <div class="quiz-card" id="quiz-assess"></div>
+
+    <div style="margin-top:20px;text-align:right">
+      <button class="btn-primary" onclick="goTo('progression')">Next: The Clock →</button>
+    </div>
+  </div>
+
+  <!-- PROGRESSION -->
+  <div class="section" id="sec-progression">
+    <h2 class="section-title">The Clock — How SDH Progresses</h2>
+    <p class="section-sub">Your job is to recognize WHERE on this timeline the patient is and act before they move to the next stage. Serial assessment every 5 minutes is your early warning system.</p>
+
+    <div class="card">
+      <div class="stage-label-row"><span class="stage-badge info">Stage 1</span><span class="stage-title">Compensation</span></div>
+      <div class="mini-label">Patient Signs</div>
+      <p style="font-size:14px;line-height:1.6;margin-bottom:10px">Headache, mild confusion, nausea. Vitals may be normal. GCS 14-15.</p>
+      <div class="mini-label">What You See on the Truck</div>
+      <p style="font-size:14px;line-height:1.6;margin-bottom:10px">The patient looks okay. They're talking to you. It would be easy to dismiss this.</p>
+      <div class="stage-alert warning">⚠ THE DANGER ZONE: The brain is compensating by pushing CSF out. The 'lucid interval' lives here — the patient seems fine right up until they're not. Once compensation is exhausted, pressure rises exponentially.</div>
+    </div>
+
+    <div class="card">
+      <div class="stage-label-row"><span class="stage-badge warning">Stage 2</span><span class="stage-title">Decompensation</span></div>
+      <div class="mini-label">Patient Signs</div>
+      <p style="font-size:14px;line-height:1.6;margin-bottom:10px">Increasing confusion, agitation, fluctuating LOC, vomiting, worsening headache. GCS dropping. Pupils sluggish or unequal.</p>
+      <div class="mini-label">What You See on the Truck</div>
+      <p style="font-size:14px;line-height:1.6;margin-bottom:10px">Your serial GCS catches this. The patient who was GCS 14 is now GCS 11. Cushing's response may appear: hypertension + bradycardia + irregular respirations.</p>
+      <div class="stage-alert warning">Your assessments are catching the decline. This patient is on the edge. Be ready for rapid progression to Stage 3.</div>
+    </div>
+
+    <div class="card card-danger">
+      <div class="stage-label-row"><span class="stage-badge danger">Stage 3</span><span class="stage-title">Herniation</span></div>
+      <div class="mini-label">Patient Signs</div>
+      <p style="font-size:14px;line-height:1.6;margin-bottom:10px">GCS &lt;9 + dilated/unreactive pupils OR asymmetric pupils OR decorticate/decerebrate posturing. Breathing irregular or stops.</p>
+      <div class="mini-label">What You See on the Truck</div>
+      <p style="font-size:14px;line-height:1.6;margin-bottom:10px">BLS p117 herniation criteria met. Hyperventilate to ETCO2 30-35 mmHg. This patient needs a surgeon. Everything you do now is buying time.</p>
+      <div class="stage-alert danger">WITHOUT SURGICAL INTERVENTION, THE PATIENT WILL DIE. Hyperventilation is a bridge, not a treatment.</div>
+    </div>
+
+    <div class="quiz-card" id="quiz-progression"></div>
+
+    <div style="margin-top:20px;text-align:right">
+      <button class="btn-primary" onclick="goTo('manage')">Next: Management →</button>
+    </div>
+  </div>
+
+  <!-- MANAGE -->
+  <div class="section" id="sec-manage">
+    <h2 class="section-title">Management — What to Do and Why</h2>
+    <p class="section-sub">Every intervention has a physiological rationale. Knowing the "why" means you'll adapt when the textbook scenario doesn't match reality.</p>
+
+    <div class="card mgmt-card">
+      <div class="mgmt-title">Airway & Ventilation</div>
+      <div class="mgmt-action">Ventilate if apneic or inadequate. ETCO2 35-45 mmHg normally.</div>
+      <div class="mgmt-why"><strong>Why: </strong>The brain needs oxygen. Hypoxia accelerates brain swelling and herniation. Normal CO2 keeps cerebral blood vessels at normal size = normal ICP.</div>
+    </div>
+
+    <div class="card card-danger mgmt-card critical">
+      <div class="mgmt-title">If Herniation Signs Present</div>
+      <div class="mgmt-action">Hyperventilate to ETCO2 30-35 mmHg. Adult ~20/min, Child ~25/min, Infant ~30/min.</div>
+      <div class="mgmt-why"><strong>Why: </strong>Lowering CO2 → cerebral vasoconstriction → blood vessels shrink → reduces blood volume in skull → temporarily drops ICP. This is a BRIDGE to surgery, not a cure.</div>
+    </div>
+
+    <div class="card card-danger mgmt-card critical">
+      <div class="mgmt-title">DO NOT Go Below ETCO2 30</div>
+      <div class="mgmt-action">Watch your capnography closely.</div>
+      <div class="mgmt-why"><strong>Why: </strong>Excessive vasoconstriction = brain ischemia. You're trying to lower pressure, not starve the brain of blood.</div>
+    </div>
+
+    <div class="card mgmt-card">
+      <div class="mgmt-title">Position: Head Up 30°</div>
+      <div class="mgmt-action">Elevate head 30 degrees. If on spinal board, tilt the whole board.</div>
+      <div class="mgmt-why"><strong>Why: </strong>Gravity helps venous blood drain out of the skull, reducing ICP. Simple but effective.</div>
+    </div>
+
+    <div class="card mgmt-card">
+      <div class="mgmt-title">CSF Leak</div>
+      <div class="mgmt-action">Loose sterile dressing. Do NOT plug it.</div>
+      <div class="mgmt-why"><strong>Why: </strong>CSF leaking out is actually reducing ICP. Prevent infection but don't block drainage.</div>
+    </div>
+
+    <div class="card mgmt-card">
+      <div class="mgmt-title">Seizure Preparedness</div>
+      <div class="mgmt-action">Anticipate seizures. Have suction ready.</div>
+      <div class="mgmt-why"><strong>Why: </strong>Blood irritates brain tissue. The hematoma on the cortex can trigger seizures, which increase metabolic demand and worsen ICP.</div>
+    </div>
+
+    <div class="card mgmt-card">
+      <div class="mgmt-title">Transport</div>
+      <div class="mgmt-action">Load and Go. This patient needs a surgeon, not your ambulance.</div>
+      <div class="mgmt-why"><strong>Why: </strong>No field intervention fixes this. Everything you do is buying time for definitive surgical intervention. Don't delay transport for procedures you can do en route.</div>
+    </div>
+
+    <div class="callout-danger" style="margin-top:16px">
+      <div style="font-weight:700;font-size:14px;color:var(--wrong-border);margin-bottom:6px">What NOT To Do</div>
+      <ul class="dont-list">
+        <li><strong>Don't drop BP aggressively</strong> — the body is raising BP to perfuse the brain. Drop BP = brain loses blood flow.</li>
+        <li><strong>Don't delay transport</strong> for interventions that can be done en route.</li>
+        <li><strong>Don't assume "minor fall" is minor</strong> in elderly or anticoagulated patients.</li>
+      </ul>
+    </div>
+
+    <div class="quiz-card" id="quiz-manage"></div>
+
+    <div style="margin-top:20px;text-align:right">
+      <button class="btn-primary" onclick="goTo('traps')">Next: The Traps →</button>
+    </div>
+  </div>
+
+  <!-- TRAPS -->
+  <div class="section" id="sec-traps">
+    <h2 class="section-title">The Traps — Myths, Mimics & Missed Calls</h2>
+    <p class="section-sub">Challenge what you think you know. These are the assumptions that lead to missed SDHs.</p>
+
+    <h3 style="font-size:16px;font-weight:700;color:var(--heading);margin-bottom:12px">Myth Busters — Tap to Reveal</h3>
+
+    <div class="myth-card" onclick="toggleMyth(0)">
+      <div class="myth-header">
+        <div class="myth-label">🚫 Myth: "Minor falls don't cause brain bleeds."</div>
+        <span class="myth-toggle" id="myth-toggle-0">▼ Tap</span>
+      </div>
+      <div class="myth-reveal" id="myth-0">
+        <div class="myth-reveal-label">REALITY</div>
+        <p>In elderly or anticoagulated patients, even a bump against a cupboard door can tear stretched bridging veins. The #1 cause of SDH is falls — including ones the patient calls "nothing."</p>
+      </div>
+    </div>
+
+    <div class="myth-card" onclick="toggleMyth(1)">
+      <div class="myth-header">
+        <div class="myth-label">🚫 Myth: "If the patient is talking and alert, they're fine."</div>
+        <span class="myth-toggle" id="myth-toggle-1">▼ Tap</span>
+      </div>
+      <div class="myth-reveal" id="myth-1">
+        <div class="myth-reveal-label">REALITY</div>
+        <p>The lucid interval exists because the brain compensates — CSF gets pushed out, venous blood compresses. The patient looks fine right up until compensation fails and they crash. A single GCS of 15 means nothing without serial reassessment.</p>
+      </div>
+    </div>
+
+    <div class="myth-card" onclick="toggleMyth(2)">
+      <div class="myth-header">
+        <div class="myth-label">🚫 Myth: "Hyperventilating a head injury is always right."</div>
+        <span class="myth-toggle" id="myth-toggle-2">▼ Tap</span>
+      </div>
+      <div class="myth-reveal" id="myth-2">
+        <div class="myth-reveal-label">REALITY</div>
+        <p>Only hyperventilate with confirmed herniation signs (GCS &lt;9 + pupil/posturing changes). Routine hyperventilation in head injuries causes cerebral vasoconstriction and can worsen brain ischemia. Normal target: ETCO2 35-45 mmHg.</p>
+      </div>
+    </div>
+
+    <h3 style="font-size:16px;font-weight:700;color:var(--heading);margin:20px 0 12px">Differential — What Else Could This Be?</h3>
+    <div class="card" style="overflow-x:auto">
+      <table class="diff-table">
+        <thead><tr><th>Condition</th><th>Key Differentiator</th><th>SDH Clue</th></tr></thead>
+        <tbody>
+          <tr><td>Epidural</td><td>Arterial, faster, younger patients, temporal fracture</td><td>More focal. Classic LOC → lucid → rapid decline.</td></tr>
+          <tr><td>Stroke (CVA)</td><td>No trauma history, sudden focal deficits, may have A-fib</td><td>Ask about head trauma. Chronic SDH mimics stroke. Always ask about falls.</td></tr>
+          <tr><td>Concussion</td><td>Mild TBI, GCS 13-15, symptoms may resolve</td><td>What looks like concussion CAN be evolving SDH. Serial GCS: dropping = SDH.</td></tr>
+          <tr><td>Intoxication</td><td>Alcohol, drugs, metabolic causes</td><td>Can COEXIST. The drunk patient who fell may also be bleeding. Always assess for trauma.</td></tr>
+          <tr><td>UTI / Dementia</td><td>Common labels for elderly confusion</td><td>Chronic SDH mimics both. Ask about falls and anticoagulants.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="quiz-card" id="quiz-traps"></div>
+
+    <div style="margin-top:20px;text-align:right">
+      <button class="btn-primary" onclick="goTo('summary')">Next: Summary Card →</button>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="section" id="sec-summary">
+    <h2 class="section-title">Summary Card — Keep This</h2>
+    <p class="section-sub">The 5 things that matter most. Review at 1 day, 1 week, 1 month.</p>
+
+    <div class="summary-box">
+      <div class="summary-title">SDH — 5 Must-Know Takeaways</div>
+
+      <div class="takeaway-row"><div class="takeaway-num">1</div><div class="takeaway-text">The skull is a fixed box (Monro-Kellie). Add blood → pressure rises → brain herniates. Every assessment finding tracks this progression.</div></div>
+      <div class="takeaway-row"><div class="takeaway-num">2</div><div class="takeaway-text">SDH is venous and sneaky. The patient may look fine while pressure quietly builds. Serial GCS is your early warning system.</div></div>
+      <div class="takeaway-row"><div class="takeaway-num">3</div><div class="takeaway-text">Elderly + anticoagulants + fall (even minor) = HIGH suspicion. Chronic SDH mimics dementia, stroke, and UTI. Your history-taking catches it.</div></div>
+      <div class="takeaway-row"><div class="takeaway-num">4</div><div class="takeaway-text">Herniation = GCS &lt;9 + pupil/posturing changes → Hyperventilate to ETCO2 30-35 mmHg. NOT below 30. This is a bridge to surgery.</div></div>
+      <div class="takeaway-row"><div class="takeaway-num">5</div><div class="takeaway-text">This patient needs a surgeon. Everything you do is buying time. Don't delay transport. Don't drop BP. Elevate the head 30°.</div></div>
+
+      <div style="margin-top:20px;border-top:1px solid var(--border);padding-top:16px">
+        <div style="font-weight:700;font-size:13px;color:var(--accent);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px">Herniation Quick Reference</div>
+        <div class="hern-box">
+          <div class="hern-title">CRITERIA: GCS &lt;9 + ANY of:</div>
+          <div class="hern-list">• Dilated unreactive pupils<br>• Asymmetric pupils<br>• Decorticate or decerebrate posturing</div>
+        </div>
+        <div class="three-col">
+          <div class="rate-box"><div class="rate-label">Adult</div><div class="rate-value">~20/min</div></div>
+          <div class="rate-box"><div class="rate-label">Child</div><div class="rate-value">~25/min</div></div>
+          <div class="rate-box"><div class="rate-label">Infant &lt;1yr</div><div class="rate-value">~30/min</div></div>
+        </div>
+        <div style="margin-top:8px;font-size:13px;font-weight:600;color:var(--accent);text-align:center">Target ETCO2: 30-35 mmHg</div>
+      </div>
+    </div>
+
+    <div class="challenge-box">
+      <div class="challenge-tag">🎯 Next Shift Challenge</div>
+      <div class="challenge-title">On your next shift, try this:</div>
+      <div class="challenge-steps">
+        <p><strong style="color:var(--heading)">1.</strong> For every patient over 65 with altered mental status, ask: <em>"Have you had any falls recently — even minor ones?"</em> and <em>"Are you on any blood thinners?"</em></p>
+        <p><strong style="color:var(--heading)">2.</strong> On any head injury call, do serial GCS every 5 minutes and document the trend, not just a single number.</p>
+        <p><strong style="color:var(--heading)">3.</strong> After the shift, reflect: Did you encounter any patients where chronic SDH should have been on your differential? What would you do differently?</p>
+      </div>
+    </div>
+
+    <div style="margin-top:24px;text-align:center;color:var(--muted);font-size:13px;line-height:1.6">
+      <p>Based on Ontario BLS PCS v3.4 (2023) · Review this card at 1 day, 1 week, and 1 month.</p>
+      <p style="font-weight:600;color:var(--accent)">Recognize it. Understand it. Don't miss it.</p>
+    </div>
+  </div>
+
+  <!-- Footer nav -->
+  <div class="footer-nav" id="footer-nav"></div>
+</div>
+
+<script>
+const SECTIONS = ['scenario','anatomy','who','assess','progression','manage','traps','summary'];
+const LABELS = {scenario:'The Call',anatomy:'The Why',who:'High Risk',assess:'Assessment',progression:'The Clock',manage:'Management',traps:'The Traps',summary:'Summary Card'};
+
+let activeSection = 'scenario';
+let visitedSections = new Set(['scenario']);
+let scenarioStep = 0;
+
+const QUIZZES = {
+  anatomy: {
+    q: "Subdural bleeding is VENOUS, not arterial. Why does that matter for your patient's presentation?",
+    options: [
+      "Venous bleeds are slower — the patient may look fine initially while pressure quietly builds",
+      "Venous bleeds stop on their own so SDH isn't really dangerous",
+      "Arterial bleeds spread wider across the brain surface",
+      "Venous bleeds only happen in elderly patients"
+    ],
+    correct: 0,
+    explain: "Venous bleeding is lower pressure and slower than arterial. This means a subdural bleed can accumulate gradually — the patient compensates, looks okay, then decompensates rapidly once compensation fails. This is the 'lucid interval' that kills people. Your serial assessments are what catch it."
+  },
+  who: {
+    q: "You respond to a 'lift assist' for a 79-year-old on apixaban who fell getting out of bed. She's GCS 15, denies headache, says she's fine. What's your concern?",
+    options: [
+      "No concern — GCS 15, no symptoms, mechanism is trivial",
+      "She's elderly + anticoagulated + fall — high risk for chronic SDH that may present days later",
+      "Check blood sugar and clear the call",
+      "Concern for epidural hematoma only"
+    ],
+    correct: 1,
+    explain: "This is the patient you'll miss if you don't understand risk factors. Elderly brain atrophy stretches bridging veins. Apixaban prevents clotting. A 'minor' fall can tear a bridging vein and bleed slowly for days to weeks. She may show up as a 'confusion' call next week. Your documentation of this call and thorough history matter."
+  },
+  assess: {
+    q: "You're assessing a head injury patient. Their left pupil is dilated and fixed while the right is reactive. What does this tell you anatomically?",
+    options: [
+      "The patient has a concussion",
+      "The brain is herniating on the LEFT side, compressing cranial nerve III",
+      "This is a normal variant in some patients",
+      "The right side of the brain is injured"
+    ],
+    correct: 1,
+    explain: "A unilateral blown pupil means CN III is being compressed on THAT side. The brain is herniating — being pushed through openings in the skull by rising ICP. This is a BLS herniation sign (p117): GCS <9 + pupil changes = hyperventilate to ETCO2 30-35 mmHg. This patient needs a surgeon NOW."
+  },
+  progression: {
+    q: "Your patient was GCS 14 on your first assessment. Five minutes later they're GCS 11. Vitals show BP rising and HR dropping. What stage are they in and what's happening?",
+    options: [
+      "Stage 1 — Compensation. The brain is coping fine.",
+      "Stage 2 — Decompensation. ICP is rising faster than the body can compensate. The Cushing's response confirms this.",
+      "Stage 3 — Herniation. Begin hyperventilation immediately.",
+      "This is a normal fluctuation. Reassess in 15 minutes."
+    ],
+    correct: 1,
+    explain: "Dropping GCS + Cushing's response (rising BP, falling HR) = Stage 2 decompensation. The brain's compensation mechanisms are failing. This patient is on the edge of herniation. You need to be ready: airway management, prepare for hyperventilation if they progress to Stage 3, elevate the head 30°, and move. Don't wait for herniation signs — anticipate them."
+  },
+  manage: {
+    q: "You're ventilating a herniating patient and your ETCO2 reads 25 mmHg. What's wrong and why?",
+    options: [
+      "Nothing — lower CO2 is always better for brain injuries",
+      "You're hyperventilating too aggressively. Below 30 mmHg causes excessive cerebral vasoconstriction → brain ischemia. Target 30-35 mmHg.",
+      "The monitor is malfunctioning. CO2 can't go that low.",
+      "This means the patient has improved and you can stop ventilating"
+    ],
+    correct: 1,
+    explain: "Hyperventilation works by lowering CO2, which causes cerebral vasoconstriction — blood vessels shrink, reducing blood volume in the skull, temporarily dropping ICP. But below 30 mmHg, you're constricting so much that blood flow to the brain drops dangerously. You're trying to reduce pressure, not starve the brain. Target 30-35 mmHg. This is a bridge to surgery, not a cure."
+  },
+  traps: {
+    q: "EMS is called for a 72-year-old male with 'progressive confusion over 2 weeks.' Family says he's been unsteady, personality has changed, and his doctor suspects early dementia. What should you consider?",
+    options: [
+      "Dementia workup is a physician's job — transport to ED for medical clearance",
+      "This presentation is consistent with chronic SDH. Ask about falls, head trauma (even minor), and anticoagulant use.",
+      "Progressive confusion = UTI in elderly. Focus on urinary symptoms.",
+      "Two weeks of confusion rules out SDH — that would present sooner"
+    ],
+    correct: 1,
+    explain: "Chronic SDH is the great mimicker. Gradual confusion, personality changes, and unsteadiness over days to weeks — in an elderly patient, this gets labelled 'dementia' or 'UTI' routinely. Ask about ANY falls or head bumps, even weeks ago. Ask about blood thinners. Your history-taking is the difference between this patient getting a CT and getting misdiagnosed."
+  }
+};
+
+function renderNav() {
+  const nav = document.getElementById('nav');
+  nav.innerHTML = SECTIONS.map(s => {
+    let cls = 'nav-btn';
+    if (s === activeSection) cls += ' active';
+    else if (visitedSections.has(s)) cls += ' visited';
+    return `<button class="${cls}" onclick="goTo('${s}')">${LABELS[s]}</button>`;
+  }).join('');
+}
+
+function renderFooter() {
+  const idx = SECTIONS.indexOf(activeSection);
+  const prev = idx > 0 ? SECTIONS[idx - 1] : null;
+  const next = idx < SECTIONS.length - 1 ? SECTIONS[idx + 1] : null;
+  const footer = document.getElementById('footer-nav');
+  footer.innerHTML = `
+    ${prev ? `<button class="btn-secondary" onclick="goTo('${prev}')">← ${LABELS[prev]}</button>` : '<div></div>'}
+    ${next ? `<button class="btn-primary" onclick="goTo('${next}')">${LABELS[next]} →</button>` : '<div></div>'}
+  `;
+}
+
+function goTo(section) {
+  document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+  document.getElementById('sec-' + section).classList.add('active');
+  activeSection = section;
+  visitedSections.add(section);
+  renderNav();
+  renderFooter();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+let scenarioMax = 0;
+function advanceScenario() {
+  scenarioMax++;
+  if (scenarioMax >= 4) {
+    document.getElementById('scenario-btn').style.display = 'none';
+    document.getElementById('scenario-conclusion').style.display = 'block';
+  }
+  for (let i = 0; i <= scenarioMax && i < 4; i++) {
+    document.getElementById('step-' + i).classList.add('visible');
+  }
+}
+
+function toggleMyth(idx) {
+  const el = document.getElementById('myth-' + idx);
+  const toggle = document.getElementById('myth-toggle-' + idx);
+  if (el.classList.contains('open')) {
+    el.classList.remove('open');
+    toggle.textContent = '▼ Tap';
+  } else {
+    el.classList.add('open');
+    toggle.textContent = '▲';
+  }
+}
+
+function renderQuiz(containerId, data) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  let html = `
+    <div class="quiz-label"><span style="font-size:18px">✦</span> Clinical Decision Point</div>
+    <div class="quiz-q">${data.q}</div>
+  `;
+
+  data.options.forEach((opt, i) => {
+    html += `<button class="quiz-option" id="${containerId}-opt-${i}" onclick="handleQuiz('${containerId}', ${i}, ${data.correct})">
+      <span class="quiz-option-letter">${String.fromCharCode(65 + i)}.</span>${opt}
+    </button>`;
+  });
+
+  html += `<div id="${containerId}-explain" style="display:none"></div>`;
+  container.innerHTML = html;
+}
+
+function handleQuiz(containerId, selected, correct) {
+  const isCorrect = selected === correct;
+  const data = Object.values(QUIZZES)[Object.keys(QUIZZES).indexOf(containerId.replace('quiz-', ''))];
+  // Find quiz data by containerId
+  const key = containerId.replace('quiz-', '');
+  const quizData = QUIZZES[key];
+
+  // Mark all options
+  for (let i = 0; i < quizData.options.length; i++) {
+    const btn = document.getElementById(`${containerId}-opt-${i}`);
+    btn.classList.add('revealed');
+    if (i === quizData.correct) btn.classList.add('correct');
+    else if (i === selected && !isCorrect) btn.classList.add('wrong');
+  }
+
+  const explain = document.getElementById(`${containerId}-explain`);
+  explain.style.display = 'block';
+  explain.className = `quiz-explain ${isCorrect ? 'correct' : 'wrong'}`;
+  explain.innerHTML = `
+    <div class="quiz-explain-label" style="color:${isCorrect ? 'var(--correct-border)' : 'var(--wrong-border)'}">
+      ${isCorrect ? '✓ Correct' : '✗ Not quite'}
+    </div>
+    <p>${quizData.explain}</p>
+  `;
+}
+
+// Init
+document.getElementById('step-0').classList.add('visible');
+renderNav();
+renderFooter();
+
+// Render all quizzes
+Object.keys(QUIZZES).forEach(key => {
+  renderQuiz('quiz-' + key, QUIZZES[key]);
+});
+</script>
+
+</body>
+</html>
