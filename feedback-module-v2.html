@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reading Your Student &amp; Delivering Feedback | EMS Preceptor Module</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FAF9F6;
+  --bg-card: #FFFFFF;
+  --bg-accent: #F0EDE6;
+  --bg-dark: #1C1917;
+  --text: #1C1917;
+  --text-secondary: #57534E;
+  --text-muted: #A8A29E;
+  --border: #E7E5E4;
+  --accent: #0F6E56;
+  --accent-light: #E1F5EE;
+  --accent-mid: #1D9E75;
+  --warn: #BA7517;
+  --warn-light: #FAEEDA;
+  --danger: #A32D2D;
+  --danger-light: #FCEBEB;
+  --info: #185FA5;
+  --info-light: #E6F1FB;
+  --purple: #534AB7;
+  --purple-light: #EEEDFE;
+  --coral: #D85A30;
+  --coral-light: #FAECE7;
+  --pink: #993556;
+  --pink-light: #FBEAF0;
+  --font-body: 'DM Sans', -apple-system, sans-serif;
+  --font-display: 'Fraunces', Georgia, serif;
+  --radius: 10px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 3px rgba(28,25,23,0.06);
+  --shadow-md: 0 4px 12px rgba(28,25,23,0.08);
+  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.7; font-size: 16px; -webkit-font-smoothing: antialiased; }
+
+.module-header {
+  background: var(--bg-dark); color: #FAF9F6;
+  padding: 3rem 1.5rem 2.5rem; text-align: center;
+  position: relative; overflow: hidden;
+}
+.module-header::before {
+  content: ''; position: absolute; top: -40%; left: -20%; width: 140%; height: 180%;
+  background: radial-gradient(ellipse at 30% 50%, rgba(15,110,86,0.15) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 30%, rgba(83,74,183,0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+.module-header h1 { font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 600; letter-spacing: -0.02em; margin-bottom: 0.5rem; position: relative; }
+.module-header .subtitle { font-size: 1rem; opacity: 0.7; font-weight: 400; position: relative; }
+.module-header .tag { display: inline-block; background: rgba(29,158,117,0.2); color: #5DCAA5; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.3rem 0.8rem; border-radius: 20px; margin-bottom: 1rem; position: relative; }
+
+nav.progress-nav { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 0 1rem; position: sticky; top: 0; z-index: 100; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+nav.progress-nav .nav-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 0; }
+nav.progress-nav button { background: none; border: none; font-family: var(--font-body); font-size: 0.82rem; font-weight: 500; color: var(--text-muted); padding: 0.9rem 1rem; cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; transition: var(--transition); }
+nav.progress-nav button:hover { color: var(--text-secondary); }
+nav.progress-nav button.active { color: var(--accent); border-bottom-color: var(--accent); }
+nav.progress-nav button.completed { color: var(--text); }
+nav.progress-nav button.completed::after { content: ''; display: inline-block; width: 6px; height: 6px; background: var(--accent-mid); border-radius: 50%; margin-left: 6px; vertical-align: middle; }
+
+.container { max-width: 760px; margin: 0 auto; padding: 0 1.5rem; }
+section.module-section { display: none; padding: 2.5rem 0 3rem; animation: fadeUp 0.4s ease; }
+section.module-section.active { display: block; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+h2.section-title { font-family: var(--font-display); font-size: 1.6rem; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 0.3rem; }
+.section-lead { font-size: 1.05rem; color: var(--text-secondary); margin-bottom: 2rem; max-width: 600px; }
+.section-divider { width: 40px; height: 3px; background: var(--accent-mid); border-radius: 2px; margin: 0.5rem 0 1.5rem; }
+
+.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.25rem; box-shadow: var(--shadow-sm); }
+.card-accent { border-left: 3px solid var(--accent); border-radius: 0 var(--radius-lg) var(--radius-lg) 0; }
+.card-warn { border-left: 3px solid var(--warn); border-radius: 0 var(--radius-lg) var(--radius-lg) 0; }
+.card-danger { border-left: 3px solid var(--danger); border-radius: 0 var(--radius-lg) var(--radius-lg) 0; }
+.card-info { border-left: 3px solid var(--info); border-radius: 0 var(--radius-lg) var(--radius-lg) 0; }
+.card h3 { font-family: var(--font-body); font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
+.card p { color: var(--text-secondary); font-size: 0.95rem; }
+
+.callout { display: flex; gap: 0.75rem; align-items: flex-start; padding: 1rem 1.25rem; border-radius: var(--radius); margin: 1.25rem 0; font-size: 0.9rem; }
+.callout-accent { background: var(--accent-light); color: #085041; }
+.callout-warn { background: var(--warn-light); color: #633806; }
+.callout-info { background: var(--info-light); color: #0C447C; }
+.callout-danger { background: var(--danger-light); color: #791F1F; }
+.callout .callout-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 0.1rem; }
+
+/* Cognitive load meter */
+.load-meter { margin: 1.5rem 0; }
+.load-meter-row { display: flex; align-items: stretch; margin-bottom: 2px; }
+.load-level-label { width: 90px; flex-shrink: 0; font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; padding: 0.8rem 0.5rem 0.8rem 0; text-align: right; }
+.load-level-bar { flex: 1; padding: 0.8rem 1rem; border-radius: 0 var(--radius) var(--radius) 0; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; }
+.load-green .load-level-label { color: var(--accent); }
+.load-green .load-level-bar { background: var(--accent-light); border-left: 3px solid var(--accent); }
+.load-amber .load-level-label { color: var(--warn); }
+.load-amber .load-level-bar { background: var(--warn-light); border-left: 3px solid var(--warn); }
+.load-red .load-level-label { color: var(--danger); }
+.load-red .load-level-bar { background: var(--danger-light); border-left: 3px solid var(--danger); }
+
+/* Signals grid */
+.signals-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
+.signal-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem; }
+.signal-card .signal-type { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; }
+.signal-card h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.25rem; }
+.signal-card p { font-size: 0.82rem; color: var(--text-secondary); }
+
+/* Model steps */
+.model-step { display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 1.25rem; padding: 1.25rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); transition: var(--transition); }
+.model-step:hover { border-color: var(--accent-mid); }
+.model-step .step-icon { flex-shrink: 0; width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; }
+.model-step h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.25rem; }
+.model-step p { font-size: 0.88rem; color: var(--text-secondary); }
+
+/* VS table */
+.vs-table { width: 100%; margin: 1.5rem 0; border-collapse: separate; border-spacing: 0; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); font-size: 0.9rem; }
+.vs-table th { background: var(--bg-accent); padding: 0.75rem 1rem; text-align: left; font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-secondary); }
+.vs-table td { padding: 0.75rem 1rem; border-top: 1px solid var(--border); color: var(--text-secondary); vertical-align: top; }
+.vs-table .label-col { font-weight: 500; color: var(--text); min-width: 80px; }
+.vs-table .do-col { background: rgba(15,110,86,0.03); }
+.vs-table .dont-col { background: rgba(163,45,45,0.03); }
+
+/* Quiz */
+.quiz-container { margin: 2rem 0; }
+.quiz-question { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.25rem; box-shadow: var(--shadow-sm); }
+.quiz-question .q-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--purple); margin-bottom: 0.5rem; }
+.quiz-question .q-text { font-size: 1rem; font-weight: 500; margin-bottom: 1rem; }
+.quiz-option { display: block; width: 100%; text-align: left; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 0.8rem 1rem; margin-bottom: 0.5rem; font-family: var(--font-body); font-size: 0.9rem; color: var(--text); cursor: pointer; transition: var(--transition); line-height: 1.5; }
+.quiz-option:hover { border-color: var(--accent-mid); background: var(--accent-light); }
+.quiz-option.selected-correct { background: var(--accent-light); border-color: var(--accent); color: var(--accent); font-weight: 500; }
+.quiz-option.selected-wrong { background: var(--danger-light); border-color: var(--danger); color: var(--danger); }
+.quiz-option.show-correct { background: var(--accent-light); border-color: var(--accent); opacity: 0.7; }
+.quiz-option:disabled { cursor: default; }
+.feedback-reveal { display: none; padding: 1rem; margin-top: 0.75rem; border-radius: var(--radius); font-size: 0.9rem; line-height: 1.6; }
+.feedback-reveal.correct { display: block; background: var(--accent-light); color: #085041; }
+.feedback-reveal.incorrect { display: block; background: var(--danger-light); color: #791F1F; }
+
+/* Practice */
+.interactive-practice { background: var(--purple-light); border: 1px solid #CECBF6; border-radius: var(--radius-lg); padding: 1.5rem; margin: 1.5rem 0; }
+.interactive-practice .practice-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--purple); margin-bottom: 0.6rem; }
+.interactive-practice textarea { width: 100%; min-height: 100px; padding: 0.8rem; border: 1px solid #CECBF6; border-radius: var(--radius); font-family: var(--font-body); font-size: 0.9rem; resize: vertical; background: #fff; color: var(--text); margin-bottom: 0.75rem; }
+.interactive-practice textarea:focus { outline: none; border-color: var(--purple); }
+.reveal-btn { background: var(--purple); color: #fff; border: none; border-radius: var(--radius); padding: 0.6rem 1.2rem; font-family: var(--font-body); font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: var(--transition); }
+.reveal-btn:hover { opacity: 0.9; }
+.example-reveal { display: none; margin-top: 1rem; padding: 1rem; background: #fff; border-radius: var(--radius); border: 1px solid #CECBF6; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+.example-reveal.visible { display: block; animation: fadeUp 0.3s ease; }
+
+/* Scenario */
+.scenario-box { background: var(--bg-accent); border-radius: var(--radius-lg); padding: 1.5rem; margin: 1.5rem 0; border: 1px solid var(--border); }
+.scenario-box .scenario-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 0.5rem; }
+.scenario-box .scenario-text { font-size: 0.95rem; color: var(--text); font-style: italic; line-height: 1.6; }
+
+/* Checklist */
+.checklist { list-style: none; margin: 1rem 0; }
+.checklist li { display: flex; gap: 0.6rem; align-items: flex-start; padding: 0.5rem 0; font-size: 0.92rem; color: var(--text-secondary); cursor: pointer; }
+.checklist li::before { content: ''; flex-shrink: 0; width: 18px; height: 18px; border: 1.5px solid var(--border); border-radius: 4px; margin-top: 0.15rem; transition: var(--transition); }
+.checklist li.checked::before { background: var(--accent); border-color: var(--accent); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E"); background-size: 12px; background-position: center; background-repeat: no-repeat; }
+
+/* Nav buttons */
+.nav-buttons { display: flex; justify-content: space-between; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+.nav-btn { font-family: var(--font-body); font-size: 0.9rem; font-weight: 500; padding: 0.7rem 1.5rem; border-radius: var(--radius); cursor: pointer; transition: var(--transition); border: 1px solid var(--border); background: var(--bg-card); color: var(--text); }
+.nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+.nav-btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.nav-btn.primary:hover { background: #085041; }
+
+/* Principle grid */
+.principle-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+.principle-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; text-align: center; transition: var(--transition); }
+.principle-item:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.principle-item .num { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: var(--accent-light); color: var(--accent); border-radius: 50%; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.6rem; }
+.principle-item h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.3rem; }
+.principle-item p { font-size: 0.82rem; color: var(--text-secondary); }
+
+footer.module-footer { background: var(--bg-accent); padding: 2rem 1.5rem; text-align: center; font-size: 0.82rem; color: var(--text-muted); border-top: 1px solid var(--border); }
+
+@media (max-width: 600px) {
+  .signals-grid { grid-template-columns: 1fr; }
+  .principle-grid { grid-template-columns: 1fr; }
+  nav.progress-nav button { font-size: 0.75rem; padding: 0.8rem 0.6rem; }
+  .vs-table { font-size: 0.8rem; }
+  .vs-table th, .vs-table td { padding: 0.6rem; }
+  .load-level-label { width: 70px; font-size: 0.7rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="module-header">
+  <div class="tag">Preceptor skills</div>
+  <h1>Reading your student &amp; delivering feedback</h1>
+  <p class="subtitle">Recognize cognitive load, understand how learners receive feedback, and deliver it so it actually sticks</p>
+</header>
+
+<nav class="progress-nav" id="nav">
+  <div class="nav-inner">
+    <button class="active" onclick="goTo(0)">Cognitive load</button>
+    <button onclick="goTo(1)">Reading signals</button>
+    <button onclick="goTo(2)">How they hear it</button>
+    <button onclick="goTo(3)">Delivering feedback</button>
+    <button onclick="goTo(4)">Practice</button>
+    <button onclick="goTo(5)">On shift</button>
+  </div>
+</nav>
+
+<main class="container">
+
+<!-- ============ SECTION 0: COGNITIVE LOAD ============ -->
+<section class="module-section active" id="sec-0">
+  <h2 class="section-title">Cognitive load is the bottleneck</h2>
+  <div class="section-divider"></div>
+  <p class="section-lead">Your student's brain has a fixed amount of working memory. When it's full, nothing else gets in &mdash; not your teaching, not your feedback, not the thing they already know but can't access right now.</p>
+
+  <div class="card card-accent">
+    <h3>Three types of cognitive load</h3>
+    <p>Understanding which type is consuming your student's bandwidth tells you what to do about it.</p>
+    <p style="margin-top: 0.75rem;"><strong>Intrinsic load</strong> &mdash; The inherent difficulty of the task itself. A pediatric respiratory arrest has higher intrinsic load than a lift assist. You can't reduce this, but you can scaffold it.</p>
+    <p style="margin-top: 0.5rem;"><strong>Extraneous load</strong> &mdash; Unnecessary cognitive noise that doesn't serve learning. Unclear instructions, distracting environment, equipment they don't know, navigating an unfamiliar crew dynamic. This is the load you can and should eliminate.</p>
+    <p style="margin-top: 0.5rem;"><strong>Germane load</strong> &mdash; The productive cognitive work of actually learning. Building mental models, connecting new information to old, making sense of patterns. This is the load you <em>want</em>. Your job is to maximize germane load by reducing extraneous load.</p>
+  </div>
+
+  <h3 style="margin: 2rem 0 0.75rem; font-size: 1.05rem;">The bandwidth meter</h3>
+  <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1rem;">Your student operates at one of three levels at any given moment. Learn to read which one they're in, because it determines what you can ask of them.</p>
+
+  <div class="load-meter">
+    <div class="load-meter-row load-green">
+      <div class="load-level-label">Green</div>
+      <div class="load-level-bar">
+        <strong style="color: var(--accent);">Learning zone.</strong> They have bandwidth to spare. They can process new information, reflect on what they're doing, and respond to questions. This is where teaching and feedback are most effective. They're calm, methodical, and asking questions themselves.
+      </div>
+    </div>
+    <div class="load-meter-row load-amber">
+      <div class="load-level-label">Amber</div>
+      <div class="load-level-bar">
+        <strong style="color: var(--warn);">Performance zone.</strong> They're working at capacity. They can execute what they already know, but there's no room for new concepts. Feedback in this zone gets heard but not processed. Teaching gets lost. They're focused, maybe slightly tunnel-visioned, doing things in the order they learned them.
+      </div>
+    </div>
+    <div class="load-meter-row load-red">
+      <div class="load-level-label">Red</div>
+      <div class="load-level-bar">
+        <strong style="color: var(--danger);">Overload zone.</strong> Working memory is full. They're freezing, repeating themselves, missing obvious things, or going robotic. No learning is happening. Feedback in this zone is literally inaudible &mdash; it enters short-term memory and is immediately displaced. They need you to reduce load, not add to it.
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-warn">
+    <span class="callout-icon">&#9888;</span>
+    <div><strong>The preceptor trap.</strong> Most of us default to teaching when we see a gap. But if your student is in amber or red, teaching <em>adds</em> cognitive load rather than building competence. The most effective thing you can do in those moments is shut up, let them work, and save the teaching for when they have bandwidth to receive it.</div>
+  </div>
+
+  <div class="card">
+    <h3>What fills the tank</h3>
+    <p>Cognitive load isn't just about call complexity. These factors stack and compound:</p>
+    <p style="margin-top: 0.5rem;"><strong>Novelty</strong> &mdash; First time doing a skill, working with a new crew, unfamiliar station or territory.</p>
+    <p style="margin-top: 0.3rem;"><strong>Emotional intensity</strong> &mdash; Pediatric patients, death, family distress, conflict on scene.</p>
+    <p style="margin-top: 0.3rem;"><strong>Decision density</strong> &mdash; Multiple competing priorities, ambiguous presentations, time pressure.</p>
+    <p style="margin-top: 0.3rem;"><strong>Social pressure</strong> &mdash; Being observed, feeling evaluated, performing in front of other crews or hospital staff.</p>
+    <p style="margin-top: 0.3rem;"><strong>Fatigue</strong> &mdash; Time of day, sleep quality, shift length. Night four of a block looks different than day one.</p>
+    <p style="margin-top: 0.3rem;"><strong>Life outside the truck</strong> &mdash; They may be carrying stress you can't see. A student who was in green zone yesterday might show up in amber today because of something at home.</p>
+  </div>
+
+  <div class="quiz-container">
+    <div class="quiz-question" data-correct="2">
+      <div class="q-label">Knowledge check</div>
+      <div class="q-text">Your student is managing a straightforward COPD exacerbation but keeps forgetting to reassess after treatments. They're on their third night shift. Their movements are slow but methodical. What level are they operating at?</div>
+      <button class="quiz-option" data-idx="0">Green &mdash; they're handling the call, so there's bandwidth for teaching</button>
+      <button class="quiz-option" data-idx="1">Red &mdash; they're forgetting things, they're overloaded</button>
+      <button class="quiz-option" data-idx="2">Amber &mdash; fatigue has narrowed their bandwidth and they're executing known routines but not integrating the reassessment cycle</button>
+      <button class="quiz-option" data-idx="3">They're just being lazy on a night shift</button>
+      <div class="feedback-reveal"></div>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <div></div>
+    <button class="nav-btn primary" onclick="goTo(1)">Next: Reading signals &#8594;</button>
+  </div>
+</section>
+
+<!-- ============ SECTION 1: READING SIGNALS ============ -->
+<section class="module-section" id="sec-1">
+  <h2 class="section-title">Reading the signals</h2>
+  <div class="section-divider"></div>
+  <p class="section-lead">Your student won't tell you they're overloaded. They probably don't even know it themselves. You have to learn to see it in their behaviour &mdash; and then adjust in real time.</p>
+
+  <h3 style="margin: 1rem 0 0.75rem; font-size: 1.05rem;">Observable indicators by zone</h3>
+
+  <div class="signals-grid">
+    <div class="signal-card">
+      <div class="signal-type" style="color: var(--accent);">Green &mdash; verbal</div>
+      <h4>Thinking out loud</h4>
+      <p>Narrating their reasoning, asking "what if" questions, connecting current call to previous ones. They're building mental models in real time.</p>
+    </div>
+    <div class="signal-card">
+      <div class="signal-type" style="color: var(--accent);">Green &mdash; behavioural</div>
+      <h4>Smooth task-switching</h4>
+      <p>Moving between assessment, treatment, and communication without significant pauses. Making eye contact with you. Adapting when something unexpected comes up.</p>
+    </div>
+    <div class="signal-card">
+      <div class="signal-type" style="color: var(--warn);">Amber &mdash; verbal</div>
+      <h4>Going quiet</h4>
+      <p>Stopped narrating. Answering your questions with short, surface-level responses. Not asking questions themselves. They're conserving bandwidth.</p>
+    </div>
+    <div class="signal-card">
+      <div class="signal-type" style="color: var(--warn);">Amber &mdash; behavioural</div>
+      <h4>Tunnel vision</h4>
+      <p>Following their mental checklist rigidly. Missing contextual cues. Treating it like a protocol rather than a patient. Slow to respond to changes in the situation.</p>
+    </div>
+    <div class="signal-card">
+      <div class="signal-type" style="color: var(--danger);">Red &mdash; verbal</div>
+      <h4>Repeating or freezing</h4>
+      <p>Asking the same question twice. Starting a sentence and losing it. Saying "uh..." repeatedly. Or going completely silent for extended periods.</p>
+    </div>
+    <div class="signal-card">
+      <div class="signal-type" style="color: var(--danger);">Red &mdash; behavioural</div>
+      <h4>Motor breakdown</h4>
+      <p>Fumbling with equipment they normally handle fine. Standing still when they should be acting. Fixating on one task while ignoring higher priorities. Reverting to the first thing they ever learned.</p>
+    </div>
+  </div>
+
+  <div class="card card-accent">
+    <h3>What to do when you read each zone</h3>
+    <p><strong style="color: var(--accent);">Green:</strong> Teach. Ask questions. Add complexity. "What's the worst thing this could be?" Push them toward the edge of their competence. This is where growth happens.</p>
+    <p style="margin-top: 0.5rem;"><strong style="color: var(--warn);">Amber:</strong> Reduce extraneous load. Handle the radio call yourself. Quietly prep equipment so they don't have to multitask. Don't teach &mdash; just give brief, clear directives if needed. Save the debrief for later.</p>
+    <p style="margin-top: 0.5rem;"><strong style="color: var(--danger);">Red:</strong> Step in. Not as a takeover, but as a load shed. "I've got the monitor, you focus on the airway." Give them one task, make it clear, and reduce their decision space. Debrief much later &mdash; they need to decompress first.</p>
+  </div>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">&#9432;</span>
+    <div><strong>Zone transitions are fast.</strong> A student can go from green to red in seconds if something unexpected happens &mdash; an arrest, an aggressive bystander, equipment failure. Watch for the transition moment, not just the steady state. The shift from narrating to silence is the signal.</div>
+  </div>
+
+  <div class="card">
+    <h3>Calibrating the challenge</h3>
+    <p>Vygotsky's zone of proximal development is the space between what a learner can do independently and what they can do with support. Your job is to keep them at the edge of that zone &mdash; challenged enough to grow, supported enough not to drown.</p>
+    <p style="margin-top: 0.5rem;">Most preceptors intervene too early because watching someone struggle is uncomfortable. But productive struggle &mdash; the kind that happens in green zone, where they have bandwidth to work through the problem &mdash; is exactly where learning lives. Your discomfort isn't a signal to step in. Their zone colour is.</p>
+  </div>
+
+  <div class="quiz-container">
+    <div class="quiz-question" data-correct="1">
+      <div class="q-label">Knowledge check</div>
+      <div class="q-text">You're on a chest pain call. Your student has been managing well (green) but the 12-lead shows a STEMI and you see them stop, stare at the strip, and go quiet. What just happened and what do you do?</div>
+      <button class="quiz-option" data-idx="0">They're in green still &mdash; they're just reading the strip carefully. Wait and let them work.</button>
+      <button class="quiz-option" data-idx="1">They've jumped to amber or red &mdash; the unexpected finding spiked their load. Reduce their decision space: "I see it too. What's the one thing we need to do right now?"</button>
+      <button class="quiz-option" data-idx="2">Take over the call &mdash; a STEMI is too high-stakes for a student to manage.</button>
+      <button class="quiz-option" data-idx="3">Start teaching them about STEMI recognition &mdash; this is a great learning moment.</button>
+      <div class="feedback-reveal"></div>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="goTo(0)">&#8592; Cognitive load</button>
+    <button class="nav-btn primary" onclick="goTo(2)">Next: How they hear it &#8594;</button>
+  </div>
+</section>
+
+<!-- ============ SECTION 2: HOW THEY HEAR IT ============ -->
+<section class="module-section" id="sec-2">
+  <h2 class="section-title">How your student hears feedback</h2>
+  <div class="section-divider"></div>
+  <p class="section-lead">You can deliver perfect feedback and it still won't land if the receiver's brain isn't ready for it. Understanding what happens on their end changes how and when you deliver on yours.</p>
+
+  <div class="card card-accent">
+    <h3>The threat response is the gatekeeper</h3>
+    <p>The moment someone perceives evaluative information, the amygdala fires a threat-or-safety assessment before the prefrontal cortex (the part that actually learns) even gets involved. If the brain reads "threat," it routes to defend, deflect, freeze, or perform agreement. If it reads "safe," the information reaches the learning centres. Your delivery determines which route it takes.</p>
+  </div>
+
+  <h3 style="margin: 2rem 0 0.75rem; font-size: 1.05rem;">What triggers threat vs. safety</h3>
+
+  <table class="vs-table">
+    <thead>
+      <tr>
+        <th class="label-col">Factor</th>
+        <th class="dont-col">Triggers threat</th>
+        <th class="do-col">Triggers safety</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="label-col">Timing</td>
+        <td class="dont-col">Feedback in front of patients, crews, or hospital staff</td>
+        <td class="do-col">Private, after the call, when they've had a minute to breathe</td>
+      </tr>
+      <tr>
+        <td class="label-col">Identity</td>
+        <td class="dont-col">"You're not a strong assessor" (identity-level)</td>
+        <td class="do-col">"That assessment had gaps" (behaviour-level)</td>
+      </tr>
+      <tr>
+        <td class="label-col">Direction</td>
+        <td class="dont-col">You talk, they listen (lecture mode)</td>
+        <td class="do-col">You observe, then ask a question (dialogue mode)</td>
+      </tr>
+      <tr>
+        <td class="label-col">Predictability</td>
+        <td class="dont-col">Feedback comes randomly, inconsistently, only when things go wrong</td>
+        <td class="do-col">Structured debriefs are routine &mdash; they expect it every call</td>
+      </tr>
+      <tr>
+        <td class="label-col">Power</td>
+        <td class="dont-col">"I need to talk to you about something" (summons energy)</td>
+        <td class="do-col">"Let's debrief that one" (normal, expected, low-stakes language)</td>
+      </tr>
+      <tr>
+        <td class="label-col">Cognitive state</td>
+        <td class="dont-col">They're still in amber/red from the call</td>
+        <td class="do-col">They've returned to green &mdash; decompressed, hydrated, sitting down</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout-warn">
+    <span class="callout-icon">&#9888;</span>
+    <div><strong>The cognitive load connection.</strong> If your student is still in amber or red when you start debriefing, the feedback itself becomes additional cognitive load that pushes them further into overload. They'll nod along, say "yeah, okay," and retain nothing. Wait until they're back in green. That might mean waiting until the next posted period, or the drive back to base.</div>
+  </div>
+
+  <div class="card">
+    <h3>The five SCARF domains</h3>
+    <p>David Rock's model maps five social triggers that the brain processes using the same circuitry as physical threats. Knowing which domain you're activating helps you reframe your delivery.</p>
+    <p style="margin-top: 0.75rem;"><strong>Status</strong> &mdash; "Am I being seen as competent?" Threatened by: feedback that implies incompetence, comparisons to other students.</p>
+    <p style="margin-top: 0.3rem;"><strong>Certainty</strong> &mdash; "Do I know what's expected?" Threatened by: vague feedback, unclear standards, shifting goalposts.</p>
+    <p style="margin-top: 0.3rem;"><strong>Autonomy</strong> &mdash; "Do I have agency?" Threatened by: being told exactly what to do, micromanagement, no choices.</p>
+    <p style="margin-top: 0.3rem;"><strong>Relatedness</strong> &mdash; "Am I part of the team?" Threatened by: feeling singled out, excluded, or judged as an outsider.</p>
+    <p style="margin-top: 0.3rem;"><strong>Fairness</strong> &mdash; "Is this fair?" Threatened by: inconsistent standards, being called out for something others get away with.</p>
+  </div>
+
+  <div class="card card-info">
+    <h3>Reading their receiving style</h3>
+    <p>Pay attention in the first few shifts to how your student responds to feedback. People have default patterns:</p>
+    <p style="margin-top: 0.5rem;"><strong>The deflector:</strong> "Yeah but..." followed by an explanation. They're protecting status. Frame feedback as building on what's already working.</p>
+    <p style="margin-top: 0.3rem;"><strong>The absorber:</strong> Goes quiet, nods, says nothing. They might be processing deeply, or they might be shutting down. Follow up later: "I shared some observations earlier &mdash; what landed and what didn't?"</p>
+    <p style="margin-top: 0.3rem;"><strong>The performer:</strong> "Absolutely, totally, I'll fix that right away." Quick agreement without depth. They want to please. Slow them down: "Before you jump to fixing it, tell me what you think caused it."</p>
+    <p style="margin-top: 0.3rem;"><strong>The questioner:</strong> Asks clarifying questions, wants specifics. They're genuinely processing. Give them the detail they need &mdash; they'll do the work.</p>
+  </div>
+
+  <div class="quiz-container">
+    <div class="quiz-question" data-correct="0">
+      <div class="q-label">Knowledge check</div>
+      <div class="q-text">You notice your student always responds to corrective feedback with "Yep, totally, I'll fix that" but the same issues keep appearing. This pattern suggests:</div>
+      <button class="quiz-option" data-idx="0">They're performing agreement without processing. You need to slow them down and ask them to articulate the root cause before jumping to solutions.</button>
+      <button class="quiz-option" data-idx="1">They don't respect your feedback and aren't planning to change.</button>
+      <button class="quiz-option" data-idx="2">Your feedback is clear enough &mdash; they just need more repetition to build the habit.</button>
+      <button class="quiz-option" data-idx="3">You should switch to written feedback so they can process it on their own time.</button>
+      <div class="feedback-reveal"></div>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="goTo(1)">&#8592; Reading signals</button>
+    <button class="nav-btn primary" onclick="goTo(3)">Next: Delivering feedback &#8594;</button>
+  </div>
+</section>
+
+<!-- ============ SECTION 3: DELIVERING FEEDBACK ============ -->
+<section class="module-section" id="sec-3">
+  <h2 class="section-title">Delivering feedback that sticks</h2>
+  <div class="section-divider"></div>
+  <p class="section-lead">One message, anchored to something specific, connected to an outcome. Positive or corrective &mdash; never both at the same time.</p>
+
+  <div class="card card-danger">
+    <h3>Why the feedback sandwich fails</h3>
+    <p>Positive-negative-positive teaches your student to brace for the "but" every time you say something good. It dilutes both messages, erodes trust in your praise, and trains them to filter for the criticism in the middle. You end up delivering three messages and landing zero.</p>
+  </div>
+
+  <div class="card card-accent">
+    <h3>The rule: one type per conversation</h3>
+    <p>If you have corrective feedback, give it cleanly. If you have positive feedback, let it stand on its own so it registers as genuine. Separate them in time &mdash; even a few calls apart is enough. Your student needs to know that when you say "that was good," there's no "but" coming.</p>
+  </div>
+
+  <h3 style="margin: 2rem 0 1rem; font-size: 1.05rem;">The OIQ model</h3>
+  <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1.25rem;">Three components. Works for both positive and corrective feedback. The anchor is the observation &mdash; the more specific it is, the more useful everything after it becomes.</p>
+
+  <div class="model-step">
+    <div class="step-icon" style="background: var(--accent-light); color: var(--accent);">O</div>
+    <div>
+      <h4>Observation</h4>
+      <p>What you specifically saw or heard. Behavioural, concrete, verifiable. No interpretation, no judgment. This is your anchor &mdash; and the part that's hardest when your memory doesn't cooperate. Jot one line on your phone right after the call: 10 words, the specific thing. That note is your debrief ammunition later.</p>
+    </div>
+  </div>
+  <div class="model-step">
+    <div class="step-icon" style="background: var(--info-light); color: var(--info);">I</div>
+    <div>
+      <h4>Impact</h4>
+      <p>Connect the behaviour to an outcome &mdash; patient outcome, clinical standard, team function, or learning goal. "Here's why that mattered." This is where the feedback becomes meaningful rather than arbitrary. A behaviour without a connected outcome feels like a preference, not a principle.</p>
+    </div>
+  </div>
+  <div class="model-step">
+    <div class="step-icon" style="background: var(--purple-light); color: var(--purple);">Q</div>
+    <div>
+      <h4>Question</h4>
+      <p>Open the door to their perspective. This is the step most people skip, and it's the most important one. "What was going on for you in that moment?" Without it, feedback is a lecture. With it, you discover the root cause &mdash; and each root cause requires a different intervention.</p>
+    </div>
+  </div>
+
+  <div class="callout callout-accent">
+    <span class="callout-icon">&#10003;</span>
+    <div><strong>The phone note hack.</strong> Right after the call, while the student is doing paperwork, type one line into your Notes app: the specific behaviour and whether it was good or a gap. "Didn't reassess after ventolin" or "Directed fire without hesitation." That's your observation, pre-captured. The impact and question you can construct later because those come from your clinical knowledge, not your memory of the event.</div>
+  </div>
+
+  <h3 style="margin: 2rem 0 1rem; font-size: 1.05rem;">Positive vs. corrective: what changes</h3>
+
+  <table class="vs-table">
+    <thead>
+      <tr>
+        <th class="label-col">Element</th>
+        <th class="do-col">Positive example</th>
+        <th class="dont-col">Corrective example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="label-col">Observation</td>
+        <td class="do-col">"You repositioned the patient before reassessing vitals, without being prompted"</td>
+        <td class="dont-col">"You didn't auscultate lung sounds before or after the ventolin"</td>
+      </tr>
+      <tr>
+        <td class="label-col">Impact</td>
+        <td class="do-col">"That tells me you're thinking about interventions as a cycle, not a checklist &mdash; that's the clinical thinking we want"</td>
+        <td class="dont-col">"Without a baseline, we can't determine if the intervention worked &mdash; and it's a BLS PCS standard"</td>
+      </tr>
+      <tr>
+        <td class="label-col">Question</td>
+        <td class="do-col">"What tipped you off that repositioning might help?"</td>
+        <td class="dont-col">"Help me understand &mdash; is it a prioritization thing or is it not on your radar for these patients?"</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin: 2rem 0 1rem; font-size: 1.05rem;">Timing: hot vs. cold</h3>
+
+  <div class="card">
+    <p><strong>Hot debrief</strong> (right after the call): Best for immediate factual correction and emotional processing. Keep it under 2 minutes. One point only. Only do this if they're back in green zone &mdash; not while they're still completing the ACR or decompressing.</p>
+    <p style="margin-top: 0.75rem;"><strong>Cold debrief</strong> (end of shift, posted period, next day): Best for pattern recognition and deeper reflection. The learner has distance, you've had time to choose your words, and you can connect multiple experiences. "Over the last three calls, I've noticed..."</p>
+    <p style="margin-top: 0.75rem;"><strong>Rule of thumb:</strong> Single-call corrective feedback? Hot, if they have bandwidth. Pattern feedback? Always cold. Positive feedback? Either, but immediate reinforcement has the strongest effect.</p>
+  </div>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">&#9432;</span>
+    <div><strong>Permission-based feedback.</strong> For non-urgent corrective feedback, try: "Can I share an observation from that call?" This small act of consent shifts the dynamic from evaluation to collaboration. It doesn't work for patient safety issues &mdash; those get addressed immediately &mdash; but for developmental feedback it puts the student in a receptive state rather than a defensive one.</div>
+  </div>
+
+  <div class="quiz-container">
+    <div class="quiz-question" data-correct="3">
+      <div class="q-label">Knowledge check</div>
+      <div class="q-text">You're three calls into a day shift. Your student nailed scene leadership on call one, missed a reassessment on call two, and did a great patient handoff on call three. How do you structure your feedback?</div>
+      <button class="quiz-option" data-idx="0">Wait until end of shift and cover all three together to give a balanced picture.</button>
+      <button class="quiz-option" data-idx="1">After call three, say: "Great handoff, but on the last call you missed the reassessment."</button>
+      <button class="quiz-option" data-idx="2">Only address the reassessment gap &mdash; corrective feedback is more important than praise.</button>
+      <button class="quiz-option" data-idx="3">Give specific positive feedback on the handoff now (on its own). Address the reassessment separately &mdash; either after a break or during a cold debrief at end of shift.</button>
+      <div class="feedback-reveal"></div>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="goTo(2)">&#8592; How they hear it</button>
+    <button class="nav-btn primary" onclick="goTo(4)">Next: Practice &#8594;</button>
+  </div>
+</section>
+
+<!-- ============ SECTION 4: PRACTICE ============ -->
+<section class="module-section" id="sec-4">
+  <h2 class="section-title">Scenario practice</h2>
+  <div class="section-divider"></div>
+  <p class="section-lead">Write your response before revealing the example. Generating your own answer &mdash; even a rough one &mdash; is retrieval practice, and it's where the learning actually cements.</p>
+
+  <div class="interactive-practice">
+    <div class="practice-label">Scenario 1 &mdash; Reading cognitive load</div>
+    <p style="font-size: 0.95rem; margin-bottom: 0.75rem;">You're on a call with a 78-year-old in respiratory distress. Your student (week 4) started strong &mdash; good primary, appropriate vitals. Then the family starts shouting questions, the patient's SpO2 drops to 84%, and you notice your student has stopped talking, is staring at the monitor, and hasn't reached for the BVM. What's happening and what do you do?</p>
+    <textarea placeholder="Identify the zone, what caused the shift, and your intervention..."></textarea>
+    <button class="reveal-btn" onclick="toggleReveal('reveal-1')">See example response</button>
+    <div class="example-reveal" id="reveal-1">
+      <strong>Zone shift:</strong> Green to red. The compounding factors &mdash; desaturating patient, family distress, and decision pressure &mdash; overwhelmed working memory simultaneously. The silence and fixation on the monitor are classic red-zone indicators.<br><br>
+      <strong>Immediate action:</strong> Shed load. "I'm going to talk to the family &mdash; you grab the BVM and get that sat up." One task, one clear directive, removal of the social stressor. You're not taking over the call; you're reducing their decision space to one actionable item.<br><br>
+      <strong>After the call:</strong> Don't debrief immediately &mdash; they need to decompress. Later, when they're back in green: "I noticed you went quiet when the sat dropped and the family got loud. That's a normal overload response. Let's talk about what you can do when you feel that happening."<br><br>
+      <strong>Key insight:</strong> The debrief is about building their self-awareness of their own overload signals, not about the BVM delay. If they learn to recognize their own red zone, they can self-manage next time.
+    </div>
+  </div>
+
+  <div class="interactive-practice">
+    <div class="practice-label">Scenario 2 &mdash; Corrective feedback with OIQ</div>
+    <p style="font-size: 0.95rem; margin-bottom: 0.75rem;">Your student didn't check a blood glucose on an altered LOC patient. This is the second time this has happened. They're generally progressing well and you have a good relationship. Build your feedback using OIQ.</p>
+    <textarea placeholder="Write your observation, impact, and question..."></textarea>
+    <button class="reveal-btn" onclick="toggleReveal('reveal-2')">See example response</button>
+    <div class="example-reveal" id="reveal-2">
+      <strong>O:</strong> "On both the call this morning and the one Tuesday, the BGL wasn't part of your workup on an altered patient."<br><br>
+      <strong>I:</strong> "Hypoglycemia is the most reversible cause of altered LOC, and missing it delays a treatment that takes seconds. It's also a BLS PCS standard &mdash; it needs to be reflexive, not something you have to think about."<br><br>
+      <strong>Q:</strong> "Help me understand what's happening &mdash; is it getting bumped by other priorities, or is it not on your radar for altered presentations?"<br><br>
+      <em>The question matters because the root cause changes the intervention. If it's a prioritization problem, you work on their assessment sequence. If it's a knowledge gap (they don't associate glucose with altered LOC), you teach the pathophysiology. You can't coach what you don't understand.</em>
+    </div>
+  </div>
+
+  <div class="interactive-practice">
+    <div class="practice-label">Scenario 3 &mdash; Positive feedback with OIQ</div>
+    <p style="font-size: 0.95rem; margin-bottom: 0.75rem;">Your student just ran a pediatric call. Without prompting, they got down to the child's level, used age-appropriate language, and kept the parent in the loop. The child stayed calm through the entire assessment.</p>
+    <textarea placeholder="Write your positive feedback using OIQ..."></textarea>
+    <button class="reveal-btn" onclick="toggleReveal('reveal-3')">See example response</button>
+    <div class="example-reveal" id="reveal-3">
+      <strong>O:</strong> "You got down to her level, used words like 'listening to your chest' instead of medical terminology, and kept mom updated at every step."<br><br>
+      <strong>I:</strong> "That kid stayed calm the entire time. When a pediatric patient is calm, your assessment quality goes way up &mdash; you got better lung sounds, a more accurate respiratory rate, and a more useful clinical picture than most crews would have."<br><br>
+      <strong>Q:</strong> "Was that deliberate or did it just happen naturally? I want to understand what was going through your head."<br><br>
+      <em>Delivered on its own &mdash; no "but" coming. The specificity tells them exactly what to repeat. The question helps them become conscious of an unconscious competence so they can replicate it deliberately. And no, this is not the moment to also mention that their radio report was weak. That's a separate conversation.</em>
+    </div>
+  </div>
+
+  <div class="interactive-practice">
+    <div class="practice-label">Scenario 4 &mdash; Timing and receiving style</div>
+    <p style="font-size: 0.95rem; margin-bottom: 0.75rem;">Your student is a "performer" &mdash; they always respond to feedback with quick agreement ("Totally, yep, I'll fix that"). You've noticed the same medication administration error three times. You've given feedback twice and gotten enthusiastic agreement both times, but nothing changed. What's your approach this time?</p>
+    <textarea placeholder="How do you break through the performance pattern?"></textarea>
+    <button class="reveal-btn" onclick="toggleReveal('reveal-4')">See example response</button>
+    <div class="example-reveal" id="reveal-4">
+      <strong>Name the pattern:</strong> "I've brought this up twice before and you agreed to work on it both times. It's still happening. I don't think the issue is willingness &mdash; I think something else is going on that we haven't identified yet."<br><br>
+      <strong>Slow them down:</strong> "Before you tell me you'll fix it, I want you to walk me through exactly what happened in your head during the med admin. Step by step, starting from when you pulled the drug."<br><br>
+      <strong>Why this works:</strong> You're bypassing the performance response by explicitly naming it and redirecting to a process-level conversation. The step-by-step narration forces them to actually reconstruct the event instead of jumping to the resolution. You'll likely discover the root cause in the narration &mdash; a knowledge gap, a sequencing error, or an environmental factor they haven't articulated.<br><br>
+      <strong>The meta-message:</strong> You're also teaching them that quick agreement without understanding isn't what you're looking for. You want genuine engagement with the problem.
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="goTo(3)">&#8592; Delivering feedback</button>
+    <button class="nav-btn primary" onclick="goTo(5)">Next: On shift &#8594;</button>
+  </div>
+</section>
+
+<!-- ============ SECTION 5: ON SHIFT ============ -->
+<section class="module-section" id="sec-5">
+  <h2 class="section-title">On shift</h2>
+  <div class="section-divider"></div>
+  <p class="section-lead">The application layer. A shift-by-shift checklist and quick-reference models you can pull up on the truck.</p>
+
+  <div class="card card-accent">
+    <h3>Your shift checklist</h3>
+    <p>Pick one or two per shift. After you've cycled through them all, they become automatic. Click to check off.</p>
+  </div>
+
+  <ul class="checklist" id="shift-checklist">
+    <li>Read your student's zone at the start of shift &mdash; where are they today?</li>
+    <li>During a call, consciously identify their cognitive load zone at least once</li>
+    <li>After a call, jot a 10-word note on your phone before doing anything else</li>
+    <li>Give one piece of positive feedback using OIQ &mdash; on its own, no "but"</li>
+    <li>Give one piece of corrective feedback using OIQ &mdash; separate from any positive</li>
+    <li>On a green-zone call, ask one Socratic question instead of giving an answer</li>
+    <li>On an amber/red call, resist the urge to teach in the moment &mdash; save it for later</li>
+    <li>Let your student struggle 10 extra seconds before stepping in</li>
+    <li>Notice your student's receiving pattern (deflector, absorber, performer, questioner)</li>
+    <li>Ask for permission before non-urgent corrective feedback: "Can I share an observation?"</li>
+  </ul>
+
+  <h3 style="margin: 2rem 0 1rem; font-size: 1.05rem;">Quick reference</h3>
+
+  <div class="card" style="margin-bottom: 1rem;">
+    <h3 style="color: var(--accent);">OIQ</h3>
+    <p>Observation (what I saw) &rarr; Impact (why it matters) &rarr; Question (what was going on for you?)</p>
+  </div>
+
+  <div class="card" style="margin-bottom: 1rem;">
+    <h3 style="color: var(--warn);">Cognitive load zones</h3>
+    <p>Green = teach and challenge &nbsp;|&nbsp; Amber = reduce noise, save teaching for later &nbsp;|&nbsp; Red = step in, shed load, debrief much later</p>
+  </div>
+
+  <div class="card" style="margin-bottom: 1rem;">
+    <h3 style="color: var(--info);">SCARF triggers</h3>
+    <p>Status &middot; Certainty &middot; Autonomy &middot; Relatedness &middot; Fairness &mdash; name the trigger to manage it</p>
+  </div>
+
+  <div class="card" style="margin-bottom: 1rem;">
+    <h3 style="color: var(--purple);">Receiving styles</h3>
+    <p>Deflector (protect status) &middot; Absorber (quiet processing or shutdown) &middot; Performer (quick agreement) &middot; Questioner (genuine engagement)</p>
+  </div>
+
+  <div class="card" style="margin-bottom: 1rem;">
+    <h3 style="color: var(--coral);">Timing</h3>
+    <p>Hot = single call, immediate, if they're in green &nbsp;|&nbsp; Cold = patterns, end of shift, deeper reflection</p>
+  </div>
+
+  <div class="callout callout-accent">
+    <span class="callout-icon">&#10003;</span>
+    <div><strong>The phone note is the whole system.</strong> Your memory challenge has a 10-second fix: one line, right after the call, before the details evaporate. The observation is captured. The impact comes from your clinical knowledge. The question you already know how to ask. The note turns a memory limitation into a non-issue.</div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="goTo(4)">&#8592; Practice</button>
+    <button class="nav-btn primary" onclick="goTo(0)">&#8634; Start over</button>
+  </div>
+</section>
+
+</main>
+
+<footer class="module-footer">
+  <p>Reading Your Student &amp; Delivering Feedback &mdash; EMS Preceptor Module</p>
+  <p style="margin-top: 0.25rem;">Evidence-informed. Field-tested. Built for the truck.</p>
+</footer>
+
+<script>
+const sections = document.querySelectorAll('.module-section');
+const navBtns = document.querySelectorAll('nav button');
+const visited = new Set([0]);
+
+function goTo(idx) {
+  visited.add(idx);
+  sections.forEach((s, i) => s.classList.toggle('active', i === idx));
+  navBtns.forEach((b, i) => {
+    b.classList.remove('active');
+    b.classList.toggle('completed', visited.has(i) && i !== idx);
+    if (i === idx) b.classList.add('active');
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Quiz logic
+const quizData = {
+  'sec-0': [{
+    correct: 2,
+    explanations: [
+      "Just because they're managing the call doesn't mean they're in green. The missing reassessments and slow movements point to narrowed bandwidth, not spare capacity. Teaching here likely won't land.",
+      "Red would show more dramatic signs &mdash; freezing, fumbling, complete shutdown. They're still executing known routines, which is amber territory. They're not overloaded, they're narrowed.",
+      "Correct. Night three fatigue has reduced their working memory capacity. They can execute their learned sequence (the COPD protocol they know) but don't have bandwidth for the additional cognitive step of reassessment cycling. This isn't a knowledge gap &mdash; it's a bandwidth gap. Note it, address it in a cold debrief when they're rested.",
+      "Attributing cognitive load limitations to character ('lazy') is a preceptor trap. Fatigue-induced bandwidth narrowing looks like laziness from the outside but has completely different root causes and requires a completely different intervention."
+    ]
+  }],
+  'sec-1': [{
+    correct: 1,
+    explanations: [
+      "The sudden silence and staring are not 'careful reading' &mdash; they're freeze indicators. A green-zone student reading a strip would be talking through it, not going mute. Waiting here risks the patient.",
+      "Correct. The unexpected STEMI finding created a load spike that jumped them out of green. Your job is to reduce their decision space to one clear action while removing yourself as an additional stressor. 'What's the one thing we need to do right now?' is a scaffolding question that re-engages their thinking without overwhelming it. You're not taking over &mdash; you're shrinking the problem to a size their current bandwidth can handle.",
+      "Overcorrection. Taking over entirely teaches learned helplessness and doesn't build the student's ability to manage load spikes. They need scaffolding, not rescue &mdash; unless patient safety is immediately at risk.",
+      "They just went from green to amber/red. Their working memory is full. Teaching about STEMI recognition right now is adding fuel to the overload. This is a classic preceptor trap &mdash; seeing a teaching moment when the student has zero bandwidth to receive it. Save it for the cold debrief."
+    ]
+  }],
+  'sec-2': [{
+    correct: 0,
+    explanations: [
+      "Correct. The quick-agreement-no-change pattern is the hallmark of a performer receiving style. They're optimizing for ending the uncomfortable feedback moment, not for processing the content. The fix isn't repeating the feedback louder or more often &mdash; it's slowing them down and making them engage with the root cause before they're allowed to jump to 'I'll fix it.'",
+      "Unlikely. Performers aren't dismissive &mdash; they're conflict-avoidant. They genuinely want to please, which is why they agree so fast. The problem is that agreement replaces processing, not that they don't care.",
+      "You've already given the feedback twice and it hasn't changed behaviour. More repetition of the same approach will produce the same result. The delivery method needs to change, not the frequency.",
+      "Written feedback might help some learners, but for a performer it removes the opportunity for you to slow them down and force deeper engagement. They'll read it, agree with it internally, and nothing changes."
+    ]
+  }],
+  'sec-3': [{
+    correct: 3,
+    explanations: [
+      "Bundling everything at end of shift dilutes each message. By then, the specifics of call one are fuzzy (for both of you), and the student gets a mixed bag that's hard to act on. Separate messages land better than compilations.",
+      "Classic feedback sandwich. You just undermined the handoff praise by attaching a 'but.' The student now doesn't know if the handoff was actually good or if you were just softening the blow. Both messages are weakened.",
+      "Ignoring positive performance to focus only on gaps creates an environment where the student only hears from you when they've done something wrong. That erodes safety and teaches them that your silence means 'acceptable' &mdash; which is not the same as reinforcement.",
+      "Correct. The positive feedback on the handoff lands now while it's fresh and specific, and it stands alone as genuine. The reassessment gap gets its own dedicated conversation &mdash; either after a break or at end of shift &mdash; where it gets full attention and the student can engage without the cognitive confusion of mixed messages."
+    ]
+  }]
+};
+
+document.querySelectorAll('.quiz-question').forEach(q => {
+  const section = q.closest('.module-section');
+  const sectionId = section.id;
+  const qIdx = Array.from(section.querySelectorAll('.quiz-question')).indexOf(q);
+  const answerData = quizData[sectionId]?.[qIdx];
+  if (!answerData) return;
+  const options = q.querySelectorAll('.quiz-option');
+  const revealDiv = q.querySelector('.feedback-reveal');
+  options.forEach(opt => {
+    opt.addEventListener('click', () => {
+      const idx = parseInt(opt.dataset.idx);
+      const isCorrect = idx === answerData.correct;
+      options.forEach(o => { o.disabled = true; o.classList.remove('selected-correct', 'selected-wrong', 'show-correct'); });
+      opt.classList.add(isCorrect ? 'selected-correct' : 'selected-wrong');
+      if (!isCorrect) options[answerData.correct].classList.add('show-correct');
+      revealDiv.className = 'feedback-reveal ' + (isCorrect ? 'correct' : 'incorrect');
+      revealDiv.innerHTML = answerData.explanations[idx];
+    });
+  });
+});
+
+function toggleReveal(id) { document.getElementById(id).classList.toggle('visible'); }
+document.querySelectorAll('.checklist li').forEach(li => { li.addEventListener('click', () => li.classList.toggle('checked')); });
+</script>
+
+</body>
+</html>
