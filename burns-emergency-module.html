@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Burns Emergency — PCP Interactive Module</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0f14;
+  --bg-elevated: #151921;
+  --bg-card: #1a1f2b;
+  --bg-hover: #222837;
+  --border: #2a3042;
+  --border-active: #4a6fa5;
+  --text-primary: #e8ecf2;
+  --text-secondary: #8b95a8;
+  --text-muted: #5a6477;
+  --accent-blue: #4a9eff;
+  --accent-blue-dim: #2a5a9e;
+  --accent-red: #ff6b6b;
+  --accent-red-dim: #7a2a2a;
+  --accent-amber: #f5a623;
+  --accent-amber-dim: #7a5a1a;
+  --accent-green: #4ae0a0;
+  --accent-green-dim: #1a5a3a;
+  --accent-purple: #b07aff;
+  --accent-purple-dim: #4a2a7a;
+  --accent-cyan: #5de5e5;
+  --radius: 10px;
+  --radius-lg: 16px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.3);
+  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'DM Sans', -apple-system, sans-serif;
+  background: var(--bg); color: var(--text-primary);
+  line-height: 1.65; min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── NAV ─── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(12,15,20,0.85); backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border); padding: 0 20px;
+}
+.nav-inner {
+  max-width: 900px; margin: 0 auto;
+  display: flex; align-items: center; gap: 8px; padding: 12px 0;
+  overflow-x: auto; scrollbar-width: none;
+}
+.nav-inner::-webkit-scrollbar { display: none; }
+.nav-btn {
+  flex-shrink: 0; background: transparent; border: 1px solid transparent;
+  color: var(--text-muted); font-family: inherit; font-size: 0.8rem; font-weight: 500;
+  padding: 6px 14px; border-radius: 99px; cursor: pointer; transition: var(--transition);
+  white-space: nowrap;
+}
+.nav-btn:hover { color: var(--text-secondary); background: var(--bg-card); }
+.nav-btn.active { color: var(--accent-blue); background: rgba(74,158,255,0.1); border-color: var(--accent-blue-dim); }
+.nav-btn.visited { color: var(--text-secondary); }
+.nav-progress {
+  flex-shrink: 0; display: flex; align-items: center; gap: 6px; margin-left: auto; padding-left: 12px;
+}
+.progress-ring { width: 28px; height: 28px; }
+.progress-ring .bg { fill: none; stroke: var(--border); stroke-width: 3; }
+.progress-ring .fg { fill: none; stroke: var(--accent-green); stroke-width: 3; stroke-linecap: round; transform: rotate(-90deg); transform-origin: center; transition: stroke-dashoffset 0.5s ease; }
+#progressText { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-muted); }
+
+/* ─── CONTAINER ─── */
+.container { max-width: 900px; margin: 0 auto; padding: 32px 20px 80px; }
+
+/* ─── SECTIONS ─── */
+.section { display: none; animation: fadeUp 0.35s ease; }
+.section.active { display: block; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ─── TYPOGRAPHY ─── */
+h1 { font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 700; line-height: 1.2; margin-bottom: 8px; }
+h2 { font-family: 'Fraunces', serif; font-size: 1.4rem; font-weight: 700; margin-bottom: 16px; line-height: 1.3; }
+h3 { font-size: 1rem; font-weight: 600; margin: 20px 0 8px; }
+p { margin-bottom: 12px; font-size: 0.92rem; }
+.subtitle { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px; }
+.tag { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; font-weight: 600; padding: 2px 8px; border-radius: 4px; margin-left: 4px; vertical-align: middle; }
+.tag-bls { background: rgba(74,158,255,0.12); color: var(--accent-blue); }
+.tag-acp { background: rgba(245,166,35,0.12); color: var(--accent-amber); }
+
+/* ─── SCENE HOOK ─── */
+.scene-hook {
+  background: linear-gradient(135deg, rgba(74,158,255,0.06), rgba(176,122,255,0.05));
+  border: 1px solid rgba(74,158,255,0.15); border-radius: var(--radius-lg);
+  padding: 24px; margin: 20px 0;
+}
+.scene-hook .label { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-blue); margin-bottom: 8px; }
+
+/* ─── EXPANDABLE ─── */
+.expandable { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius); margin: 10px 0; overflow: hidden; }
+.expand-header { padding: 12px 16px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; font-size: 0.88rem; font-weight: 500; transition: background 0.2s; }
+.expand-header:hover { background: var(--bg-hover); }
+.expand-arrow { transition: transform 0.3s; color: var(--text-muted); font-size: 0.8rem; }
+.expandable.open .expand-arrow { transform: rotate(90deg); }
+.expand-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; padding: 0 16px; }
+.expandable.open .expand-body { max-height: 3000px; padding: 0 16px 14px; }
+
+/* ─── CALLOUT BOXES ─── */
+.callout { border-radius: var(--radius); padding: 14px 16px; margin: 14px 0; font-size: 0.88rem; }
+.callout-label { font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+.callout-green { background: rgba(74,224,160,0.08); border: 1px solid rgba(74,224,160,0.2); }
+.callout-green .callout-label { color: var(--accent-green); }
+.callout-red { background: rgba(255,107,107,0.08); border: 1px solid rgba(255,107,107,0.2); }
+.callout-red .callout-label { color: var(--accent-red); }
+.callout-amber { background: rgba(245,166,35,0.08); border: 1px solid rgba(245,166,35,0.2); }
+.callout-amber .callout-label { color: var(--accent-amber); }
+.callout-blue { background: rgba(74,158,255,0.08); border: 1px solid rgba(74,158,255,0.2); }
+.callout-blue .callout-label { color: var(--accent-blue); }
+.callout-purple { background: rgba(176,122,255,0.08); border: 1px solid rgba(176,122,255,0.2); }
+.callout-purple .callout-label { color: var(--accent-purple); }
+
+/* ─── MYTH BOX ─── */
+.myth-box { background: rgba(255,107,107,0.06); border: 1px solid rgba(255,107,107,0.18); border-radius: var(--radius); padding: 14px 16px; margin: 14px 0; font-size: 0.88rem; cursor: pointer; }
+.myth-box .callout-label { color: var(--accent-red); }
+.myth-tap { font-size: 0.76rem; color: var(--accent-red); opacity: 0.6; margin-top: 6px; }
+.myth-reveal { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,107,107,0.15); }
+.myth-box.revealed .myth-reveal { display: block; }
+.myth-box.revealed .myth-tap { display: none; }
+
+/* ─── INFO TABLE ─── */
+.info-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; margin: 12px 0; }
+.info-table th { text-align: left; padding: 8px 12px; background: var(--bg-elevated); border: 1px solid var(--border); font-weight: 600; font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); }
+.info-table td { padding: 8px 12px; border: 1px solid var(--border); vertical-align: top; }
+
+/* ─── STAGE CARDS ─── */
+.stage-card { border-radius: var(--radius); padding: 16px; margin: 12px 0; font-size: 0.88rem; }
+.stage-green { background: rgba(74,224,160,0.06); border: 1px solid rgba(74,224,160,0.18); }
+.stage-amber { background: rgba(245,166,35,0.06); border: 1px solid rgba(245,166,35,0.18); }
+.stage-red { background: rgba(255,107,107,0.06); border: 1px solid rgba(255,107,107,0.18); }
+.stage-label { font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
+.stage-green .stage-label { color: var(--accent-green); }
+.stage-amber .stage-label { color: var(--accent-amber); }
+.stage-red .stage-label { color: var(--accent-red); }
+
+/* ─── QUIZ ─── */
+.quiz-block { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; margin: 24px 0; }
+.quiz-label { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px; }
+.quiz-label.recall { color: var(--accent-green); }
+.quiz-label.application { color: var(--accent-amber); }
+.quiz-label.critical { color: var(--accent-red); }
+.quiz-question { font-size: 0.92rem; font-weight: 500; margin-bottom: 14px; line-height: 1.6; }
+.quiz-opt {
+  display: flex; align-items: flex-start; gap: 10px; width: 100%;
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  color: var(--text-primary); font-family: inherit; font-size: 0.86rem;
+  padding: 10px 14px; border-radius: var(--radius); cursor: pointer;
+  margin-bottom: 6px; transition: all 0.2s; text-align: left;
+}
+.quiz-opt:hover:not(.disabled) { background: var(--bg-hover); border-color: var(--border-active); }
+.quiz-opt .letter { font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 0.78rem; color: var(--text-muted); flex-shrink: 0; margin-top: 1px; }
+.quiz-opt.correct { background: rgba(74,224,160,0.1); border-color: var(--accent-green); }
+.quiz-opt.correct .letter { color: var(--accent-green); }
+.quiz-opt.incorrect { background: rgba(255,107,107,0.1); border-color: var(--accent-red); }
+.quiz-opt.incorrect .letter { color: var(--accent-red); }
+.quiz-opt.disabled { cursor: default; opacity: 0.6; }
+.quiz-opt.disabled.correct { opacity: 1; }
+.quiz-feedback { display: none; padding: 14px; border-radius: var(--radius); margin-top: 12px; font-size: 0.86rem; line-height: 1.6; }
+.quiz-feedback.show { display: block; }
+.quiz-feedback.correct-fb { background: rgba(74,224,160,0.08); border: 1px solid rgba(74,224,160,0.2); }
+.quiz-feedback.incorrect-fb { background: rgba(255,107,107,0.08); border: 1px solid rgba(255,107,107,0.2); }
+
+/* ─── CHEAT SHEET / SUMMARY ─── */
+.cheatsheet { background: var(--bg-elevated); border: 2px solid var(--accent-blue-dim); border-radius: var(--radius-lg); padding: 24px; margin: 24px 0; }
+.cheatsheet h3 { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent-blue); margin: 0 0 16px; }
+.cheatsheet-item { display: flex; gap: 12px; margin-bottom: 12px; font-size: 0.88rem; line-height: 1.6; }
+.cheatsheet-num { font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--accent-blue); font-size: 0.85rem; flex-shrink: 0; }
+
+/* ─── NEXT SHIFT ─── */
+.next-shift { background: linear-gradient(135deg, rgba(74,224,160,0.06), rgba(93,229,229,0.06)); border: 1px solid rgba(74,224,160,0.15); border-radius: var(--radius-lg); padding: 24px; margin: 24px 0; }
+.next-shift .ns-label { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-cyan); margin-bottom: 10px; }
+
+/* ─── SCORE BAR ─── */
+.score-bar { display: flex; align-items: center; justify-content: center; gap: 24px; padding: 16px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius); margin: 24px 0; }
+.score-item { text-align: center; }
+.score-num { font-family: 'JetBrains Mono', monospace; font-size: 1.6rem; font-weight: 700; }
+.score-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+
+/* ─── SPACED REVIEW ─── */
+.review-schedule { display: flex; gap: 12px; margin: 16px 0; flex-wrap: wrap; }
+.review-badge { display: flex; flex-direction: column; align-items: center; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 18px; flex: 1; min-width: 90px; }
+.review-badge .when { font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; font-weight: 700; color: var(--accent-blue); }
+.review-badge .what { font-size: 0.72rem; color: var(--text-muted); text-align: center; margin-top: 4px; }
+
+/* ─── SECTION NAV ─── */
+.section-nav { display: flex; justify-content: space-between; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
+.section-nav button { background: var(--bg-card); border: 1px solid var(--border); color: var(--text-primary); font-family: inherit; font-size: 0.88rem; font-weight: 500; padding: 10px 20px; border-radius: var(--radius); cursor: pointer; transition: var(--transition); }
+.section-nav button:hover { background: var(--bg-hover); border-color: var(--border-active); }
+.section-nav button:disabled { opacity: 0.3; cursor: default; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 600px) {
+  .container { padding: 20px 14px 80px; }
+  h1 { font-size: 1.6rem; }
+  h2 { font-size: 1.25rem; }
+  .scene-hook, .quiz-block, .cheatsheet, .next-shift { padding: 18px; }
+  .score-bar { gap: 16px; flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="goTo(0)">The Call</button>
+    <button class="nav-btn" onclick="goTo(1)">The Why</button>
+    <button class="nav-btn" onclick="goTo(2)">High Risk</button>
+    <button class="nav-btn" onclick="goTo(3)">Assessment</button>
+    <button class="nav-btn" onclick="goTo(4)">The Clock</button>
+    <button class="nav-btn" onclick="goTo(5)">Management</button>
+    <button class="nav-btn" onclick="goTo(6)">The Traps</button>
+    <button class="nav-btn" onclick="goTo(7)">Review</button>
+    <div class="nav-progress">
+      <svg class="progress-ring" viewBox="0 0 36 36">
+        <circle class="bg" cx="18" cy="18" r="15"/>
+        <circle class="fg" id="progressCircle" cx="18" cy="18" r="15" stroke-dasharray="94.25" stroke-dashoffset="94.25"/>
+      </svg>
+      <span id="progressText">0/8</span>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- ═══════════════════ SECTION 0: THE CALL ═══════════════════ -->
+<div class="section active" id="sec-0">
+  <h1>Burns Emergency</h1>
+  <p class="subtitle">Thermal, Chemical & Electrical Burn Management for Ontario PCPs. The burns you can see are often not the burns that kill.</p>
+
+  <div class="scene-hook">
+    <div class="label">📟 Dispatch — 0247h</div>
+    <p><strong>"Respond to a residential structure fire — one patient self-extricated, conscious and breathing, minor burns."</strong></p>
+    <p style="margin-top:12px;">You arrive to find fire crews working a kitchen fire. Your patient is a 52-year-old male sitting on the porch. He tells you the grease fire on the stove flared up and he tried to smother it with a towel. The kitchen filled with thick black smoke. He was in the room for "maybe five minutes" before getting out.</p>
+    <p style="margin-top:12px;">His forearms have red, blistering skin where the grease splashed. He's coughing occasionally. His voice sounds a little raspy, but he's talking in full sentences.</p>
+    <p style="margin-top:12px;"><strong>Vitals:</strong> <span style="font-family:'JetBrains Mono',monospace;">HR 92 · RR 20 · SpO₂ 98% · BP 134/82</span></p>
+    <p style="margin-top:12px;">His neighbour says: <em>"He seems fine — he walked out on his own."</em></p>
+    <p style="margin-top:16px; color: var(--accent-amber);"><strong>SpO₂ is 98%. Vitals are normal. He's talking to you.</strong><br><em>So why should this call scare you more than the burns on his arms?</em></p>
+  </div>
+
+  <p>This module will teach you why the burns you can see are often not the burns that kill — and how to recognize, assess, and manage the full spectrum of burn injuries using the Ontario BLS Patient Care Standards.</p>
+
+  <div class="section-nav">
+    <button disabled>← Previous</button>
+    <button onclick="goTo(1)">The Why →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ SECTION 1: THE WHY ═══════════════════ -->
+<div class="section" id="sec-1">
+  <h2>The Why — Burn Pathophysiology That Matters on the Truck</h2>
+  <p>You don't need a physiology textbook to manage burns. You need to understand three things: how skin protects you, what happens when it fails, and why that makes your patient sick in ways you can't always see.</p>
+
+  <div class="expandable">
+    <div class="expand-header" onclick="toggleExpand(this)"><span>What Skin Actually Does for You</span><span class="expand-arrow">›</span></div>
+    <div class="expand-body">
+      <p><strong>Barrier:</strong> Keeps bacteria out and fluids in. When skin is destroyed, plasma leaks out and pathogens walk in. This is why large burns cause hypovolaemia and infection — the barrier is gone.</p>
+      <p><strong>Thermoregulation:</strong> Skin controls body temperature through vasodilation, vasoconstriction, and sweating. Burned skin can't do any of this. That's why your burn patient gets hypothermic — and why hypothermia in burn patients is a clinical emergency, not just discomfort.</p>
+      <p><strong>Sensation:</strong> Pain receptors in the dermis tell the patient (and you) something is wrong. Full-thickness burns destroy these receptors. A painless burn is a deep burn — that's information, not reassurance.</p>
+      <p><strong>Fluid regulation:</strong> Intact capillaries keep plasma in the vessels. Burn injury causes massive capillary permeability — fluid pours into the interstitial space (oedema). This happens both locally and systemically in large burns.</p>
+    </div>
+  </div>
+
+  <div class="expandable">
+    <div class="expand-header" onclick="toggleExpand(this)"><span>Burn Depth — What It Looks Like and What It Means</span><span class="expand-arrow">›</span></div>
+    <div class="expand-body">
+      <table class="info-table">
+        <tr><th>Depth</th><th>What You See</th><th>What It Means</th></tr>
+        <tr><td><strong>Superficial (1st)</strong></td><td>Red, dry, painful. No blisters. Think sunburn.</td><td>Only epidermis damaged. Barrier intact. Heals on its own. <strong>NOT counted in TBSA estimates.</strong></td></tr>
+        <tr><td><strong>Partial-thickness (2nd)</strong></td><td>Red, wet, blistered, very painful. Blanches with pressure.</td><td>Epidermis destroyed, dermis partially damaged. Pain receptors intact (that's why it hurts). Barrier compromised — fluid loss and infection risk are real.</td></tr>
+        <tr><td><strong>Full-thickness (3rd)</strong></td><td>White, waxy, leathery, or charred. Painless. Does not blanch.</td><td>Epidermis and full dermis destroyed. No sensation because nerve endings are gone. Skin is stiff (eschar) — this causes compartment syndrome in circumferential burns.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="expandable">
+    <div class="expand-header" onclick="toggleExpand(this)"><span>The Airway Problem — Why Smoke Kills Before Burns Do</span><span class="expand-arrow">›</span></div>
+    <div class="expand-body">
+      <p>The upper airway (above the vocal cords) is incredibly efficient at absorbing heat. Hot gases from a fire cause thermal injury to the supraglottic structures — the epiglottis, aryepiglottic folds, and false vocal cords. These structures swell. Fast.</p>
+      <p><strong>Why this matters on the truck:</strong> Upper airway oedema can progress from "hoarse voice" to "complete obstruction" in 30–60 minutes. By the time you see stridor, you're behind.</p>
+      <p><strong>Below the cords:</strong> The lower airway is usually protected from direct thermal injury. However, inhaled toxic products of combustion (carbon monoxide, hydrogen cyanide, particulate matter) cause chemical injury to the lower airways and alveoli, leading to bronchospasm, pulmonary oedema, and impaired gas exchange.</p>
+      <p><strong>Carbon monoxide (CO):</strong> CO binds to haemoglobin with 200× the affinity of oxygen, forming carboxyhaemoglobin (COHb). The pulse oximeter reads COHb as oxyhaemoglobin. <strong>A SpO₂ of 98% can be a lie.</strong> High-concentration oxygen is the treatment because it displaces CO from haemoglobin — the half-life of COHb drops from ~4-6 hours on room air to ~60-90 minutes on 100% O₂.</p>
+    </div>
+  </div>
+
+  <div class="callout callout-green">
+    <div class="callout-label">Key Clinical Takeaway</div>
+    A normal SpO₂ does NOT rule out carbon monoxide poisoning. Standard pulse oximetry cannot distinguish carboxyhaemoglobin from oxyhaemoglobin. After any enclosed-space fire, treat the airway and the blood — not the number on the monitor.
+  </div>
+
+  <div class="quiz-block" id="q2-1">
+    <div class="quiz-label recall">● Recall</div>
+    <div class="quiz-question">You arrive at a house fire to find a 45-year-old male who was in a smoke-filled basement for approximately 10 minutes. He is ambulatory with superficial burns to both forearms. His voice is hoarse and you notice soot in his saliva. What is the MOST important clinical concern right now?</div>
+    <button class="quiz-opt" data-correct="false" onclick="checkQuiz('q2-1',this,false)"><span class="letter">A</span> The superficial burns to his forearms need immediate cooling</button>
+    <button class="quiz-opt" data-correct="true" onclick="checkQuiz('q2-1',this,true)"><span class="letter">B</span> Progressive upper airway oedema from inhalation injury</button>
+    <button class="quiz-opt" data-correct="false" onclick="checkQuiz('q2-1',this,false)"><span class="letter">C</span> Carbon monoxide poisoning causing altered mental status</button>
+    <button class="quiz-opt" data-correct="false" onclick="checkQuiz('q2-1',this,false)"><span class="letter">D</span> Fluid loss from the forearm burns causing hypovolaemia</button>
+    <div class="quiz-feedback correct-fb">Correct. Hoarseness and soot in sputum are signs of thermal injury to the upper airway. The supraglottic structures swell rapidly and can completely obstruct the airway within 30–60 minutes. Superficial forearm burns are manageable, but a closing airway is immediately life-threatening. The BLS PCS Burns (Thermal) Standard requires you to assess for signs of smoke inhalation and upper airway injury as part of the burn secondary survey.</div>
+    <div class="quiz-feedback incorrect-fb">The biggest threat here is the airway. Hoarseness and soot in sputum mean hot gases have reached the upper airway. The supraglottic structures swell rapidly and can fully obstruct within 30–60 minutes. Always prioritize airway over skin in burn patients, especially after enclosed-space fires. The BLS PCS Burns (Thermal) Standard requires assessment for signs of smoke inhalation and upper airway injury.</div>
+  </div>
+
+  <div class="section-nav">
+    <button onclick="goTo(0)">← The Call</button>
+    <button onclick="goTo(2)">High Risk →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ SECTION 2: HIGH RISK ═══════════════════ -->
+<div class="section" id="sec-2">
+  <h2>High Risk — Who Gets Burned and Why It Matters</h2>
+  <p>Knowing who is at higher risk for burn injury — and why — changes your history-taking from a checklist into a clinical tool.</p>
+
+  <div class="expandable">
+    <div class="expand-header" onclick="toggleExpand(this)"><span>Paediatric Patients</span><span class="expand-arrow">›</span></div>
+    <div class="expand-body">
+      <p><strong>Why they're at risk:</strong> Thinner skin means the same temperature causes deeper burns faster. Higher body surface area-to-mass ratio means they lose heat and fluid proportionally faster. Scalds (hot liquid spills) are the most common mechanism in children under 5.</p>
+      <p><strong>What to ask:</strong> Mechanism and timing. Was the child unattended? Does the burn pattern match the story? Immersion burns with clear lines of demarcation (glove/stocking pattern) or burns to buttocks/perineum should raise concern for non-accidental injury.</p>
+      <p><strong>What to watch for:</strong> Hypothermia develops faster. Use the modified Rule of Nines — the child's head is 18% total body surface area (TBSA) vs 9% in adults, each lower extremity is 14% vs 18%.</p>
+    </div>
+  </div>
+
+  <div class="expandable">
+    <div class="expand-header" onclick="toggleExpand(this)"><span>Geriatric Patients</span><span class="expand-arrow">›</span></div>
+    <div class="expand-body">
+      <p><strong>Why they're at risk:</strong> Thinner skin (dermal atrophy with aging) means minor mechanisms cause significant burns. Decreased mobility means longer exposure time. Pre-existing conditions (diabetes, peripheral vascular disease, heart failure) impair healing and reduce physiological reserve.</p>
+      <p><strong>What to ask:</strong> Medications — anticoagulants complicate wound care. Baseline mobility and cognitive status. Was there a fall or syncopal event that preceded the burn?</p>
+      <p><strong>What to watch for:</strong> Hypotension may appear earlier due to reduced cardiac reserve.</p>
+    </div>
+  </div>
+
+  <div class="expandable">
+    <div class="expand-header" onclick="toggleExpand(this)"><span>Industrial / Occupational Exposures</span><span class="expand-arrow">›</span></div>
+    <div class="expand-body">
+      <p><strong>Why they're at risk:</strong> High-energy mechanisms (electrical, chemical, flash burns) cause injuries disproportionate to surface appearance. Chemical burns may involve ongoing tissue destruction.</p>
+      <p><strong>What to ask:</strong> What substance? What voltage/current type? Duration of contact? Loss of consciousness? Is a Material Safety Data Sheet (MSDS) available?</p>
+      <p><strong>What to watch for:</strong> Electrical injuries — entry/exit wounds may look small but internal damage can be massive. Chemical burns — know your decontamination requirements.</p>
+    </div>
+  </div>
+
+  <div class="expandable">
+    <div class="expand-header" onclick="toggleExpand(this)"><span>Patients with Pre-existing Conditions</span><span class="expand-arrow">›</span></div>
+    <div class="expand-body">
+      <p><strong>Diabetes:</strong> Peripheral neuropathy means they may not feel a burn developing (contact burns from heating pads, hot water). Microvascular disease impairs perfusion and healing.</p>
+      <p><strong>Peripheral vascular disease:</strong> Already compromised distal circulation makes compartment syndrome more dangerous.</p>
+      <p><strong>Substance use:</strong> Impaired judgment leads to longer exposure. Altered sensation delays recognition. Co-intoxication complicates assessment.</p>
+    </div>
+  </div>
+
+  <div class="callout callout-blue">
+    <div class="callout-label">BLS PCS Anchor</div>
+    The BLS PCS v3.4, Section 3 — Burns (Thermal) Standard requires you to determine the source of burn, whether the fire occurred in an enclosed space, and whether the patient lost consciousness during exposure. These aren't just documentation — they're clinical decision tools that tell you about inhalation injury risk and burn severity.
+  </div>
+
+  <div class="quiz-block" id="q3-1">
+    <div class="quiz-label recall">● Recall</div>
+    <div class="quiz-question">You respond to a kitchen scald injury involving a 68-year-old woman with diabetes and peripheral neuropathy. She placed her hand in hot dishwater and didn't realize it was scalding until she noticed blistering. What is the MOST important clinical implication of her neuropathy for this burn?</div>
+    <button class="quiz-opt" data-correct="false" onclick="checkQuiz('q3-1',this,false)"><span class="letter">A</span> She will need stronger analgesia than a patient without neuropathy</button>
+    <button class="quiz-opt" data-correct="true" onclick="checkQuiz('q3-1',this,true)"><span class="letter">B</span> The burn may be deeper than it appears because delayed recognition meant longer exposure time</button>
+    <button class="quiz-opt" data-correct="false" onclick="checkQuiz('q3-1',this,false)"><span class="letter">C</span> Peripheral neuropathy makes burn depth assessment unreliable</button>
+    <button class="quiz-opt" data-correct="false" onclick="checkQuiz('q3-1',this,false)"><span class="letter">D</span> She is at higher risk for compartment syndrome than other patients</button>
+    <div class="quiz-feedback correct-fb">Correct. Neuropathy means she didn't feel the pain that would normally cause instant withdrawal. Longer exposure time = deeper burn. A burn that looks partial-thickness may in fact be full-thickness underneath because the exposure was prolonged. This is why "duration of exposure" is one of the history questions that matters most — it directly predicts burn depth.</div>
+    <div class="quiz-feedback incorrect-fb">The key issue is exposure time. Neuropathy eliminated the pain reflex that normally causes instant withdrawal from a hot surface. She stayed in contact with the hot water longer than a patient with intact sensation would have. Longer exposure = deeper burn. This is why the history question "how long was the exposure?" is clinically critical — it predicts burn depth even when the surface appearance is ambiguous.</div>
+  </div>
+
+  <div class="section-nav">
+    <button onclick="goTo(1)">← The Why</button>
+    <button onclick="goTo(3)">Assessment →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ SECTION 3: ASSESSMENT ═══════════════════ -->
+<div class="section" id="sec-3">
+  <h2>Assessment — What to Look For and Why It Matters</h2>
+  <p>The BLS PCS requires a secondary survey burn assessment for every burn patient. Here's what to assess, what each finding means, and why it matters for your clinical decisions.</p>
+
+  <h3>History</h3>
+  <div class="expandable">
+    <div class="expand-header" onclick="toggleExpand(this)"><span>Critical History Questions</span><span class="expand-arrow">›</span></div>
+    <div class="expand-body">
+      <table class="info-table">
+        <tr><th>Question</th><th>Why You're Asking</th></tr>
+        <tr><td>What was the source of the burn?</td><td>Mechanism drives severity — grease is hotter than water, chemicals may need decontamination, electrical has hidden internal injury.</td></tr>
+        <tr><td>Enclosed space?</td><td>Enclosed-space fires = inhalation injury until proven otherwise.</td></tr>
+        <tr><td>Loss of consciousness?</td><td>LOC = prolonged inhalation + possible CO/cyanide toxicity + possible concurrent medical event.</td></tr>
+        <tr><td>Duration of exposure?</td><td>Longer exposure = deeper burns. A 30-second flash burn is different from 5 minutes trapped.</td></tr>
+        <tr><td>What was the patient wearing?</td><td>Synthetic fabrics melt into skin (deeper injury). Protective clothing may have limited exposure.</td></tr>
+        <tr><td>Any treatment before arrival?</td><td>What cooling was done? Anything applied? Chemical — decontamination attempted?</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <h3>Burn Severity Assessment (BLS PCS Required)</h3>
+  <p>The BLS PCS requires you to estimate three things for every burn:</p>
+
+  <div class="expandable">
+    <div class="expand-header" onclick="toggleExpand(this)"><span>1. Area Burned — Location and Pattern</span><span class="expand-arrow">›</span></div>
+    <div class="expand-body">
+      <p>Location matters. Face, hands, feet, genitalia, and major joints are critical areas regardless of TBSA. Circumferential burns to extremities or the chest are high-risk for compartment syndrome and respiratory compromise.</p>
+    </div>
+  </div>
+
+  <div class="expandable">
+    <div class="expand-header" onclick="toggleExpand(this)"><span>2. Burn Depth — Superficial, Partial, or Full</span><span class="expand-arrow">›</span></div>
+    <div class="expand-body">
+      <p>Multiple depths can coexist in the same patient. <strong>Remember: painless ≠ minor.</strong> A painless burn means full-thickness destruction of nerve endings.</p>
+    </div>
+  </div>
+
+  <div class="expandable open">
+    <div class="expand-header" onclick="toggleExpand(this)"><span>3. TBSA Percentage — The Rule of Nines</span><span class="expand-arrow">›</span></div>
+    <div class="expand-body">
+      <p>Use the Rule of Nines (adult) or Modified Rule of Nines (paediatric). <strong>Only count partial-thickness and full-thickness burns — superficial burns are NOT included.</strong></p>
+      <table class="info-table">
+        <tr><th>Body Region</th><th>Adult</th><th>Child</th></tr>
+        <tr><td>Head & Neck</td><td>9%</td><td>18%</td></tr>
+        <tr><td>Each Upper Extremity</td><td>9%</td><td>9%</td></tr>
+        <tr><td>Anterior Torso</td><td>18%</td><td>18%</td></tr>
+        <tr><td>Posterior Torso</td><td>18%</td><td>18%</td></tr>
+        <tr><td>Each Lower Extremity</td><td>18%</td><td>14%</td></tr>
+        <tr><td>Perineum</td><td>1%</td><td>1%</td></tr>
+      </table>
+      <p style="margin-top:8px;"><strong>Quick tip:</strong> The patient's palm (including fingers) ≈ 1% TBSA. Useful for estimating scattered or irregular burns.</p>
+      <p><strong>Why TBSA matters for management:</strong> The 15% TBSA threshold drives a critical dressing decision in the BLS PCS — partial-thickness burns below 15% get moist sterile dressing, at or above 15% they get dry sterile dressing. Getting this number right changes your treatment.</p>
+    </div>
+  </div>
+
+  <h3>Inhalation Injury Assessment (BLS PCS Required)</h3>
+  <div class="expandable">
+    <div class="expand-header" onclick="toggleExpand(this)"><span>Signs of Smoke Inhalation & Upper Airway Injury</span><span class="expand-arrow">›</span></div>
+    <div class="expand-body">
+      <p><strong>Airway signs:</strong> Burns to lips/mouth, singed nasal hair or eyebrows, facial burns, carbon particles in saliva/sputum, stridor or hoarseness, drooling.</p>
+      <p><strong>Respiratory signs:</strong> Cough, shortness of breath, shallow respirations, decreased air entry, audible wheezes, tachypnoea.</p>
+      <p><strong>Any ONE of these after fire/smoke exposure = suspected inhalation injury.</strong></p>
+    </div>
+  </div>
+
+  <h3>Distal Neurovascular Status (BLS PCS Required)</h3>
+  <p>For any burned extremity, assess pulse, sensation, motor function, and capillary refill distal to the burn. Re-check approximately every 10 minutes if compromised.</p>
+
+  <div class="callout callout-green">
+    <div class="callout-label">Key Clinical Takeaway</div>
+    Eye burns: assess as per the Visual Disturbance Standard, BUT if the eye is swollen shut, leave it shut. Do not force open a swollen burned eyelid.
+  </div>
+
+  <div class="quiz-block" id="q4-1">
+    <div class="quiz-label application">●● Application</div>
+    <div class="quiz-question">You respond to a scald injury involving a 2-year-old. The child has partial-thickness burns covering the entire anterior torso. Using the modified Rule of Nines for paediatrics, approximately what percentage of TBSA does this represent?</div>
+    <button class="quiz-opt" data-correct="false" onclick="checkQuiz('q4-1',this,false)"><span class="letter">A</span> 9%</button>
+    <button class="quiz-opt" data-correct="true" onclick="checkQuiz('q4-1',this,true)"><span class="letter">B</span> 18%</button>
+    <button class="quiz-opt" data-correct="false" onclick="checkQuiz('q4-1',this,false)"><span class="letter">C</span> 27%</button>
+    <button class="quiz-opt" data-correct="false" onclick="checkQuiz('q4-1',this,false)"><span class="letter">D</span> 36%</button>
+    <div class="quiz-feedback correct-fb">Correct. In the paediatric modified Rule of Nines, the anterior torso is 18% TBSA (same as adults). The key paediatric differences: head is 18% (vs 9% in adults), each lower extremity is 14% (vs 18%). This matters because a scald covering a child's head AND anterior torso would be 36% TBSA — much more critical than the same pattern in an adult.</div>
+    <div class="quiz-feedback incorrect-fb">The anterior torso in the paediatric modified Rule of Nines is 18% TBSA. The key paediatric differences: head = 18% (vs 9% adult), each lower extremity = 14% (vs 18% adult). Getting the TBSA estimate right drives transport decisions and dressing choices.</div>
+  </div>
+
+  <div class="quiz-block" id="q4-2">
+    <div class="quiz-label application">●● Application</div>
+    <div class="quiz-question">You are assessing a patient with burns from a propane grill explosion. You find circumferential full-thickness burns to the entire right forearm. Distal pulses are present now. What is the MOST important reason to reassess distal neurovascular status frequently?</div>
+    <button class="quiz-opt" data-correct="false" onclick="checkQuiz('q4-2',this,false)"><span class="letter">A</span> Full-thickness burns are painless, so the patient cannot report changes</button>
+    <button class="quiz-opt" data-correct="true" onclick="checkQuiz('q4-2',this,true)"><span class="letter">B</span> Circumferential eschar acts like a tourniquet as tissue swells underneath</button>
+    <button class="quiz-opt" data-correct="false" onclick="checkQuiz('q4-2',this,false)"><span class="letter">C</span> Nerve damage from the burn will cause permanent numbness</button>
+    <button class="quiz-opt" data-correct="false" onclick="checkQuiz('q4-2',this,false)"><span class="letter">D</span> Blood viscosity increases in burn patients, causing distal clotting</button>
+    <div class="quiz-feedback correct-fb">Correct. Full-thickness burned skin (eschar) is leather-like and cannot expand. As tissue beneath swells from the inflammatory response, pressure builds in a closed compartment — creating a tourniquet effect. This is compartment syndrome. If uncorrected, it causes ischaemia distal to the burn. Pulses present now does not mean pulses present in 20 minutes.</div>
+    <div class="quiz-feedback incorrect-fb">The critical concern is compartment syndrome. The burned skin (eschar) is stiff and cannot stretch. As tissue swells beneath, pressure rises in a closed space, compressing blood vessels — like a tourniquet. This is why the BLS PCS requires assessment of distal neurovascular status in burned extremities. Present pulses now ≠ present pulses later.</div>
+  </div>
+
+  <div class="section-nav">
+    <button onclick="goTo(2)">← High Risk</button>
+    <button onclick="goTo(4)">The Clock →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ SECTION 4: THE CLOCK ═══════════════════ -->
+<div class="section" id="sec-4">
+  <h2>The Clock — How Burn Injuries Progress</h2>
+  <p>Burns are dynamic injuries. Your patient's condition at 5 minutes post-burn is not the same as at 30 minutes or 2 hours. Understanding the timeline tells you where your patient is and where they're headed.</p>
+
+  <div class="stage-card stage-green">
+    <div class="stage-label">Stage 1 — The "Looks Okay" Window (0–30 min)</div>
+    <p><strong>Patient shows:</strong> Pain, anxiety, possibly coughing. May be ambulatory. Talking. Vitals often normal or mildly tachycardic.</p>
+    <p><strong>What you see:</strong> Surface burns are obvious. Airway may sound clear or have mild hoarseness. SpO₂ may read normal.</p>
+    <p><strong>What it means:</strong> This is the deceptive phase. Airway oedema is developing but not yet critical. Fluid shifts are beginning but haven't caused hypotension. CO is bound to haemoglobin but the patient may look pink. <strong>This is your window to act — before the patient declares.</strong></p>
+  </div>
+
+  <div class="stage-card stage-amber">
+    <div class="stage-label">⚠ Stage 2 — The Danger Zone (30 min – 2 hours)</div>
+    <p><strong>Patient shows:</strong> Increasing hoarseness, progressive stridor, worsening cough, agitation. Tachycardia increasing. May develop hypotension with large burns.</p>
+    <p><strong>What you see:</strong> Voice changes become obvious. Facial/neck swelling. Wheezing on auscultation. Burns may look "worse" as blisters develop and partial-thickness burns deepen.</p>
+    <p><strong>What it means:</strong> Airway oedema is becoming significant. Fluid is pouring out of the vascular space. This is where "walking and talking" becomes "stridorous and deteriorating."</p>
+  </div>
+
+  <div class="stage-card stage-red">
+    <div class="stage-label">🚨 Stage 3 — Decompensation (2+ hours)</div>
+    <p><strong>Patient shows:</strong> Severe stridor or loss of voice. Marked hypotension. Altered mental status. Hypothermia developing.</p>
+    <p><strong>What you see:</strong> Critically ill patient. Airway near-complete obstruction. Burns that looked partial-thickness may now appear full-thickness. Mottled skin, delayed cap refill, absent distal pulses.</p>
+    <p><strong>What it means:</strong> Every system is failing. Early aggressive management in Stage 1 is what prevents this stage.</p>
+  </div>
+
+  <div class="callout callout-red">
+    <div class="callout-label">The Trap</div>
+    Stage 1 looks reassuring. Stage 3 looks catastrophic. The critical skill is recognizing Stage 1 patients headed for Stage 3. Facial burns + enclosed space + any airway sign = treat as if Stage 2 is imminent, even if the patient looks fine right now.
+  </div>
+
+  <div class="quiz-block" id="q5-1">
+    <div class="quiz-label application">●● Application</div>
+    <div class="quiz-question">You arrive at a structure fire to find a 30-year-old who self-extricated 5 minutes ago. She has minor facial burns and a mild cough. Vitals: HR 88, RR 18, SpO₂ 99% on room air, BP 126/78. She says "I'm fine, I just need some air." What is the MOST appropriate clinical response?</div>
+    <button class="quiz-opt" data-correct="false" onclick="checkQuiz('q5-1',this,false)"><span class="letter">A</span> Reassure her, apply moist dressings to the facial burns, and offer transport</button>
+    <button class="quiz-opt" data-correct="true" onclick="checkQuiz('q5-1',this,true)"><span class="letter">B</span> Treat as a high-priority airway patient — high-concentration O₂, frequent reassessment, prepare for deterioration</button>
+    <button class="quiz-opt" data-correct="false" onclick="checkQuiz('q5-1',this,false)"><span class="letter">C</span> Place on nasal cannula at 4 LPM and monitor for 15 minutes before deciding</button>
+    <button class="quiz-opt" data-correct="false" onclick="checkQuiz('q5-1',this,false)"><span class="letter">D</span> Since vitals are normal, assess and potentially allow refusal if she declines transport</button>
+    <div class="quiz-feedback correct-fb">Correct. Facial burns + cough after a structure fire = suspected inhalation injury. The "I'm fine" presentation is the one that kills. Normal SpO₂ does NOT rule out CO poisoning — pulse oximetry can't distinguish COHb. The BLS PCS directs high-concentration O₂ for suspected CO/cyanide exposure. This is a high-priority patient who needs aggressive monitoring and rapid transport.</div>
+    <div class="quiz-feedback incorrect-fb">Facial burns and cough after a structure fire are early signs of inhalation injury. Upper airway oedema can progress from mild cough to complete obstruction in under an hour. Normal SpO₂ doesn't rule out CO poisoning. The BLS PCS calls for high-concentration O₂ for suspected CO exposure. This patient needs aggressive monitoring and rapid transport — not a wait-and-see approach.</div>
+  </div>
+
+  <div class="section-nav">
+    <button onclick="goTo(3)">← Assessment</button>
+    <button onclick="goTo(5)">Management →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ SECTION 5: MANAGEMENT ═══════════════════ -->
+<div class="section" id="sec-5">
+  <h2>Management — What to Do and Why It Works</h2>
+  <p>Every intervention has a physiological reason. Knowing WHY you're doing something means you can adapt when reality doesn't match the textbook.</p>
+
+  <h3>Immediate Priorities</h3>
+  <div class="expandable">
+    <div class="expand-header" onclick="toggleExpand(this)"><span>Scene Safety & Stop the Burning Process</span><span class="expand-arrow">›</span></div>
+    <div class="expand-body">
+      <p><strong>Action:</strong> If in a smoke/fume-filled environment, request fire personnel. Move patient to fresh air when safe.</p>
+      <p><strong>Why:</strong> Continued exposure = continued injury. Every second in a toxic environment adds to inhalation injury and burn depth.</p>
+      <p><strong>Action:</strong> Stop the burning process. Remove clothing — but cut around clothing adherent to skin.</p>
+      <p><strong>Why:</strong> Adherent clothing is stuck to destroyed tissue. Pulling it off removes viable tissue and worsens the wound.</p>
+    </div>
+  </div>
+
+  <div class="expandable">
+    <div class="expand-header" onclick="toggleExpand(this)"><span>Airway & Oxygen</span><span class="expand-arrow">›</span></div>
+    <div class="expand-body">
+      <p><strong>Action:</strong> High-concentration oxygen for any suspected CO or cyanide exposure — which means ANY fire involving combustible materials.</p>
+      <p><strong>Why:</strong> 100% O₂ accelerates CO displacement from haemoglobin. COHb half-life drops from ~4-6 hours (room air) to ~60-90 minutes (100% O₂).</p>
+      <p><strong>Action:</strong> For facial burns, place gauze pads under the edges of the oxygen mask.</p>
+      <p><strong>Why:</strong> Mask edges pressing on burned skin causes pain and further tissue damage.</p>
+    </div>
+  </div>
+
+  <h3>Dressing Selection — The Critical Decision Tree</h3>
+  <p>The BLS PCS has specific dressing rules based on burn depth and TBSA. Getting this wrong leads to either inadequate cooling or hypothermia:</p>
+  <table class="info-table">
+    <tr><th>Burn Type</th><th>Dressing</th><th>Rationale</th></tr>
+    <tr><td>1st degree (superficial)</td><td>Moist sterile, then dry sheet/blanket</td><td>Cooling provides pain relief. No significant fluid loss risk.</td></tr>
+    <tr><td>2nd degree &lt;15% TBSA</td><td>Moist sterile, then dry sheet/blanket</td><td>Cooling helps. Fluid loss manageable at this TBSA.</td></tr>
+    <tr><td>2nd degree ≥15% TBSA</td><td><strong>Dry</strong> sterile dressing or sheet</td><td>Moist dressings over large areas = hypothermia. Heat loss through damaged skin is already significant at ≥15%.</td></tr>
+    <tr><td>3rd degree (full-thickness)</td><td><strong>Dry</strong> sterile dressing or sheet</td><td>Full-thickness burns don't benefit from cooling (nerve endings destroyed). Dry dressing prevents heat loss.</td></tr>
+  </table>
+
+  <div class="callout callout-green">
+    <div class="callout-label">Key Clinical Takeaway</div>
+    <p style="margin-bottom:0;">The 15% TBSA line is the critical threshold. Below it: moist is fine. At or above it: dry only. This single decision point prevents hypothermia — a leading killer in burn patients.</p>
+  </div>
+
+  <p><strong>Additional PCS rules:</strong> Cool burns &lt;15% TBSA only, limit cooling to &lt;30 minutes. If remoistening is needed, remove the dry cover and remoisten the sterile dressing underneath. Dress digits individually. Leave blisters intact.</p>
+
+  <div class="callout callout-red">
+    <div class="callout-label">Critical Safety Rule</div>
+    If shivering or hypotension develops, discontinue ALL cooling efforts immediately. Switch to dry sterile dressing. Keep the patient warm. Hypothermia impairs coagulation, worsens acidosis, and increases mortality.
+  </div>
+
+  <div class="expandable">
+    <div class="expand-header" onclick="toggleExpand(this)"><span>Chemical Burns — Decontamination Rules</span><span class="expand-arrow">›</span></div>
+    <div class="expand-body">
+      <p>The BLS PCS Hazardous Materials Injury Standard has specific irrigation times:</p>
+      <table class="info-table">
+        <tr><th>Chemical Type</th><th>Min. Irrigation at Scene</th></tr>
+        <tr><td>Alkali (known or suspected)</td><td>20 minutes if stable</td></tr>
+        <tr><td>Acid (known)</td><td>10 minutes if stable</td></tr>
+        <tr><td>Unknown chemical</td><td>20 minutes if stable</td></tr>
+        <tr><td>Water-reactive chemical</td><td><strong>Do NOT irrigate</strong></td></tr>
+      </table>
+      <p style="margin-top:10px;"><strong>Powder/solid chemicals:</strong> Brush off or manually remove first → confirm not water-reactive → irrigate with cool (not cold) water.</p>
+      <p><strong>Eye irrigation:</strong> Affected side down (one eye) or supine (both eyes). Manually open eyelids if needed. Irrigate away from tear duct(s). Patient removes contact lenses if readily removable.</p>
+    </div>
+  </div>
+
+  <div class="expandable">
+    <div class="expand-header" onclick="toggleExpand(this)"><span>Electrical Injury — Hidden Damage</span><span class="expand-arrow">›</span></div>
+    <div class="expand-body">
+      <p><strong>Scene safety first:</strong> Never touch a potential energized source or patient still in contact.</p>
+      <p><strong>Assess for:</strong> Entry/exit wounds, dysrhythmias, burns, muscle spasms, cold/mottled/pulseless extremities, neurologic impairment, shallow/irregular respirations.</p>
+      <p><strong>Why electrical is different:</strong> Electricity follows nerves, blood vessels, and muscle. Internal muscle necrosis can be massive while skin burns appear minor. Cardiac dysrhythmias can be immediate or delayed.</p>
+      <p><strong>Determine:</strong> AC vs DC current and voltage. AC is generally more dangerous — tetanic contraction means the patient can't let go.</p>
+    </div>
+  </div>
+
+  <div class="callout callout-amber">
+    <div class="callout-label">ACP Scope — Pain Management</div>
+    ACPs have access to the Analgesia Medical Directive. Options: fentaNYL (IV/IN, up to 75 mcg/dose, max 200 mcg cumulative), morphine (IV/SC, up to 10 mg/dose, max 20 mg cumulative), ketamine (IV/IN). Ketamine is preferred for hypotensive patients — no haemodynamic effects. IV fluid therapy (0.9% NaCl, 20 ml/kg bolus) available for hypotension.
+  </div>
+
+  <h3>What NOT To Do</h3>
+  <div class="callout callout-red">
+    <div class="callout-label">Common Mistakes That Cause Harm</div>
+    <p><strong>Do NOT apply ice or ice water.</strong> Ice causes vasoconstriction and accelerates hypothermia.</p>
+    <p><strong>Do NOT pop blisters.</strong> Intact blisters are a sterile biological dressing.</p>
+    <p><strong>Do NOT apply creams, butter, toothpaste.</strong> They trap heat, contaminate wounds, and interfere with hospital assessment.</p>
+    <p><strong>Do NOT remove clothing stuck to burns.</strong> Cut around it.</p>
+    <p style="margin-bottom:0;"><strong>Do NOT underestimate enclosed-space fires.</strong> Inhalation injury is the leading cause of fire-related death.</p>
+  </div>
+
+  <div class="quiz-block" id="q6-1">
+    <div class="quiz-label critical">●●● Critical Thinking</div>
+    <div class="quiz-question">You arrive to find a patient with partial-thickness (2nd degree) burns from a cooking oil spill. Your partner has already applied moist sterile dressings. You estimate the burns cover approximately 20% TBSA. What should you do?</div>
+    <button class="quiz-opt" data-correct="false" onclick="checkQuiz('q6-1',this,false)"><span class="letter">A</span> Leave the moist dressings in place — they were applied correctly and cooling is beneficial</button>
+    <button class="quiz-opt" data-correct="true" onclick="checkQuiz('q6-1',this,true)"><span class="letter">B</span> Replace the moist dressings with dry sterile dressing — 20% TBSA exceeds the 15% threshold</button>
+    <button class="quiz-opt" data-correct="false" onclick="checkQuiz('q6-1',this,false)"><span class="letter">C</span> Add more moist dressings to ensure complete coverage of the burn area</button>
+    <button class="quiz-opt" data-correct="false" onclick="checkQuiz('q6-1',this,false)"><span class="letter">D</span> Remove all dressings and apply direct dry heat to prevent hypothermia</button>
+    <div class="quiz-feedback correct-fb">Correct. The BLS PCS is explicit: 2nd degree burns ≥15% TBSA get dry, sterile dressing — not moist. Your partner made an understandable error (moist dressings are correct for smaller burns), but at 20% TBSA, moist dressings create significant hypothermia risk. The fix is straightforward: replace with dry sterile dressing and keep the patient warm. This is exactly the kind of error you catch when you know the 15% threshold.</div>
+    <div class="quiz-feedback incorrect-fb">The BLS PCS dressing rule: 2nd degree burns <strong>&lt;15%</strong> TBSA = moist sterile dressing. 2nd degree burns <strong>≥15%</strong> TBSA = dry sterile dressing. At 20% TBSA, these burns exceed the threshold — moist dressings create hypothermia risk over this much damaged skin. The correct action is to replace them with dry sterile dressing and keep the patient warm.</div>
+  </div>
+
+  <div class="section-nav">
+    <button onclick="goTo(4)">← The Clock</button>
+    <button onclick="goTo(6)">The Traps →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ SECTION 6: THE TRAPS ═══════════════════ -->
+<div class="section" id="sec-6">
+  <h2>The Traps — Myths, Mimics & Missed Calls</h2>
+  <p>The deepest learning happens when your assumptions get challenged. Tap each myth to confront what you think you know.</p>
+
+  <h3>Myth Busters</h3>
+  <div class="myth-box" onclick="this.classList.toggle('revealed')">
+    <div class="callout-label">Myth #1</div>
+    <p><strong>"SpO₂ is 98% — the patient is oxygenating fine."</strong></p>
+    <div class="myth-tap">Tap to reveal →</div>
+    <div class="myth-reveal">
+      <p><strong>Reality:</strong> Standard pulse oximetry cannot distinguish oxyhaemoglobin from carboxyhaemoglobin. After CO exposure, SpO₂ of 98% may mean 70% O₂ and 28% CO on haemoglobin. The patient is profoundly hypoxic despite the reassuring number. Treat the mechanism, not the monitor.</p>
+    </div>
+  </div>
+
+  <div class="myth-box" onclick="this.classList.toggle('revealed')">
+    <div class="callout-label">Myth #2</div>
+    <p><strong>"Third-degree burns are the most painful — they're the worst ones."</strong></p>
+    <div class="myth-tap">Tap to reveal →</div>
+    <div class="myth-reveal">
+      <p><strong>Reality:</strong> Full-thickness (3rd degree) burns are painless — nerve endings are destroyed. The most painful burns are partial-thickness (2nd degree), where nerve endings are exposed but intact. A patient reporting NO pain in a burn area is giving you clinical information: that burn is deeper than it looks.</p>
+    </div>
+  </div>
+
+  <div class="myth-box" onclick="this.classList.toggle('revealed')">
+    <div class="callout-label">Myth #3</div>
+    <p><strong>"Small burns can't cause shock — there isn't enough fluid loss."</strong></p>
+    <div class="myth-tap">Tap to reveal →</div>
+    <div class="myth-reveal">
+      <p><strong>Reality:</strong> Hypovolaemic shock from fluid loss alone requires larger burns (typically >20% TBSA). But "small" burns CAN cause shock through other mechanisms: electrical injury → cardiac dysrhythmias → cardiogenic shock. Inhalation injury → distributive shock. Pain → neurogenic/vasovagal response. Assess the whole patient, not just the skin.</p>
+    </div>
+  </div>
+
+  <h3>Differential Diagnosis</h3>
+  <table class="info-table">
+    <tr><th>Condition</th><th>Key Differentiator</th><th>Clue Pointing to Burns</th></tr>
+    <tr><td>Toxic epidermal necrolysis (TEN)</td><td>Skin sloughing without thermal exposure. Drug reaction.</td><td>Burns have a clear thermal/chemical/electrical mechanism.</td></tr>
+    <tr><td>Cellulitis / necrotizing fasciitis</td><td>Red, hot skin developing over hours/days with fever.</td><td>Burns have clear mechanism and sudden onset.</td></tr>
+    <tr><td>Severe frostbite</td><td>White/waxy skin from cold exposure. Skin is cold and hard.</td><td>Burn eschar is warm or room-temperature.</td></tr>
+    <tr><td>Non-accidental injury (paediatric)</td><td>Symmetric burns, sharp demarcation, pattern doesn't match story.</td><td>Accidental burns have irregular borders and splash patterns.</td></tr>
+  </table>
+
+  <div class="quiz-block" id="q7-1">
+    <div class="quiz-label critical">●●● Critical Thinking</div>
+    <div class="quiz-question">You respond to a chemical exposure at a factory. The patient has a white powdery residue on his right arm with reddened, blistered skin underneath. A coworker says "we washed it off with the hose already." What is your MOST important next step?</div>
+    <button class="quiz-opt" data-correct="false" onclick="checkQuiz('q7-1',this,false)"><span class="letter">A</span> Begin irrigating with cool water immediately for at least 10 minutes</button>
+    <button class="quiz-opt" data-correct="true" onclick="checkQuiz('q7-1',this,true)"><span class="letter">B</span> Brush off or manually remove the remaining powder first, then irrigate</button>
+    <button class="quiz-opt" data-correct="false" onclick="checkQuiz('q7-1',this,false)"><span class="letter">C</span> Apply moist sterile dressings and transport</button>
+    <button class="quiz-opt" data-correct="false" onclick="checkQuiz('q7-1',this,false)"><span class="letter">D</span> Identify the chemical before doing anything — it may be water-reactive</button>
+    <div class="quiz-feedback correct-fb">Correct. The BLS PCS Hazardous Materials Injury Standard requires you to brush off or manually remove solid/powdered hazardous materials BEFORE irrigating. Water on powder can dissolve it into a concentrated solution, worsening the chemical reaction. After removing powder, confirm not water-reactive, then irrigate with large volumes of cool water. For unknown chemicals, 20 minutes minimum at scene if stable.</div>
+    <div class="quiz-feedback incorrect-fb">Before irrigating, the BLS PCS requires you to brush off or manually remove solid/powdered chemicals first. Water on powder can create a concentrated solution that worsens the burn. Correct sequence: brush off → confirm not water-reactive → irrigate with large volumes of cool water. For unknown chemicals, irrigate 20 minutes minimum at scene if stable.</div>
+  </div>
+
+  <div class="section-nav">
+    <button onclick="goTo(5)">← Management</button>
+    <button onclick="goTo(7)">Review →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ SECTION 7: REVIEW ═══════════════════ -->
+<div class="section" id="sec-7">
+  <h2>Summary & Review</h2>
+
+  <div class="score-bar">
+    <div class="score-item"><div class="score-num" id="scoreCorrect" style="color:var(--accent-green)">0</div><div class="score-label">Correct</div></div>
+    <div class="score-item"><div class="score-num" id="scoreTotal" style="color:var(--accent-blue)">0</div><div class="score-label">Answered</div></div>
+    <div class="score-item"><div class="score-num" id="scorePct" style="color:var(--accent-amber)">—</div><div class="score-label">Score</div></div>
+  </div>
+
+  <div class="cheatsheet">
+    <h3>5 Must-Know Takeaways</h3>
+    <div class="cheatsheet-item"><span class="cheatsheet-num">01</span> The burns you can see are often not the burns that kill. Facial burns, hoarseness, soot in sputum, and cough after an enclosed-space fire = inhalation injury developing. Treat the airway first, skin second.</div>
+    <div class="cheatsheet-item"><span class="cheatsheet-num">02</span> SpO₂ lies after CO exposure. Standard pulse oximetry cannot distinguish carboxyhaemoglobin. High-concentration O₂ is mandatory for any suspected smoke inhalation regardless of the monitor reading.</div>
+    <div class="cheatsheet-item"><span class="cheatsheet-num">03</span> Dressing selection is driven by depth and TBSA: moist sterile for 2nd degree &lt;15% TBSA, dry sterile for 2nd degree ≥15% TBSA and all 3rd degree. Stop cooling if shivering or hypotension develops.</div>
+    <div class="cheatsheet-item"><span class="cheatsheet-num">04</span> Circumferential full-thickness burns cause compartment syndrome. Eschar can't expand, swelling compresses vessels underneath. Reassess distal neurovascular status — pulses present now ≠ pulses present later.</div>
+    <div class="cheatsheet-item"><span class="cheatsheet-num">05</span> Chemical burns: brush off powder first, confirm not water-reactive, then irrigate. Alkali and unknown = 20 min minimum. Acid = 10 min minimum.</div>
+  </div>
+
+  <div class="callout callout-blue">
+    <div class="callout-label">Quick Reference — High-Priority Transport</div>
+    <p>Any inhalation injury signs · Burns to face, hands, feet, genitalia, major joints · Circumferential burns · Full-thickness burns of significant area · Partial-thickness ≥15% TBSA (adult) or ≥10% (paediatric) · Electrical burns · Chemical burns with systemic symptoms · Significant comorbidities · Suspected non-accidental injury.</p>
+  </div>
+
+  <div class="next-shift">
+    <div class="ns-label">🚑 Next Shift Challenge</div>
+    <p><strong>1. Assessment Habit:</strong> On your next fire/smoke/burn call, do a full inhalation injury assessment BEFORE looking at the skin burns. Hoarseness, soot in sputum, facial burns, singed nasal hair, cough, lung auscultation. Make it your reflex: airway first, then skin.</p>
+    <p style="margin-top:10px;"><strong>2. Documentation Practice:</strong> On your next burn patient, document TBSA using Rule of Nines, burn depth at each site, and explicitly document enclosed space (yes/no) and LOC during exposure (yes/no). These three data points drive receiving facility decisions.</p>
+    <p style="margin-top:10px;"><strong>3. Reflection Question:</strong> Think about your last burn call. Did you check distal neurovascular status in any burned extremity? Did you reassess it? Circumferential eschar is a tourniquet. Make pulse checks distal to burns a standing habit.</p>
+  </div>
+
+  <h3>Spaced Review Schedule</h3>
+  <p>A single pass won't create lasting knowledge. Come back at these intervals:</p>
+  <div class="review-schedule">
+    <div class="review-badge"><span class="when">Day 1</span><span class="what">Re-read the 5 Takeaways above</span></div>
+    <div class="review-badge"><span class="when">Day 7</span><span class="what">Redo quizzes without looking at answers</span></div>
+    <div class="review-badge"><span class="when">Day 30</span><span class="what">Run through the full module again</span></div>
+  </div>
+
+  <p style="margin-top:28px; text-align:center; color: var(--text-muted); font-size: 0.8rem;">
+    Based on the Ontario BLS Patient Care Standards v3.4 (March 2023) &amp; ALS PCS v5.4 (June 2025).<br>
+    Review all clinical content for accuracy before using in practice.
+  </p>
+
+  <div class="section-nav">
+    <button onclick="goTo(6)">← The Traps</button>
+    <button disabled>Complete ✓</button>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+// ─── STATE ───
+let currentSection = 0;
+const totalSections = 8;
+const visited = new Set([0]);
+let quizResults = {};
+
+// ─── NAVIGATION ───
+function goTo(idx) {
+  if (idx < 0 || idx >= totalSections) return;
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('sec-' + idx).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach((b, i) => {
+    if (i < totalSections) {
+      b.classList.toggle('active', i === idx);
+      if (visited.has(i)) b.classList.add('visited');
+    }
+  });
+  currentSection = idx;
+  visited.add(idx);
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateProgress() {
+  const pct = visited.size / totalSections;
+  const circle = document.getElementById('progressCircle');
+  const circ = 2 * Math.PI * 15;
+  circle.setAttribute('stroke-dashoffset', circ * (1 - pct));
+  document.getElementById('progressText').textContent = visited.size + '/' + totalSections;
+}
+
+// ─── EXPANDABLE ───
+function toggleExpand(el) { el.closest('.expandable').classList.toggle('open'); }
+
+// ─── QUIZ ───
+function checkQuiz(quizId, btn, isCorrect) {
+  const block = document.getElementById(quizId);
+  if (block.dataset.answered === 'true') return;
+  block.dataset.answered = 'true';
+
+  const opts = block.querySelectorAll('.quiz-opt');
+  opts.forEach(o => {
+    o.classList.add('disabled');
+    if (o.dataset.correct === 'true') o.classList.add('correct');
+  });
+  if (!isCorrect) btn.classList.add('incorrect');
+
+  block.querySelector(isCorrect ? '.correct-fb' : '.incorrect-fb').classList.add('show');
+  quizResults[quizId] = isCorrect;
+  updateScore();
+}
+
+function updateScore() {
+  const keys = Object.keys(quizResults);
+  const correct = keys.filter(k => quizResults[k]).length;
+  const total = keys.length;
+  document.getElementById('scoreCorrect').textContent = correct;
+  document.getElementById('scoreTotal').textContent = total;
+  document.getElementById('scorePct').textContent = total > 0 ? Math.round(correct / total * 100) + '%' : '—';
+}
+
+updateProgress();
+</script>
+</body>
+</html>
