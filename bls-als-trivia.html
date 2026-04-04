@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLS & ALS Trivia — Ontario PCS</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface-hover: #222636;
+    --border: #2a2e3d;
+    --text: #e4e6ed;
+    --text-dim: #8b8fa3;
+    --blue: #4a9eff;
+    --blue-dim: rgba(74, 158, 255, 0.12);
+    --green: #34d399;
+    --green-dim: rgba(52, 211, 153, 0.12);
+    --amber: #fbbf24;
+    --amber-dim: rgba(251, 191, 36, 0.12);
+    --red: #f87171;
+    --red-dim: rgba(248, 113, 113, 0.12);
+    --radius: 12px;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .header p {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+  }
+
+  .filters {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .filter-btn:hover { border-color: var(--blue); color: var(--text); }
+  .filter-btn.active { background: var(--blue-dim); border-color: var(--blue); color: var(--blue); }
+
+  .score-bar {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+  }
+
+  .score-bar span { display: flex; align-items: center; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .dot.revealed { background: var(--green); }
+  .dot.hidden { background: var(--text-dim); }
+
+  .cards { display: flex; flex-direction: column; gap: 14px; max-width: 720px; margin: 0 auto; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover { border-color: #3a3f52; }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 18px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .card-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--text-dim);
+    background: var(--bg);
+    padding: 4px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  .card-question {
+    font-size: 0.92rem;
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  .card-chevron {
+    color: var(--text-dim);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+    margin-top: 3px;
+    font-size: 0.8rem;
+  }
+
+  .card.open .card-chevron { transform: rotate(180deg); }
+
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+    display: inline-block;
+    margin-left: 8px;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+  }
+
+  .tag.bls { background: var(--blue-dim); color: var(--blue); }
+  .tag.als { background: var(--amber-dim); color: var(--amber); }
+  .tag.both { background: var(--green-dim); color: var(--green); }
+
+  .card-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .card.open .card-answer { max-height: 500px; }
+
+  .answer-content {
+    padding: 0 18px 16px 18px;
+    border-top: 1px solid var(--border);
+    margin-top: 0;
+    padding-top: 14px;
+  }
+
+  .answer-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--green);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+
+  .answer-text {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  .answer-text strong { color: var(--green); font-weight: 600; }
+  .answer-text em { color: var(--amber); font-style: normal; }
+
+  .controls {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .ctrl-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .ctrl-btn:hover { background: var(--surface-hover); border-color: var(--blue); }
+
+  @media (max-width: 480px) {
+    body { padding: 14px; }
+    .header h1 { font-size: 1.3rem; }
+    .card-header { padding: 14px; }
+    .answer-content { padding: 0 14px 14px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>BLS & ALS Trivia</h1>
+  <p>Ontario PCS v3.4 / v5.4 — Tap a question to reveal the answer</p>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active" onclick="filter('all')">ALL</button>
+  <button class="filter-btn" onclick="filter('bls')">BLS</button>
+  <button class="filter-btn" onclick="filter('als')">ALS</button>
+  <button class="filter-btn" onclick="filter('both')">BOTH</button>
+</div>
+
+<div class="score-bar">
+  <span><span class="dot revealed"></span> <span id="revealedCount">0</span> revealed</span>
+  <span><span class="dot hidden"></span> <span id="hiddenCount">0</span> hidden</span>
+</div>
+
+<div class="cards" id="cardContainer"></div>
+
+<div class="controls">
+  <button class="ctrl-btn" onclick="revealAll()">Reveal All</button>
+  <button class="ctrl-btn" onclick="hideAll()">Hide All</button>
+  <button class="ctrl-btn" onclick="shuffleCards()">Shuffle</button>
+</div>
+
+<script>
+const questions = [
+  {
+    q: "What is the IV naloxone dose for suspected opioid toxicity, and what should you titrate to?",
+    a: "<strong>Up to 0.4 mg IV</strong>, titrated to restore <strong>respiratory status</strong> — target RR ≥10, adequate airway and ventilation, <em>not full alertness</em>. Dosing interval: 5 min, max 3 doses.",
+    tag: "both"
+  },
+  {
+    q: "What respiratory rate condition must be met before administering naloxone?",
+    a: "RR <strong>&lt; 10 breaths/min</strong>, OR inability to adequately ventilate, OR persistent need to assist ventilations. <em>Airway management is the initial priority — always before medication.</em>",
+    tag: "both"
+  },
+  {
+    q: "What is the minimum COWS score required to administer buprenorphine/naloxone, and what is the max cumulative dose?",
+    a: "COWS score <strong>≥ 8</strong>. Initial dose: 16 mg BUC/SL, subsequent doses 8 mg q10 min. <strong>Max cumulative dose: 24 mg.</strong>",
+    tag: "both"
+  },
+  {
+    q: "A patient received naloxone for opioid toxicity and is now in withdrawal. What additional contraindication must you rule out before giving buprenorphine/naloxone?",
+    a: "The patient must <strong>not have taken methadone in the past 72 hours</strong>. Also: age must be ≥16, LOA must be unaltered, and no allergy to buprenorphine.",
+    tag: "both"
+  },
+  {
+    q: "In the bronchoconstriction directive, what is the EPINEPHrine condition that differs from anaphylaxis?",
+    a: "For bronchoconstriction, EPINEPHrine requires <strong>BVM ventilation required</strong> AND <strong>Hx of asthma</strong>. This is different from anaphylaxis where EPINEPHrine is first-line for any severe reaction. Dose is 0.01 mg/kg IM (max 0.5 mg).",
+    tag: "both"
+  },
+  {
+    q: "What are the three conditions that qualify a patient for dexamethasone under the bronchoconstriction directive?",
+    a: "History of <strong>asthma</strong>, OR <strong>COPD</strong>, OR <strong>20 pack-year history of smoking</strong>. Dose: 0.5 mg/kg PO/IM/IV, max 8 mg. Contraindicated if currently on PO or parenteral steroids.",
+    tag: "both"
+  },
+  {
+    q: "What are the age and heart rate conditions for nebulized EPINEPHrine in croup?",
+    a: "Age <strong>≥ 6 months to &lt; 8 years</strong>, HR <strong>&lt; 200 bpm</strong>, with <strong>stridor at rest</strong>. Dose: 2.5 mg NEB if &lt;10 kg, 5 mg NEB if ≥10 kg. One dose only.",
+    tag: "both"
+  },
+  {
+    q: "In the Field Trauma Triage Standard, what are the three Step 1 physiological criteria?",
+    a: "<strong>1)</strong> Does not follow commands, <strong>2)</strong> SBP &lt;90 mmHg, <strong>3)</strong> RR &lt;10 or ≥30 (or &lt;20 in infant &lt;1 year), or need for ventilatory support.",
+    tag: "bls"
+  },
+  {
+    q: "What is the maximum land transport time to a Lead Trauma Hospital for the Field Trauma Triage bypass?",
+    a: "<strong>&lt; 30 minutes.</strong> If transport time exceeds 30 minutes, or if the airway cannot be secured and survival is unlikely, transport to the closest ED.",
+    tag: "bls"
+  },
+  {
+    q: "Name four of the eight anatomical criteria (Step 2) in the Field Trauma Triage Standard.",
+    a: "Any four of: <strong>penetrating injuries</strong> to head/neck/torso/proximal extremities, <strong>chest wall instability</strong> (flail), <strong>two+ proximal long-bone fractures</strong>, <strong>crushed/degloved/pulseless extremity</strong>, <strong>amputation proximal to wrist/ankle</strong>, <strong>pelvic fractures</strong>, <strong>open/depressed skull fracture</strong>, <strong>paralysis</strong>.",
+    tag: "bls"
+  },
+  {
+    q: "What defines 'refractory VF/pVT' in the Medical Cardiac Arrest directive, and what interventions follow?",
+    a: "Persistent VF or pulseless VT <strong>after 3 consecutive shocks</strong>. Consider <strong>DSED</strong> (if authorized) or <strong>VCD</strong> (if DSED unavailable). Transport after <strong>3 doses of DSED/VCD + 3 rounds of epinephrine</strong> if still in VF/pVT.",
+    tag: "both"
+  },
+  {
+    q: "When should you consider very early transport in a medical cardiac arrest? (two scenarios)",
+    a: "<strong>1)</strong> Pregnancy presumed ≥ 20 weeks gestation (fundus at or above umbilicus — ensure manual uterine displacement to the left). <strong>2)</strong> Known reversible cause of arrest unable to be addressed in the field.",
+    tag: "both"
+  },
+  {
+    q: "What are the Trauma TOR criteria for a PCP?",
+    a: "Age ≥16, no pulses, no defibrillation delivered, AND: <strong>asystole + no signs of life since fully extricated</strong>, OR signs of life when extricated but closest ED ≥30 min away, OR <strong>PEA with closest ED ≥30 min away</strong>. Must patch BHP for authorization.",
+    tag: "both"
+  },
+  {
+    q: "What is the mandatory patch point for Medical TOR?",
+    a: "Patch to consider Medical TOR if applicable. <strong>Patch early</strong> if extenuating circumstances or paramedic considers resuscitation futile. If patch fails and/or no ROSC after <strong>20 minutes</strong>, initiate transport.",
+    tag: "both"
+  },
+  {
+    q: "What is the SC dose of naloxone, and how does it differ from the IM dose?",
+    a: "SC: <strong>0.8 mg</strong> (double the IM dose of 0.4 mg). Same dosing interval of 5 min, max 3 doses. The IN dose is <strong>2–4 mg</strong>.",
+    tag: "both"
+  },
+  {
+    q: "Glucometry in a VSA patient — indicated or not?",
+    a: "<strong>Not indicated.</strong> Glucometry in the VSA patient is of no clinical value. However, if the patient does not respond to airway management and naloxone, <em>then</em> glucometry should be considered.",
+    tag: "both"
+  },
+  {
+    q: "In the STEMI bypass protocol, what information must be relayed to the PCI centre?",
+    a: "That the patient is a <strong>STEMI patient</strong>, patient initials, age, sex, concerns about clinical stability, <strong>infarct territory/findings on qualifying ECG</strong>, estimated time of arrival, and catchment area of pickup.",
+    tag: "bls"
+  },
+  {
+    q: "An inferior STEMI is identified on 12-lead. What additional lead must be obtained before considering nitroglycerin?",
+    a: "A minimum <strong>V4R</strong> must be completed to rule in or rule out a right ventricular infarction (RVI). These patients are preload dependent and nitroglycerin may cause <em>significant hypotension</em>.",
+    tag: "both"
+  },
+  {
+    q: "What is the hydrocortisone dose for suspected adrenal crisis, and what routes are available to PCPs vs ACPs?",
+    a: "Dose: <strong>2 mg/kg</strong> (max 100 mg, rounded to nearest 10 mg). PCP routes: <strong>IM/IV</strong> (IV only if authorized for PCP Autonomous IV). ACP routes: <strong>IM/IV/IO/CVAD</strong>.",
+    tag: "both"
+  },
+  {
+    q: "What is the 'Red Rule' of medication administration?",
+    a: "<strong>NEVER give the contents of a syringe that is not labelled or without visualizing the vial or ampule from which it was immediately drawn.</strong> A duty to avoid causing unjustifiable harm.",
+    tag: "both"
+  },
+  {
+    q: "When administering salbutamol via MDI, what rate should you use and what device is required?",
+    a: "<strong>100 mcg approximately every 4 breaths.</strong> A <strong>spacer</strong> should always be used. For patients &lt;25 kg: up to 600 mcg (6 puffs). For ≥25 kg: up to 800 mcg (8 puffs).",
+    tag: "both"
+  },
+  {
+    q: "When is nebulization contraindicated?",
+    a: "In patients with a <strong>known or suspected fever</strong>, or in the setting of a <strong>declared febrile respiratory illness outbreak</strong> by the local medical officer of health.",
+    tag: "both"
+  },
+  {
+    q: "In the ACP analgesia directive, what is the IV ketamine dose for adults, and what are the contraindications?",
+    a: "IV: <strong>0.25 mg/kg</strong> (max single dose 20 mg), dosing interval 15 min, max 2 doses. Contraindications: allergy, <strong>treatment of headache</strong>, treatment of chronic pain, <strong>suspected ischaemic chest pain</strong>. LOA must be unaltered.",
+    tag: "als"
+  },
+  {
+    q: "What is the preferred needle thoracostomy site, and what are the conditions for performing it?",
+    a: "<strong>4th intercostal space, anterior axillary line</strong> (preferred) OR 2nd intercostal space, midclavicular line. Conditions: pre-arrest or VSA, absent/severely diminished breath sounds on affected side, <strong>hypotension or VSA</strong>.",
+    tag: "als"
+  },
+  {
+    q: "What factors might cause a BHP to NOT authorize TOR even when the patient meets the TOR rule?",
+    a: "Location of patient, <strong>EtCO₂</strong>, age, bystander witnessed, bystander CPR, transportation time, and <strong>unusual cause of arrest</strong> (electrocution, hanging, toxicology).",
+    tag: "both"
+  },
+  {
+    q: "In the MACC (Medication Administration Cross-Check), what does Provider 2 remember with the mnemonic 'R.C.V.' or 'R.C.Q.'?",
+    a: "<strong>R</strong> = Ready, <strong>C</strong> = Contraindications?, <strong>V</strong> = Volume? (or <strong>Q</strong> = Quantity? for PO). Provider 2 essentially authorizes the administration — Provider 1 cannot proceed without their concurrence.",
+    tag: "both"
+  },
+];
+
+let openCards = new Set();
+let activeFilter = 'all';
+let currentOrder = [...Array(questions.length).keys()];
+
+function render() {
+  const container = document.getElementById('cardContainer');
+  container.innerHTML = '';
+  let visibleCount = 0;
+  let revealedCount = 0;
+
+  currentOrder.forEach((i) => {
+    const q = questions[i];
+    if (activeFilter !== 'all' && q.tag !== activeFilter) return;
+    visibleCount++;
+    const isOpen = openCards.has(i);
+    if (isOpen) revealedCount++;
+
+    const tagLabel = q.tag === 'both' ? 'BLS/ALS' : q.tag.toUpperCase();
+
+    container.innerHTML += `
+      <div class="card ${isOpen ? 'open' : ''}" data-index="${i}" onclick="toggle(${i})">
+        <div class="card-header">
+          <span class="card-num">${String(visibleCount).padStart(2,'0')}</span>
+          <span class="card-question">${q.q} <span class="tag ${q.tag}">${tagLabel}</span></span>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-answer">
+          <div class="answer-content">
+            <div class="answer-label">Answer</div>
+            <div class="answer-text">${q.a}</div>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  document.getElementById('revealedCount').textContent = revealedCount;
+  document.getElementById('hiddenCount').textContent = visibleCount - revealedCount;
+}
+
+function toggle(i) {
+  if (openCards.has(i)) openCards.delete(i);
+  else openCards.add(i);
+  render();
+}
+
+function filter(f) {
+  activeFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  render();
+}
+
+function revealAll() {
+  currentOrder.forEach(i => {
+    if (activeFilter === 'all' || questions[i].tag === activeFilter) openCards.add(i);
+  });
+  render();
+}
+
+function hideAll() {
+  openCards.clear();
+  render();
+}
+
+function shuffleCards() {
+  openCards.clear();
+  for (let i = currentOrder.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [currentOrder[i], currentOrder[j]] = [currentOrder[j], currentOrder[i]];
+  }
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
