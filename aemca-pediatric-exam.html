@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>AEMCA Exam Prep — Pediatric Emergencies</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg: #141417;
+  --card: #1c1b20;
+  --surface: #222127;
+  --border: rgba(255,255,255,0.06);
+  --border-hover: rgba(255,255,255,0.12);
+  --text-1: #e8e6e0;
+  --text-2: #b0ada5;
+  --text-3: #7a786f;
+  --text-4: #5a5850;
+  --text-5: #3d3b37;
+  --correct: #5DCAA5;
+  --correct-dim: rgba(93,202,165,0.06);
+  --correct-border: rgba(93,202,165,0.3);
+  --incorrect: #F09595;
+  --incorrect-dim: rgba(240,149,149,0.06);
+  --incorrect-border: rgba(240,149,149,0.3);
+  --accent: #B5D4F4;
+  --accent-dim: rgba(181,212,244,0.1);
+  --amber: #FAC775;
+  --amber-dim: rgba(186,117,23,0.12);
+  --purple: #CECBF6;
+  --purple-dim: rgba(206,203,246,0.1);
+  --pink: #F4C0D1;
+  --pink-dim: rgba(244,192,209,0.1);
+  --coral: #F0997B;
+  --coral-dim: rgba(240,153,123,0.1);
+  --teal-dark: #04342C;
+  --sans: 'DM Sans', system-ui, sans-serif;
+  --serif: 'Source Serif 4', Georgia, serif;
+  --mono: 'JetBrains Mono', monospace;
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text-1);
+  line-height: 1.5;
+  min-height: 100vh;
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page { display: none; }
+.page.active { display: flex; }
+
+/* INTRO */
+.intro {
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 40px 28px;
+}
+
+.intro-label {
+  font-size: 11px;
+  color: var(--text-4);
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.intro-title {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--text-1);
+  line-height: 1.3;
+}
+
+.btn-begin {
+  margin-top: 56px;
+  width: 100%;
+  padding: 14px;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: var(--radius);
+  border: none;
+  background: var(--correct);
+  color: var(--teal-dark);
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.btn-begin:active { opacity: 0.85; }
+
+/* EXAM */
+.exam {
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* Progress */
+.progress-bar {
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 10;
+}
+
+.progress-ticks {
+  display: flex;
+  gap: 3px;
+  flex-wrap: wrap;
+}
+
+.tick {
+  width: 16px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.08);
+  transition: background 0.3s;
+}
+
+.tick.correct { background: var(--correct); }
+.tick.incorrect { background: var(--incorrect); }
+.tick.current { background: var(--accent); }
+
+.progress-count {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-3);
+  white-space: nowrap;
+  margin-left: 12px;
+}
+
+/* Question area */
+.question-area {
+  flex: 1;
+  padding: 24px 20px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.q-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.q-category {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: var(--radius);
+  font-weight: 500;
+}
+
+.q-type {
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+/* Narrative block */
+.narrative {
+  font-family: var(--serif);
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--text-2);
+  padding: 16px 18px;
+  background: var(--card);
+  border-left: 2px solid var(--border-hover);
+  margin-bottom: 20px;
+  border-radius: 0;
+}
+
+.narrative p + p { margin-top: 12px; }
+
+/* Stem */
+.q-stem {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--text-1);
+  margin-bottom: 18px;
+}
+
+/* Sub-options for combination */
+.sub-options {
+  background: var(--surface);
+  padding: 14px 16px;
+  margin-bottom: 18px;
+  border-left: 2px solid var(--border-hover);
+  border-radius: 0;
+}
+
+.sub-options-label {
+  font-size: 11px;
+  color: var(--text-3);
+  margin-bottom: 8px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.sub-option {
+  font-family: var(--serif);
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--text-2);
+  padding: 2px 0;
+  display: flex;
+  gap: 8px;
+}
+
+.sub-option-num {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-3);
+  min-width: 16px;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+/* Answer options */
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.option:active:not(.disabled) {
+  background: var(--surface);
+}
+
+.option-letter {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text-3);
+  min-width: 14px;
+}
+
+.option-text {
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--text-1);
+}
+
+.option.selected-correct {
+  background: var(--correct-dim);
+  border-color: var(--correct-border);
+}
+.option.selected-correct .option-letter { color: var(--correct); }
+
+.option.selected-incorrect {
+  background: var(--incorrect-dim);
+  border-color: var(--incorrect-border);
+}
+.option.selected-incorrect .option-letter { color: var(--incorrect); }
+
+.option.show-correct {
+  background: var(--correct-dim);
+  border-color: var(--correct-border);
+}
+.option.show-correct .option-letter { color: var(--correct); }
+
+.option.disabled {
+  cursor: default;
+  opacity: 0.3;
+}
+.option.selected-correct.disabled,
+.option.selected-incorrect.disabled,
+.option.show-correct.disabled { opacity: 1; }
+
+.option-tag {
+  margin-left: auto;
+  font-size: 11px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Rationale */
+.rationale-wrap {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.rationale-wrap.visible {
+  display: flex;
+}
+
+.rationale-block {
+  padding: 16px 18px;
+  background: var(--surface);
+  border-left: 2px solid var(--border-hover);
+  border-radius: 0;
+}
+
+.rationale-block.correct-block { border-left-color: var(--correct); }
+.rationale-block.incorrect-block { border-left-color: var(--incorrect); }
+.rationale-block.ref-block { border-left-color: rgba(255,255,255,0.08); }
+
+.rationale-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  margin-bottom: 8px;
+}
+
+.rationale-label.correct-label { color: var(--correct); }
+.rationale-label.incorrect-label { color: var(--incorrect); }
+.rationale-label.ref-label { color: var(--text-4); }
+
+.rationale-text {
+  font-family: var(--serif);
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--text-2);
+}
+
+.rationale-text.dim { color: var(--text-3); }
+
+.rationale-ref {
+  font-family: var(--serif);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-4);
+  font-style: italic;
+}
+
+/* Answer status header */
+.answer-status {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.answer-status.visible { display: flex; }
+
+.status-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-icon.correct-icon { background: rgba(93,202,165,0.12); }
+.status-icon.incorrect-icon { background: rgba(240,149,149,0.12); }
+
+.status-text { font-size: 13px; }
+.status-text.correct-text { color: var(--correct); }
+.status-text.incorrect-text { color: var(--incorrect); }
+
+/* Footer nav */
+.q-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.btn-nav {
+  padding: 8px 18px;
+  font-family: var(--sans);
+  font-size: 13px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--border-hover);
+  color: var(--text-3);
+  transition: opacity 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-nav:active { opacity: 0.7; }
+.btn-nav:disabled { opacity: 0.3; cursor: default; }
+
+.btn-next {
+  padding: 10px 24px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: var(--radius);
+  border: none;
+  background: var(--correct);
+  color: var(--teal-dark);
+  cursor: pointer;
+  transition: opacity 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-next:active { opacity: 0.85; }
+
+.btn-flag {
+  padding: 8px 14px;
+  font-family: var(--sans);
+  font-size: 13px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-4);
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-flag.flagged {
+  border-color: var(--amber-dim);
+  color: var(--amber);
+  background: var(--amber-dim);
+}
+
+/* RESULTS */
+.results {
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 40px 24px;
+}
+
+.results-label {
+  font-size: 11px;
+  color: var(--text-3);
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  margin-bottom: 24px;
+}
+
+.score-ring {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  margin-bottom: 20px;
+}
+
+.score-ring svg { transform: rotate(-90deg); }
+
+.ring-bg { stroke: rgba(255,255,255,0.05); }
+
+.ring-fill {
+  transition: stroke-dashoffset 1.2s ease;
+}
+
+.ring-fill.pass { stroke: var(--correct); }
+.ring-fill.fail { stroke: var(--incorrect); }
+
+.score-pct {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 36px;
+  font-weight: 500;
+  color: var(--text-1);
+}
+
+.pass-fail-badge {
+  display: inline-block;
+  padding: 5px 18px;
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 28px;
+}
+
+.pass-fail-badge.pass {
+  background: rgba(93,202,165,0.1);
+  border: 1px solid rgba(93,202,165,0.2);
+  color: var(--correct);
+}
+
+.pass-fail-badge.fail {
+  background: rgba(240,149,149,0.08);
+  border: 1px solid rgba(240,149,149,0.2);
+  color: var(--incorrect);
+}
+
+.stats-row {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 28px;
+}
+
+.stat-card {
+  flex: 1;
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 14px;
+  text-align: center;
+}
+
+.stat-val {
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.stat-val.green { color: var(--correct); }
+.stat-val.red { color: var(--incorrect); }
+
+.stat-label {
+  font-size: 11px;
+  color: var(--text-4);
+}
+
+.topic-section {
+  width: 100%;
+  max-width: 400px;
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+  margin-bottom: 28px;
+}
+
+.topic-label {
+  font-size: 11px;
+  color: var(--text-3);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  margin-bottom: 14px;
+}
+
+.topic-row {
+  margin-bottom: 12px;
+}
+
+.topic-row-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.topic-name {
+  font-family: var(--serif);
+  font-size: 13px;
+  color: var(--text-2);
+}
+
+.topic-score {
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.topic-bar {
+  height: 3px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 2px;
+}
+
+.topic-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.8s ease;
+}
+
+.results-buttons {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.results-buttons .btn-next { flex: 1; padding: 13px; }
+
+.btn-restart {
+  flex: 1;
+  padding: 13px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: var(--radius);
+  cursor: pointer;
+  background: var(--card);
+  color: var(--text-3);
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: opacity 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-restart:active { opacity: 0.7; }
+
+@media (max-width: 420px) {
+  .tick { width: 14px; }
+  .progress-bar { padding: 10px 16px; }
+  .question-area { padding: 20px 16px 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div class="page intro active" id="introPage">
+  <span class="intro-label">AEMCA exam prep</span>
+  <h1 class="intro-title">Pediatric Emergencies</h1>
+  <button class="btn-begin" onclick="startExam()">Begin exam</button>
+</div>
+
+<!-- EXAM -->
+<div class="page exam" id="examPage">
+  <div class="progress-bar">
+    <div class="progress-ticks" id="progressTicks"></div>
+    <span class="progress-count" id="progressCount"></span>
+  </div>
+  <div class="question-area" id="questionArea"></div>
+</div>
+
+<!-- RESULTS -->
+<div class="page results" id="resultsPage">
+  <span class="results-label">Your result</span>
+  <div class="score-ring">
+    <svg width="160" height="160" viewBox="0 0 160 160">
+      <circle class="ring-bg" cx="80" cy="80" r="68" fill="none" stroke-width="6"/>
+      <circle class="ring-fill" id="ringFill" cx="80" cy="80" r="68" fill="none" stroke-width="6" stroke-linecap="round" stroke-dasharray="427.3" stroke-dashoffset="427.3"/>
+    </svg>
+    <span class="score-pct" id="scorePct"></span>
+  </div>
+  <div class="pass-fail-badge" id="passFail"></div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-val green" id="statCorrect"></div><div class="stat-label">Correct</div></div>
+    <div class="stat-card"><div class="stat-val red" id="statIncorrect"></div><div class="stat-label">Incorrect</div></div>
+    <div class="stat-card"><div class="stat-val" id="statTotal"></div><div class="stat-label">Total</div></div>
+  </div>
+  <div class="topic-section" id="topicSection">
+    <div class="topic-label">Performance by topic</div>
+  </div>
+  <div class="results-buttons">
+    <button class="btn-next" onclick="reviewExam()">Review answers</button>
+    <button class="btn-restart" onclick="restartExam()">Restart</button>
+  </div>
+</div>
+
+<script>
+const examData = {
+  scenarios: [
+    {
+      id: 1, title: "Pediatric Drowning / Hypothermia",
+      blocks: [
+        {
+          text: "You are dispatched priority 4 to a private residence for a child who has fallen into a backyard pool. It is late October and outdoor temperatures are approximately 8\u00b0C. You arrive on scene and are met by a frantic mother at the front door who tells you her daughter fell into their above-ground pool. Fire personnel are on scene and have removed the child from the water. The family dog is barking from inside a kennel near the back fence.\n\nYou approach the patient on the pool deck and observe a female child approximately 4 years old, weighing approximately 18 kilograms. She has been placed on a blanket by firefighters. She is conscious, shivering violently, and crying weakly. Her skin is pale and cool to the touch, her lips are cyanotic, and her clothing is soaking wet. She is moving all extremities. Upon auscultation, you note scattered crackles bilaterally with diminished air entry at the bases. A firefighter tells you the child was in the water for approximately 3 to 4 minutes.",
+          questions: [
+            { id:1, type:"Prioritization", category:"Submersion Injury / Hypothermia", stem:"Your priority at this time is to:", format:"combination",
+              subOptions:[{num:1,text:"Remove the child\u2019s wet clothing and wrap her in dry blankets"},{num:2,text:"Perform a full secondary survey from toe to head"},{num:3,text:"Administer oxygen via non-rebreather mask at 15 L/min"},{num:4,text:"Apply the cardiac monitor"},{num:5,text:"Begin assisted ventilations with a BVM"}],
+              options:[{letter:"A",text:"2, 3 and 4"},{letter:"B",text:"1, 3 and 4"},{letter:"C",text:"1, 2 and 5"},{letter:"D",text:"3, 4 and 5"}],
+              correctAnswer:"B",
+              rationale:"This child is conscious, breathing spontaneously, and has bilateral crackles consistent with aspiration. The immediate priorities are to prevent further heat loss by removing wet clothing and wrapping in dry blankets (Choice 1), administer high concentration oxygen given the cyanosis and crackles (Choice 3), and apply the cardiac monitor given the risk of hypothermia-related dysrhythmias (Choice 4).",
+              wrongExplanations:{"A":"You included a full secondary survey (Choice 2) instead of removing wet clothing (Choice 1). A secondary survey is not the immediate priority when critical interventions \u2014 active rewarming, oxygenation, and cardiac monitoring \u2014 are needed first.","C":"You excluded the cardiac monitor (Choice 4) and included BVM ventilations (Choice 5). The child is breathing spontaneously and crying \u2014 assisted ventilations are only indicated if respirations become inadequate. Cardiac monitoring is essential given hypothermia risk.","D":"You excluded removing wet clothing (Choice 1) and included BVM ventilations (Choice 5). Wet clothing accelerates heat loss \u2014 removing it is a critical early intervention. The child is breathing spontaneously, so BVM is not indicated."},
+              reference:"BLS PCS \u2014 Cold Injury Standard, Oxygen Therapy Standard, General Pediatric Standard"
+            },
+            { id:2, type:"Factual", category:"Submersion Injury", stem:"In addition to asphyxia and aspiration, which of the following is a life/limb/function threat you should consider in a submersion injury?", format:"standard",
+              options:[{letter:"A",text:"Tension pneumothorax secondary to water pressure on the chest wall"},{letter:"B",text:"Mesenteric ischemia caused by the diving reflex"},{letter:"C",text:"Rhabdomyolysis resulting from prolonged cold water exposure"},{letter:"D",text:"Underlying disorders which may have precipitated the event, such as hypoglycemia, cardiac dysrhythmias, or trauma including spinal or head injury"}],
+              correctAnswer:"D",
+              rationale:"The Submersion Injury Standard directs paramedics to consider underlying disorders that may have precipitated the submersion, including drug or alcohol consumption, hypoglycemia, cardiac dysrhythmias, and trauma such as spinal or head injury.",
+              wrongExplanations:{"A":"Tension pneumothorax from water pressure is not a recognized prehospital life threat in the Submersion Injury Standard. It is specific to scuba-diving related barotrauma, not surface submersion.","B":"Mesenteric ischemia from the diving reflex sounds physiologically sophisticated but is not a recognized prehospital life threat listed in the Standard.","C":"While cold exposure can theoretically damage muscle tissue, rhabdomyolysis is not identified in the Submersion Injury Standard as a life/limb/function threat to consider."},
+              reference:"BLS PCS \u2014 Submersion Injury Standard"
+            },
+            { id:3, type:"Judgement", category:"Submersion Injury / Spinal Motion Restriction", stem:"Which of the following questions are most important to ask the mother at this time?", format:"combination",
+              subOptions:[{num:1,text:"\u201cDoes your daughter know how to swim?\u201d"},{num:2,text:"\u201cDid she hit her head or dive into the pool?\u201d"},{num:3,text:"\u201cHas she had anything to eat today?\u201d"},{num:4,text:"\u201cDoes she have any medical conditions or take any medications?\u201d"},{num:5,text:"\u201cWhat temperature is your pool set to?\u201d"}],
+              options:[{letter:"A",text:"1, 3 and 5"},{letter:"B",text:"2, 4 and 5"},{letter:"C",text:"2, 3 and 4"},{letter:"D",text:"1, 4 and 5"}],
+              correctAnswer:"C",
+              rationale:"The critical questions determine whether there is a concurrent spinal injury requiring SMR, an underlying disorder that precipitated the event, or a need for specific medical directives. Asking about head impact or diving (Choice 2) determines SMR need. Asking about food intake (Choice 3) helps rule out hypoglycemia. Asking about medical conditions (Choice 4) identifies underlying disorders.",
+              wrongExplanations:{"A":"You included swimming ability (Choice 1) and pool temperature (Choice 5) instead of head injury mechanism (Choice 2) and medical conditions (Choice 4). Swimming ability doesn\u2019t change your management, and you can assess hypothermia clinically.","B":"You included pool temperature (Choice 5) instead of food intake (Choice 3). Pool temperature doesn\u2019t change your clinical management \u2014 you assess hypothermia by the patient\u2019s presentation. Food intake helps rule out hypoglycemia as a precipitating factor.","D":"You included swimming ability (Choice 1) and pool temperature (Choice 5) instead of head injury mechanism (Choice 2) and food intake (Choice 3). Neither swimming ability nor pool temperature changes your immediate management."},
+              reference:"BLS PCS \u2014 Submersion Injury Standard, SMR Standard"
+            }
+          ]
+        },
+        {
+          text: "The mother tells you that her daughter slipped on the wet deck and fell in \u2014 she did not witness the child diving or hitting her head. She says her daughter had a small breakfast this morning but has not eaten since. The child has no known medical conditions and takes no medications. She has no allergies. The firefighter who pulled her from the water notes he found her face down and flipped her over before lifting her out.\n\nYour assessment reveals: heart rate 110, weak and regular; blood pressure 84/52; respirations 28, shallow and regular with continued bilateral crackles; SpO\u2082 88% on non-rebreather at 15 L/min; GCS 13 (E3, V4, M6); pupils equal and reactive; skin pale, cool and moist; temperature by tympanic reading is 34.2\u00b0C. The child is no longer shivering as vigorously and appears increasingly lethargic. Blood glucose reads 4.8 mmol/L.",
+          questions: [
+            { id:4, type:"Application", category:"Hypothermia / Submersion Injury", stem:"Which of the following statements is true regarding this patient\u2019s presentation?", format:"standard",
+              options:[{letter:"A",text:"The decrease in shivering with increasing lethargy suggests the child\u2019s core temperature is dropping further, which in the presence of hypothermia indicates a worsening condition rather than an improvement"},{letter:"B",text:"The SpO\u2082 reading of 88% is within acceptable range for a pediatric submersion patient and does not require further intervention beyond the current oxygen therapy"},{letter:"C",text:"The bilateral crackles are most likely caused by bronchospasm secondary to cold water inhalation, and the primary intervention should be nebulized salbutamol"},{letter:"D",text:"A blood glucose of 4.8 mmol/L in a 4-year-old confirms hypoglycemia and requires immediate administration of dextrose per the Hypoglycemia Medical Directive"}],
+              correctAnswer:"A",
+              rationale:"In hypothermia, shivering is an active thermoregulatory response. When shivering decreases while the patient becomes more lethargic, it suggests the core temperature is continuing to fall \u2014 the body is losing its ability to generate heat.",
+              wrongExplanations:{"B":"88% SpO\u2082 in a pediatric patient is critically low. The Oxygen Therapy Standard directs maintaining SpO\u2082 between 92\u201396%. This reading requires further intervention.","C":"The crackles are from aspirated water, not bronchospasm. There is no wheezing described in the presentation. Salbutamol treats bronchoconstriction, not aspiration.","D":"4.8 mmol/L is above the pediatric hypoglycemia threshold of <4.0 mmol/L for patients \u22652 years per the ALS PCS. This is a normal reading."},
+              reference:"BLS PCS \u2014 Cold Injury Standard, Oxygen Therapy Standard"
+            },
+            { id:5, type:"Rationale", category:"Spinal Motion Restriction", stem:"The reason you should consider spinal motion restriction for this patient despite the absence of a witnessed diving mechanism is:", format:"standard",
+              options:[{letter:"A",text:"All submersion patients automatically require full spinal motion restriction regardless of mechanism"},{letter:"B",text:"The child\u2019s GCS of 13 indicates a head injury has occurred, which always necessitates SMR"},{letter:"C",text:"The child\u2019s lethargy is the result of a cervical spine injury causing neurogenic shock"},{letter:"D",text:"The child was found face down in the water and was unwitnessed, meaning a mechanism involving an axial load to the head or impact cannot be reliably excluded"}],
+              correctAnswer:"D",
+              rationale:"Submersion injuries are listed as a mechanism suggestive of potential spine or spinal cord injury in the SMR Standard. The entry was unwitnessed and the child was found face down, meaning the paramedic cannot reliably exclude an axial load or impact. Combined with the altered LOC, SMR should be applied.",
+              wrongExplanations:{"A":"The SMR Standard does not mandate automatic SMR for all submersion patients. It requires assessing for risk criteria \u2014 mechanism plus clinical findings.","B":"GCS 13 does not confirm head injury. It could be from hypothermia or hypoxia. While altered LOC is a risk criterion for SMR, it does not alone prove head injury.","C":"Neurogenic shock would present with bradycardia and warm, dry skin below the injury. This child has tachycardia at 110 \u2014 inconsistent with neurogenic shock."},
+              reference:"BLS PCS \u2014 SMR Standard"
+            },
+            { id:6, type:"Interpretation", category:"Load and Go / Patient Management", stem:"Given the complete clinical picture, your best course of action at this time is to:", format:"combination",
+              subOptions:[{num:1,text:"Initiate rapid transport as a load-and-go patient"},{num:2,text:"Perform assisted ventilations with BVM given the SpO\u2082 of 88%"},{num:3,text:"Continue passive rewarming efforts and monitor for dysrhythmias"},{num:4,text:"Apply spinal motion restriction using a cervical collar and secure to the stretcher"},{num:5,text:"Administer nebulized salbutamol at 5.0 mg for the bilateral crackles"}],
+              options:[{letter:"A",text:"1, 2 and 5"},{letter:"B",text:"1, 3 and 4"},{letter:"C",text:"2, 4 and 5"},{letter:"D",text:"2, 3 and 5"}],
+              correctAnswer:"B",
+              rationale:"This child meets load-and-go criteria \u2014 CTAS 1 with respiratory distress, altered LOC, and hemodynamic instability. Passive rewarming and cardiac monitoring (Choice 3) are indicated for hypothermia. SMR (Choice 4) is indicated given the unwitnessed mechanism combined with altered LOC.",
+              wrongExplanations:{"A":"You included BVM ventilations (Choice 2) and salbutamol (Choice 5). The child is breathing spontaneously at 28 \u2014 BVM is for inadequate or absent respirations. Salbutamol treats bronchoconstriction with wheezing, not crackles from aspiration.","C":"You excluded load-and-go transport (Choice 1) and included salbutamol (Choice 5). This child meets load-and-go criteria and needs rapid transport. Salbutamol is not indicated for aspiration crackles.","D":"You excluded both load-and-go (Choice 1) and SMR (Choice 4). This child needs rapid transport and SMR given the clinical picture. Salbutamol (Choice 5) is not indicated."},
+              reference:"BLS PCS \u2014 Cold Injury Standard, SMR Standard, Patient Management Standards"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 2, title: "Pediatric Seizure / Febrile Illness",
+      blocks: [
+        {
+          text: "You are dispatched priority 4 to a daycare centre for a child having a seizure. You arrive on scene and are met by a daycare supervisor at the front entrance. She tells you that a boy in the toddler room began shaking all over about five minutes ago and has not stopped. She is visibly upset and tells you she has never seen anything like this. You notice artwork and craft supplies scattered across the entrance table, and there is a strong smell of hand sanitizer in the hallway.\n\nYou enter the toddler room and observe a male child approximately 3 years old, weighing approximately 14 kilograms, lying on a nap mat on the floor. He is experiencing a generalized tonic-clonic seizure \u2014 his entire body is rigid with rhythmic jerking of all four extremities. His eyes are deviated upward. You note he is flushed, his skin is hot and dry to the touch, and there is a small amount of frothy saliva at his mouth. He is incontinent of urine. A staff member is holding a cloth near his mouth. A child\u2019s lunch box is open on a nearby shelf with an uneaten sandwich inside.",
+          questions: [
+            { id:7, type:"Prioritization", category:"Seizure", stem:"Your priority at this time is to:", format:"combination",
+              subOptions:[{num:1,text:"Instruct the staff member to stop placing the cloth near the child\u2019s mouth"},{num:2,text:"Attempt to position the child in the recovery position"},{num:3,text:"Restrain the child\u2019s extremities to prevent injury during the seizure"},{num:4,text:"Attempt to protect the child from injury by moving nearby objects"},{num:5,text:"Insert an oropharyngeal airway to protect the airway during the seizure"}],
+              options:[{letter:"A",text:"1, 2 and 4"},{letter:"B",text:"1, 3 and 5"},{letter:"C",text:"2, 4 and 5"},{letter:"D",text:"1, 3 and 4"}],
+              correctAnswer:"A",
+              rationale:"Per the Seizure Standard, the paramedic should attempt to position the patient in the recovery position and protect from injury. The staff member placing a cloth near the mouth risks airway obstruction \u2014 stopping this is an immediate safety priority (Choice 1). Positioning in recovery (Choice 2) and protecting from injury (Choice 4) are explicitly directed.",
+              wrongExplanations:{"B":"You included restraining extremities (Choice 3) and inserting an OPA (Choice 5). Restraining during a seizure is contraindicated and can cause injury. An OPA cannot be inserted during an active tonic-clonic seizure \u2014 the jaw is clenched during the tonic phase.","C":"You excluded stopping the cloth near the mouth (Choice 1) and included an OPA (Choice 5). The cloth is an immediate airway risk. An OPA during active tonic-clonic seizure is not appropriate.","D":"You included restraining extremities (Choice 3) instead of the recovery position (Choice 2). Restraining during a seizure is contraindicated \u2014 the recovery position is the correct intervention per the Seizure Standard."},
+              reference:"BLS PCS \u2014 Seizure Standard"
+            },
+            { id:8, type:"Factual", category:"Seizure / Pediatrics", stem:"In young children, which of the following is a common cause of seizures that should be considered when the child presents with hot, dry, flushed skin?", format:"standard",
+              options:[{letter:"A",text:"Meningitis, which typically presents with a rapid onset of generalized seizure activity within minutes of bacterial invasion of the cerebrospinal fluid"},{letter:"B",text:"Hypoglycemia, which causes seizure activity exclusively through dehydration of neural tissue in the pediatric brain"},{letter:"C",text:"Febrile convulsions associated with infection, which are the most common cause of seizures in young children and are triggered by a rapid rise in body temperature"},{letter:"D",text:"Epilepsy, which is characterised by the presence of fever and flushed skin as a hallmark feature distinguishing it from other seizure disorders"}],
+              correctAnswer:"C",
+              rationale:"Per the BLS PCS Seizure Standard, febrile convulsions associated with infection are a recognized cause of seizures in young children. The hot, dry, flushed skin strongly suggests fever, and febrile seizures are triggered by a rapid rise in body temperature.",
+              wrongExplanations:{"A":"While meningitis can cause seizures and fever, the claim that seizures occur \u201cwithin minutes\u201d of bacterial invasion is inaccurate \u2014 meningitis develops over hours to days.","B":"Hypoglycemia is a recognized cause of seizures, but it does not cause seizures through \u201cdehydration of neural tissue.\u201d The mechanism involves glucose deprivation disrupting neuronal function.","D":"Fever and flushed skin are not hallmark features of epilepsy. Epilepsy is a primary seizure disorder not characterized by febrile presentation."},
+              reference:"BLS PCS \u2014 Seizure Standard"
+            },
+            { id:9, type:"Judgement", category:"Seizure / Hypoglycemia", stem:"The seizure has stopped. The child is now post-ictal, with sonorous respirations and decreased level of consciousness. Which of the following questions or assessments are most important at this time?", format:"combination",
+              subOptions:[{num:1,text:"\u201cDoes this child have any known medical conditions such as epilepsy or diabetes?\u201d"},{num:2,text:"\u201cWhat did the child eat for lunch today?\u201d"},{num:3,text:"\u201cWhen did the child\u2019s fever start, and has he been ill recently?\u201d"},{num:4,text:"Perform blood glucometry"},{num:5,text:"\u201cHow many staff members were supervising the toddler room?\u201d"}],
+              options:[{letter:"A",text:"1, 2 and 5"},{letter:"B",text:"2, 3 and 5"},{letter:"C",text:"1, 3 and 5"},{letter:"D",text:"1, 3 and 4"}],
+              correctAnswer:"D",
+              rationale:"Asking about known conditions (Choice 1) determines whether this is a first seizure or known disorder. Asking about fever onset and recent illness (Choice 3) helps determine if this is a febrile convulsion. Blood glucometry (Choice 4) is essential \u2014 the Seizure Standard lists hypoglycemia as an underlying cause to consider.",
+              wrongExplanations:{"A":"You included lunch inquiry (Choice 2) and staffing question (Choice 5) instead of fever history (Choice 3) and glucometry (Choice 4). Glucometry provides a definitive answer about blood sugar. Staffing is irrelevant to clinical management.","B":"You excluded medical history (Choice 1) and glucometry (Choice 4) in favour of lunch inquiry (Choice 2) and staffing (Choice 5). Both omitted assessments are essential for identifying treatable causes.","C":"You included staffing (Choice 5) instead of glucometry (Choice 4). Staffing numbers are irrelevant to clinical management. Blood glucose testing is essential for any post-seizure patient who has not returned to baseline LOA."},
+              reference:"BLS PCS \u2014 Seizure Standard"
+            }
+          ]
+        },
+        {
+          text: "The daycare supervisor tells you the child\u2019s name is Ethan. He has no known medical conditions and takes no medications. He has no known allergies. She says he was fine this morning when his father dropped him off but seemed \u201ca little warm\u201d at snack time about an hour ago. She did not take his temperature. He has been irritable and clingy all morning but had no other symptoms.\n\nYour assessment reveals: heart rate 148, full and regular; blood pressure 92/58; respirations 22, now clearing with occasional snoring; SpO\u2082 94% on non-rebreather at 15 L/min; GCS 10 (E2, V3, M5); pupils equal and reactive but sluggish; skin hot, dry and flushed; tympanic temperature 39.8\u00b0C. Blood glucose is 5.2 mmol/L. There is no evidence of tongue injury, and no secondary injuries are noted. You observe a small, non-blanching, petechial rash on his trunk that the supervisor says she did not notice earlier.",
+          questions: [
+            { id:10, type:"Application", category:"Infectious Disease / Pediatrics", stem:"Which of the following statements is true regarding the petechial rash observed on Ethan\u2019s trunk?", format:"standard",
+              options:[{letter:"A",text:"Petechiae are caused by histamine release during the febrile seizure and will resolve spontaneously once the child\u2019s temperature normalizes"},{letter:"B",text:"A non-blanching petechial rash in a febrile child is a concerning finding that may indicate a serious systemic infection such as meningococcemia, and should heighten the urgency of transport"},{letter:"C",text:"Petechiae in children are a normal finding following tonic-clonic seizures and are caused by increased intrathoracic pressure during the tonic phase"},{letter:"D",text:"The petechial rash confirms that this seizure was caused by a viral exanthem, and the child should be isolated but does not require emergent transport"}],
+              correctAnswer:"B",
+              rationale:"A non-blanching petechial rash in a febrile child is a red flag for serious bacterial infection, particularly meningococcemia. This should significantly increase the urgency of transport.",
+              wrongExplanations:{"A":"Petechiae are not caused by histamine release during seizures. This is an inaccurate mechanism that does not reflect any recognized pathophysiology.","C":"While petechiae can occasionally appear after forceful seizures from increased intrathoracic pressure, the combination with high fever makes infection far more clinically significant and concerning.","D":"Viral exanthems are typically blanching maculopapular rashes, not non-blanching petechiae. The non-blanching quality specifically raises concern for bacterial infection."},
+              reference:"BLS PCS \u2014 General Pediatric Standard"
+            },
+            { id:11, type:"Rationale", category:"Seizure / Blood Glucometry", stem:"The reason blood glucose was checked in this patient despite the seizure likely being febrile in origin is:", format:"standard",
+              options:[{letter:"A",text:"Hypoglycemia is a recognized cause of seizures listed in the BLS PCS Seizure Standard, and blood glucose should be checked in any patient who has not returned to their baseline level of consciousness after a seizure to rule out a treatable underlying metabolic cause"},{letter:"B",text:"The BLS PCS requires blood glucometry on all pediatric patients regardless of their presenting complaint as part of the mandatory primary survey"},{letter:"C",text:"Blood glucose testing is required before a paramedic can administer midazolam, as the Seizure Medical Directive requires a documented normoglycemic reading prior to benzodiazepine administration"},{letter:"D",text:"A febrile seizure cannot be confirmed until a normal blood glucose is documented, as the BLS PCS classifies any seizure with an unknown glucose as a diabetic emergency"}],
+              correctAnswer:"A",
+              rationale:"Hypoglycemia is listed as a potential underlying life/limb/function threat in the BLS PCS Seizure Standard. Ethan\u2019s GCS remains 10 post-ictally \u2014 he has not returned to baseline, meaning an underlying metabolic cause cannot be excluded on presentation alone.",
+              wrongExplanations:{"B":"Glucometry is not mandatory for all pediatric patients in the primary survey. It is indicated based on clinical presentation and specific standards.","C":"The Seizure Medical Directive for midazolam is an ACP-level directive and does not require a documented normoglycemic reading prior to administration.","D":"No BLS PCS classification reclassifies a seizure as a diabetic emergency based on an unknown glucose. This is an inaccurate interpretation of the Standards."},
+              reference:"BLS PCS \u2014 Seizure Standard"
+            },
+            { id:12, type:"Interpretation", category:"Load and Go / Seizure", stem:"Given the complete clinical picture including the petechial rash, your best course of action is to:", format:"combination",
+              subOptions:[{num:1,text:"Initiate rapid transport as a load-and-go patient"},{num:2,text:"Cool the child by removing clothing and applying tepid sponging to reduce the fever before transport"},{num:3,text:"Continue oxygen therapy and monitor airway given the decreased LOC"},{num:4,text:"Contact the child\u2019s father and wait for him to arrive before transporting"},{num:5,text:"Position the child in the recovery position and prepare for recurrent seizures"}],
+              options:[{letter:"A",text:"2, 3 and 4"},{letter:"B",text:"1, 3 and 4"},{letter:"C",text:"1, 3 and 5"},{letter:"D",text:"2, 4 and 5"}],
+              correctAnswer:"C",
+              rationale:"This child has a GCS of 10, high fever with a non-blanching petechial rash suggesting possible meningococcemia \u2014 a CTAS 1 patient requiring rapid transport (Choice 1). Continuing oxygen therapy and monitoring the airway (Choice 3) is essential. Positioning in recovery and preparing for recurrent seizures (Choice 5) is indicated per the Seizure Standard.",
+              wrongExplanations:{"A":"You excluded rapid transport (Choice 1) and seizure preparation (Choice 5) in favour of active cooling (Choice 2) and waiting for the father (Choice 4). Active cooling delays transport in a load-and-go patient. Waiting for the father delays definitive care.","B":"You included waiting for the father (Choice 4) instead of seizure preparation (Choice 5). Waiting delays definitive care for a critically ill child. The recovery position and seizure readiness are essential.","D":"You excluded rapid transport (Choice 1) and airway monitoring (Choice 3) in favour of active cooling (Choice 2) and waiting for the father (Choice 4). Both omitted interventions are critical. Cooling and waiting both delay transport."},
+              reference:"BLS PCS \u2014 Seizure Standard, General Pediatric Standard"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 3, title: "Pediatric Burns / Non-Accidental Injury",
+      blocks: [
+        {
+          text: "You are dispatched priority 3 to a residential apartment for a child with a burn injury. You arrive on scene and are met by a male adult at the apartment door who identifies himself as the child\u2019s mother\u2019s boyfriend. He tells you the child pulled a pot of boiling water off the stove about 20 minutes ago. The apartment is dimly lit and the hallway has several garbage bags piled against the wall. You notice a stack of folded towels on the kitchen counter.\n\nYou enter the kitchen and observe a female child approximately 5 years old, weighing approximately 20 kilograms, sitting on the floor whimpering. She is wearing a t-shirt and underwear \u2014 her pants have been removed. You observe circumferential, bright red, blistering burns with well-defined margins to both lower legs from the knees down, including the feet. The burn pattern is symmetric and stocking-like in distribution. The child avoids eye contact with the boyfriend and flinches when he moves closer. She has no burns to her hands or arms.",
+          questions: [
+            { id:13, type:"Prioritization", category:"Burns / Child Protection", stem:"Your priority at this time is to:", format:"combination",
+              subOptions:[{num:1,text:"Cool the burns with cool water and limit cooling to less than 30 minutes"},{num:2,text:"Question the boyfriend further about the exact mechanism of the burn injury"},{num:3,text:"Administer oxygen and complete the primary survey"},{num:4,text:"Immediately confront the boyfriend about the suspected abuse"},{num:5,text:"Assess the child\u2019s airway for signs of inhalation injury"}],
+              options:[{letter:"A",text:"2, 3 and 5"},{letter:"B",text:"1, 4 and 5"},{letter:"C",text:"1, 2 and 3"},{letter:"D",text:"1, 3 and 4"}],
+              correctAnswer:"C",
+              rationale:"The immediate priorities are to initiate cooling of the burns (Choice 1, per the Burns Standard for <15% BSA), obtain a detailed mechanism history (Choice 2), and complete the primary survey (Choice 3).",
+              wrongExplanations:{"A":"You excluded burn cooling (Choice 1) in favour of airway assessment for inhalation injury (Choice 5). This is a scald burn, not a fire \u2014 there is no smoke or enclosed space, so inhalation injury is not expected. Burn cooling is time-critical.","B":"You included confronting the boyfriend (Choice 4) and inhalation assessment (Choice 5) instead of mechanism history (Choice 2) and primary survey (Choice 3). Confrontation could escalate the situation. The duty is to report to a Children\u2019s Aid Society, not confront.","D":"You included confronting the boyfriend (Choice 4) instead of obtaining mechanism history (Choice 2). Confrontation compromises both patient safety and a potential investigation. Detailed history-taking is the appropriate approach."},
+              reference:"BLS PCS \u2014 Burns Standard, Child in Need of Protection Standard"
+            },
+            { id:14, type:"Factual", category:"Child in Need of Protection", stem:"Which of the following types of pediatric injuries is specifically identified by the BLS PCS as requiring attention when determining if a patient may be a child in need of protection?", format:"standard",
+              options:[{letter:"A",text:"All burns, submersion injuries, accidental ingestions or poisonings, and other types of in-home injuries such as falls"},{letter:"B",text:"Only third-degree burns and fractures in non-mobile infants, as these are the sole indicators listed in the Standard"},{letter:"C",text:"Any injury occurring in a low-income household, as socioeconomic status is a primary indicator in the Child in Need of Protection Standard"},{letter:"D",text:"Burns that exceed 20% body surface area, as smaller burns are considered too minor to indicate non-accidental injury"}],
+              correctAnswer:"A",
+              rationale:"The BLS PCS Child in Need of Protection Standard specifically identifies submersion injury, all burns, accidental ingestions/poisoning, and other in-home injuries such as falls.",
+              wrongExplanations:{"B":"The Standard specifies \u201call burns\u201d without severity qualification, and lists multiple injury types beyond just fractures in non-mobile infants.","C":"Socioeconomic status is not a listed indicator in the Child in Need of Protection Standard. Assessment is based on injury patterns and clinical findings.","D":"There is no BSA threshold below which burns are excluded from consideration. The Standard applies to all burns."},
+              reference:"BLS PCS \u2014 Child in Need of Protection Standard"
+            },
+            { id:15, type:"Judgement", category:"Burns / Child Protection", stem:"Which of the following questions or observations are most important to guide your assessment at this time?", format:"combination",
+              subOptions:[{num:1,text:"\u201cWhere were you when this happened?\u201d"},{num:2,text:"\u201cHas this child been seen by a doctor recently for any other injuries?\u201d"},{num:3,text:"\u201cWhat is your relationship to this child\u2019s mother?\u201d"},{num:4,text:"Note whether the child\u2019s reaction and demeanour toward the boyfriend is consistent with a safe caregiver relationship"},{num:5,text:"\u201cHow old is this apartment building?\u201d"}],
+              options:[{letter:"A",text:"1, 3 and 5"},{letter:"B",text:"1, 2 and 4"},{letter:"C",text:"2, 3 and 5"},{letter:"D",text:"1, 4 and 5"}],
+              correctAnswer:"B",
+              rationale:"Asking where the boyfriend was (Choice 1) determines supervision and identifies discrepancies. Asking about recent doctor visits for other injuries (Choice 2) identifies a pattern of repeated injury. Noting the child\u2019s reaction to the boyfriend (Choice 4) provides important behavioural evidence.",
+              wrongExplanations:{"A":"You included relationship question (Choice 3) and building age (Choice 5) instead of injury history (Choice 2) and behavioural observation (Choice 4). His exact relationship doesn\u2019t change management. Building age is irrelevant.","C":"You excluded the supervision question (Choice 1) and behavioural observation (Choice 4) in favour of relationship (Choice 3) and building age (Choice 5). Neither of these changes your clinical management or duty to report.","D":"You included building age (Choice 5) instead of injury history (Choice 2). Previous injury patterns are critical evidence. Building age is irrelevant to the assessment."},
+              reference:"BLS PCS \u2014 Child in Need of Protection Standard"
+            }
+          ]
+        },
+        {
+          text: "The boyfriend tells you he was in the bathroom when he heard the child screaming. He says he ran out and found her standing in the kitchen with the pot on the floor. He removed her pants and ran cold water over her legs. When you ask if the child has been to the doctor recently, he becomes agitated and says \u201cshe\u2019s just clumsy \u2014 she\u2019s always bumping into things.\u201d The child\u2019s mother is not home. The boyfriend cannot confirm the child\u2019s allergies or medications. He says the mother will \u201cbe back later.\u201d\n\nYour secondary survey reveals: heart rate 132, full and regular; blood pressure 96/60; respirations 24, unlaboured and clear bilaterally; SpO\u2082 98% on room air; GCS 15; pupils equal and reactive; skin warm and dry (non-burned areas). The burns to both lower legs are estimated at approximately 10% BSA \u2014 bright red with blistering, consistent with second-degree burns. No other injuries are noted on initial survey. The child winces during the assessment but does not cry out.",
+          questions: [
+            { id:16, type:"Application", category:"Burns (Thermal)", stem:"Which of the following statements is true regarding the management of second-degree burns estimated to involve less than 15% body surface area?", format:"standard",
+              options:[{letter:"A",text:"All second-degree burns regardless of size should be covered with dry, sterile dressings to prevent heat loss and contamination"},{letter:"B",text:"Burns under 15% BSA do not require any dressing and should be left open to air to promote healing during transport"},{letter:"C",text:"Second-degree burns under 15% BSA should be covered with a moist sterile dressing first, then covered with a dry sheet or blanket, and blisters should be debrided to prevent infection"},{letter:"D",text:"Second-degree burns estimated to involve less than 15% BSA should be covered with moist, sterile dressings and then covered with a dry sheet or blanket, and blisters should be left intact"}],
+              correctAnswer:"D",
+              rationale:"Per the BLS PCS Burns Standard, second-degree burns <15% BSA should be covered with moist, sterile dressing, then a dry sheet or blanket. Blisters should be left intact.",
+              wrongExplanations:{"A":"Dry dressings are for third-degree burns and second-degree burns \u226515% BSA. Second-degree burns <15% receive moist dressings per the Burns Standard.","B":"All burns receive dressing per the Burns Standard. Leaving burns open to air is not appropriate prehospital management.","C":"The moist dressing is correct, but blisters should be left intact, not debrided. Debridement is not a prehospital intervention."},
+              reference:"BLS PCS \u2014 Burns Standard"
+            },
+            { id:17, type:"Rationale", category:"Burns / Child Protection", stem:"The reason the burn pattern observed on this child is inconsistent with the reported mechanism is:", format:"standard",
+              options:[{letter:"A",text:"Boiling water pulled from a stove would produce only first-degree burns on the lower extremities, and the presence of second-degree blistering indicates a longer exposure time than a splash event"},{letter:"B",text:"A child\u2019s reflex to move away from a heat source would prevent circumferential, symmetric burns \u2014 the stocking pattern with well-defined margins is more consistent with forced immersion in hot liquid"},{letter:"C",text:"A pull-down scald from a pot would produce burns to the hands, arms and chest in an irregular splash pattern \u2014 the symmetric stocking distribution to both lower legs with well-defined margins and no burns to the hands or arms is inconsistent with a splash mechanism"},{letter:"D",text:"The absence of burns above the knee proves the child was sitting in a bathtub, not standing in a kitchen, which directly contradicts the boyfriend\u2019s statement"}],
+              correctAnswer:"C",
+              rationale:"When a child pulls a pot of boiling liquid from a stove, the expected pattern is an irregular splash contacting the hands, arms, and upper body first. This child has symmetric, stocking-like burns with well-defined upper margins at both knees, circumferential distribution, and critically, no burns to the hands or arms. This pattern is characteristic of forced immersion.",
+              wrongExplanations:{"A":"Boiling water can produce second-degree burns through a splash mechanism. Burn severity depends on temperature and contact duration, not solely on whether the mechanism was a splash or immersion.","B":"This answer is partially correct about the stocking pattern being consistent with immersion, but it overstates that reflexes would \u201cprevent\u201d circumferential burns. The key finding is the absence of hand and arm burns.","D":"The absence of burns above the knee suggests immersion but does not \u201cprove\u201d a specific location. Drawing absolute conclusions about location from burn distribution alone is forensically unsound."},
+              reference:"BLS PCS \u2014 Burns Standard, Child in Need of Protection Standard"
+            },
+            { id:18, type:"Interpretation", category:"Burns / Child Protection / Transport", stem:"Given the complete clinical picture, your best course of action at this time is to:", format:"combination",
+              subOptions:[{num:1,text:"Transport the child to hospital and report your suspicion of non-accidental injury to a Children\u2019s Aid Society"},{num:2,text:"Request police attendance at the scene before transporting"},{num:3,text:"Dress the burns with moist sterile dressings, cover with a dry sheet, and keep the patient warm"},{num:4,text:"Refuse to allow the boyfriend to accompany the child in the ambulance"},{num:5,text:"Document your objective findings including the burn pattern, the boyfriend\u2019s statements, and the child\u2019s behaviour"}],
+              options:[{letter:"A",text:"1, 3 and 5"},{letter:"B",text:"2, 4 and 5"},{letter:"C",text:"1, 2 and 3"},{letter:"D",text:"2, 3 and 4"}],
+              correctAnswer:"A",
+              rationale:"Per the Child in Need of Protection Standard, report suspicion to a Children\u2019s Aid Society. The child requires transport for burn care (Choice 1). Dress burns per the Burns Standard (Choice 3). Document objective findings (Choice 5) for the medical record and child protection report.",
+              wrongExplanations:{"B":"You excluded transport and CAS reporting (Choice 1) and burn dressing (Choice 3) in favour of police (Choice 2) and refusing the boyfriend (Choice 4). Requesting police delays transport. Paramedics cannot refuse a caregiver\u2019s accompaniment based on suspicion alone.","C":"You included police attendance (Choice 2) instead of documentation (Choice 5). Requesting police delays transport for a child needing burn care. Thorough documentation is the paramedic\u2019s role.","D":"You excluded transport and CAS reporting (Choice 1) in favour of police (Choice 2) and refusing the boyfriend (Choice 4). Neither police attendance nor refusing accompaniment is within the paramedic\u2019s standard role here."},
+              reference:"BLS PCS \u2014 Burns Standard, Child in Need of Protection Standard"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 4, title: "Pediatric VSA / Respiratory Failure (Asthma)",
+      blocks: [
+        {
+          text: "You are dispatched priority 4 to a residential home for a child who is not breathing. You arrive on scene and are met at the front door by a father who is carrying his son and screaming for help. He tells you the boy was using his puffer and then suddenly stopped breathing. A second child is watching from the top of the staircase. You notice a cat sleeping on the couch in the living room.\n\nYou take the child from the father and place him on the living room floor. You observe a male child approximately 7 years old, weighing approximately 24 kilograms. He is unresponsive, cyanotic, and apneic. You check for a pulse \u2014 there is no palpable carotid or brachial pulse. There is a metered dose inhaler on the floor beside where the father was standing.",
+          questions: [
+            { id:19, type:"Prioritization", category:"Cardiac Arrest / Pediatrics", stem:"Your priority at this time is to:", format:"combination",
+              subOptions:[{num:1,text:"Obtain a detailed history from the father about the child\u2019s asthma medications"},{num:2,text:"Position the patient on a firm surface and initiate CPR"},{num:3,text:"Apply defibrillation pads"},{num:4,text:"Establish a patent airway using authorized techniques"},{num:5,text:"Administer nebulized salbutamol to treat the underlying bronchoconstriction"}],
+              options:[{letter:"A",text:"1, 2 and 5"},{letter:"B",text:"2, 3 and 5"},{letter:"C",text:"1, 4 and 5"},{letter:"D",text:"2, 3 and 4"}],
+              correctAnswer:"D",
+              rationale:"This child is VSA. As per the Cardiac Arrest Standard, the priorities are to position on a firm surface and initiate CPR (Choice 2), apply defibrillation pads (Choice 3), and establish a patent airway (Choice 4).",
+              wrongExplanations:{"A":"You included detailed history (Choice 1) and nebulized salbutamol (Choice 5) instead of defibrillation pads (Choice 3) and airway management (Choice 4). History is not the priority in a VSA patient. A VSA patient cannot inhale nebulized medication.","B":"You included salbutamol (Choice 5) instead of airway management (Choice 4). A VSA patient cannot inhale nebulized medication. CPR and BVM ventilation are the priorities.","C":"You excluded CPR (Choice 2) and defibrillation pads (Choice 3). Both are immediate priorities in a VSA patient per the Cardiac Arrest Standard."},
+              reference:"BLS PCS \u2014 Cardiac Arrest Standard"
+            },
+            { id:20, type:"Factual", category:"Pediatric Cardiac Arrest", stem:"Which of the following is a critical difference between pediatric and adult cardiac arrest that the paramedic should be aware of?", format:"standard",
+              options:[{letter:"A",text:"Pediatric patients in cardiac arrest should not receive defibrillation because their hearts are too small for the electrical current to be effective"},{letter:"B",text:"Respiratory arrest is the primary cause of pediatric cardiac arrest, unlike in adults where cardiac etiology predominates"},{letter:"C",text:"CPR in children aged 24 hours to puberty requires a compression-to-ventilation ratio of 30:2 regardless of the number of rescuers"},{letter:"D",text:"Pediatric patients in cardiac arrest do not require airway management because their airways are proportionally larger and more resistant to obstruction"}],
+              correctAnswer:"B",
+              rationale:"Per the BLS PCS General Pediatric Standard, respiratory arrest is the primary cause of pediatric cardiac arrest. This is a fundamental difference from adult arrest where cardiac etiology predominates.",
+              wrongExplanations:{"A":"Pediatric patients can receive defibrillation (\u226524 hours per ALS PCS). Defibrillation is indicated for shockable rhythms regardless of patient size.","C":"With two rescuers for a child (24 hours to puberty), the ratio is 15:2 per current HSFC Guidelines, not 30:2. The 30:2 ratio applies to single-rescuer CPR.","D":"Pediatric airways are proportionally smaller and more prone to obstruction, not larger. Airway management is critical in pediatric arrest."},
+              reference:"BLS PCS \u2014 General Pediatric Standard, Cardiac Arrest Standard"
+            },
+            { id:21, type:"Judgement", category:"Cardiac Arrest / Reversible Causes", stem:"CPR is in progress. While your partner continues compressions, which of the following questions are most important to ask the father at this time?", format:"combination",
+              subOptions:[{num:1,text:"\u201cWas he choking on anything or did he put anything in his mouth before this happened?\u201d"},{num:2,text:"\u201cHow long ago did he stop breathing?\u201d"},{num:3,text:"\u201cWhat medications does he take for his asthma?\u201d"},{num:4,text:"\u201cHas he ever been hospitalized or intubated for his asthma before?\u201d"},{num:5,text:"\u201cWhat grade is he in at school?\u201d"}],
+              options:[{letter:"A",text:"1, 2 and 3"},{letter:"B",text:"2, 4 and 5"},{letter:"C",text:"1, 4 and 5"},{letter:"D",text:"2, 3 and 5"}],
+              correctAnswer:"A",
+              rationale:"During CPR, questions must target information that affects immediate management. Asking about choking/foreign body (Choice 1) determines if an airway obstruction precipitated the arrest. Asking about downtime (Choice 2) provides critical prognostication data. Asking about asthma medications (Choice 3) confirms the clinical picture.",
+              wrongExplanations:{"B":"You excluded the choking question (Choice 1) and medication history (Choice 3). Choking determines whether to modify airway management. Medication history informs whether bronchospasm precipitated the arrest. School grade (Choice 5) is irrelevant.","C":"You excluded downtime (Choice 2) and medication history (Choice 3). Downtime is critical for prognostication. Hospitalization history (Choice 4) doesn\u2019t change the immediate CPR algorithm. School grade (Choice 5) is irrelevant.","D":"You excluded the choking question (Choice 1). This is critical because a foreign body airway obstruction changes your management approach during CPR. School grade (Choice 5) is irrelevant."},
+              reference:"BLS PCS \u2014 Cardiac Arrest Standard"
+            }
+          ]
+        },
+        {
+          text: "The father tells you the child\u2019s name is Marcus. He has asthma and uses a salbutamol MDI as needed and a fluticasone inhaler daily. He has no allergies. The father says Marcus was wheezing badly after playing with the cat and used his puffer, then suddenly became unresponsive \u2014 he estimates this was about 4 to 5 minutes before you arrived. He has never been intubated but was hospitalized once last year for a bad asthma attack.\n\nYou have applied defibrillation pads \u2014 the rhythm analysis shows asystole. You are ventilating with a BVM and obtaining chest rise. CPR quality is adequate. After two minutes of CPR, you reassess \u2014 the rhythm remains asystole. There is no pulse. ETCO\u2082 reads 14 mmHg.",
+          questions: [
+            { id:22, type:"Application", category:"Pediatric Cardiac Arrest / Pathophysiology", stem:"Which of the following statements is true regarding this patient\u2019s cardiac arrest?", format:"standard",
+              options:[{letter:"A",text:"Asystole in a pediatric patient is a shockable rhythm and should be treated with defibrillation at 2 J/kg"},{letter:"B",text:"The ETCO\u2082 of 14 mmHg indicates the child is being hyperventilated and the ventilation rate should be immediately reduced to maintain ETCO\u2082 between 35\u201345 mmHg"},{letter:"C",text:"Given that respiratory arrest is the primary cause of pediatric cardiac arrest, this child\u2019s arrest was most likely precipitated by severe bronchospasm leading to hypoxia, progressing to respiratory failure and then cardiac arrest"},{letter:"D",text:"Because the arrest occurred while the child was using his inhaler, the most likely cause is salbutamol toxicity from overdose"}],
+              correctAnswer:"C",
+              rationale:"Per the General Pediatric Standard, respiratory arrest is the primary cause of pediatric cardiac arrest. Marcus\u2019s severe wheezing likely progressed to respiratory failure, then hypoxia, then cardiac arrest \u2014 the classic pediatric arrest pathway.",
+              wrongExplanations:{"A":"Asystole is a non-shockable rhythm. Defibrillation is indicated only for ventricular fibrillation and pulseless ventricular tachycardia.","B":"During cardiac arrest, ETCO\u2082 reflects CPR quality and perfusion, not ventilation adequacy. The 35\u201345 mmHg target applies to patients with spontaneous circulation, not during active CPR.","D":"Fatal toxicity from a metered dose inhaler is exceedingly rare. The clinical picture points clearly to severe bronchospasm as the precipitating cause."},
+              reference:"BLS PCS \u2014 General Pediatric Standard, Cardiac Arrest Standard"
+            },
+            { id:23, type:"Rationale", category:"Cardiac Arrest Classification", stem:"The reason this patient\u2019s cardiac arrest is classified as a medical cardiac arrest rather than a trauma cardiac arrest is:", format:"standard",
+              options:[{letter:"A",text:"All pediatric cardiac arrests are classified as medical arrests regardless of the underlying cause"},{letter:"B",text:"There are no obvious external signs of significant blunt trauma, and the arrest was preceded by a medical condition \u2014 severe bronchoconstriction \u2014 making a medical etiology the most likely cause"},{letter:"C",text:"The child was found indoors, and trauma cardiac arrests only occur in outdoor or vehicular settings"},{letter:"D",text:"The father witnessed the arrest, and witnessed arrests are automatically classified as medical in origin"}],
+              correctAnswer:"B",
+              rationale:"The ALS PCS Trauma Cardiac Arrest clinical considerations state that if no obvious external signs of significant blunt trauma are present, consider medical cardiac arrest. Marcus has no traumatic mechanism \u2014 the arrest was preceded by severe wheezing in a child with known asthma.",
+              wrongExplanations:{"A":"Pediatric trauma arrests exist \u2014 for example, from motor vehicle collisions or falls. Not all pediatric arrests are classified as medical.","C":"Traumatic arrests can occur indoors. Location does not determine the classification of a cardiac arrest.","D":"Witnessed status does not determine classification. Both medical and traumatic arrests can be witnessed."},
+              reference:"ALS PCS \u2014 Cardiac Arrest Standard, Trauma Cardiac Arrest"
+            },
+            { id:24, type:"Interpretation", category:"ROSC / Post-Resuscitation Care", stem:"After four minutes of CPR, the rhythm analysis shows a narrow-complex rhythm. You palpate a brachial pulse \u2014 present, weak, at approximately 68 beats per minute. The child remains apneic. Your best course of action is to:", format:"combination",
+              subOptions:[{num:1,text:"Discontinue CPR and continue assisted ventilations with the BVM"},{num:2,text:"Administer oxygen to attempt to maintain SpO\u2082 between 94\u201398%"},{num:3,text:"Perform a detailed secondary survey on scene to identify the cause of arrest before transporting"},{num:4,text:"Continue cardiac monitoring and obtain vital signs at least every 15 minutes for the first hour after ROSC"},{num:5,text:"Resume CPR immediately because the heart rate of 68 is below the pediatric threshold requiring chest compressions"}],
+              options:[{letter:"A",text:"1, 3 and 5"},{letter:"B",text:"3, 4 and 5"},{letter:"C",text:"2, 3 and 4"},{letter:"D",text:"1, 2 and 4"}],
+              correctAnswer:"D",
+              rationale:"This child has achieved ROSC but remains apneic. Continue ventilation if apneic (Choice 1), administer oxygen to maintain SpO\u2082 94\u201398% (Choice 2), and continue cardiac monitoring with vitals every 15 minutes for the first hour (Choice 4).",
+              wrongExplanations:{"A":"You included on-scene secondary survey (Choice 3) and resuming CPR (Choice 5). The cause is clinically apparent \u2014 a detailed survey delays transport. HR 68 is above the pediatric CPR threshold of <60 with poor perfusion.","B":"You excluded ventilations (Choice 1) and oxygen therapy (Choice 2). The child is apneic \u2014 ventilations are essential. Resuming CPR (Choice 5) is incorrect \u2014 HR 68 is above the <60 threshold.","C":"You included on-scene secondary survey (Choice 3) instead of continuing ventilations (Choice 1). The child is apneic and needs ongoing BVM ventilation. The cause is known \u2014 a detailed survey delays transport."},
+              reference:"BLS PCS \u2014 Cardiac Arrest Standard, Post-ROSC Care"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 5, title: "Pediatric Hypoglycemia / Seizure",
+      blocks: [
+        {
+          text: "You are dispatched priority 3 to an elementary school for a child who has collapsed. You arrive on scene and are directed to the school office by the principal. She tells you a boy in grade 5 became confused during gym class and then fell to the ground. The school secretary is sitting beside the child, who is lying on the floor of the office. You notice a fire evacuation map on the wall and a trophy case in the hallway.\n\nYou approach the patient and observe a male child approximately 10 years old, weighing approximately 30 kilograms. He is lying supine on the floor. His eyes are open but he appears confused and disoriented, responding to verbal commands with inappropriate words. He is pale, diaphoretic, and trembling. His breathing is rapid but unlaboured. A teacher is holding a juice box, telling you she tried to give it to him but he wouldn\u2019t take it.",
+          questions: [
+            { id:25, type:"Prioritization", category:"Hypoglycemia / Altered LOC", stem:"Your priority at this time is to:", format:"combination",
+              subOptions:[{num:1,text:"Administer the juice box orally since the teacher has already attempted this"},{num:2,text:"Complete the primary survey including assessment of airway, breathing, circulation and level of consciousness"},{num:3,text:"Perform blood glucometry"},{num:4,text:"Contact the child\u2019s parents before initiating any assessment or treatment"},{num:5,text:"Obtain a set of baseline vital signs"}],
+              options:[{letter:"A",text:"1, 3 and 4"},{letter:"B",text:"2, 3 and 5"},{letter:"C",text:"1, 2 and 4"},{letter:"D",text:"3, 4 and 5"}],
+              correctAnswer:"B",
+              rationale:"The immediate priorities are to complete the primary survey (Choice 2), perform blood glucometry to confirm suspected hypoglycemia (Choice 3), and obtain baseline vital signs (Choice 5).",
+              wrongExplanations:{"A":"You included oral glucose (Choice 1) and parental contact (Choice 4) instead of the primary survey (Choice 2) and vital signs (Choice 5). The child is confused with inappropriate words \u2014 he cannot safely swallow liquids. Parental contact must not delay assessment.","C":"You included oral glucose (Choice 1) and parental contact (Choice 4) instead of glucometry (Choice 3) and vital signs (Choice 5). The child cannot safely swallow, and waiting for parents delays care for a potentially hypoglycemic child.","D":"You included parental contact (Choice 4) instead of the primary survey (Choice 2). Parental contact must not delay assessment of a potentially critically ill child."},
+              reference:"BLS PCS \u2014 Hypoglycemia Medical Directive, Patient Management Standards"
+            },
+            { id:26, type:"Factual", category:"Hypoglycemia", stem:"At what blood glucose level is a 10-year-old patient considered hypoglycemic as per the ALS PCS?", format:"standard",
+              options:[{letter:"A",text:"Below 4.0 mmol/L"},{letter:"B",text:"Below 3.0 mmol/L"},{letter:"C",text:"Below 5.0 mmol/L"},{letter:"D",text:"Below 2.5 mmol/L"}],
+              correctAnswer:"A",
+              rationale:"Per the ALS PCS preamble, for patients \u22652 years of age, hypoglycemia is defined as blood glucose <4.0 mmol/L. A 10-year-old falls into the \u22652 years category.",
+              wrongExplanations:{"B":"<3.0 mmol/L is the correct threshold for patients under 2 years of age, not for a 10-year-old. This is a common exam trap.","C":"<5.0 mmol/L is not the threshold defined in the ALS PCS. This is a common misconception about hypoglycemia thresholds.","D":"<2.5 mmol/L is not reflected in the ALS PCS as a diagnostic threshold. While this would certainly be critically low, the threshold for hypoglycemia is <4.0 mmol/L."},
+              reference:"ALS PCS \u2014 Hypoglycemia Medical Directive"
+            },
+            { id:27, type:"Judgement", category:"Hypoglycemia / Diabetes", stem:"Blood glucometry reveals a reading of 2.1 mmol/L. Which of the following questions are most important to ask the school staff at this time?", format:"combination",
+              subOptions:[{num:1,text:"\u201cDoes this child have diabetes? What type?\u201d"},{num:2,text:"\u201cHow many students are in his class?\u201d"},{num:3,text:"\u201cDoes he carry an insulin pump or have medication at the school?\u201d"},{num:4,text:"\u201cHas he eaten today, and when was his last meal?\u201d"},{num:5,text:"\u201cWhat sport was he playing in gym class?\u201d"}],
+              options:[{letter:"A",text:"1, 4 and 5"},{letter:"B",text:"2, 3 and 5"},{letter:"C",text:"1, 3 and 4"},{letter:"D",text:"1, 2 and 5"}],
+              correctAnswer:"C",
+              rationale:"Asking about diabetes and type (Choice 1) determines whether insulin is involved. Asking about medication or insulin pump (Choice 3) identifies recent insulin administration. Asking about dietary intake (Choice 4) addresses the most common cause \u2014 insulin with inadequate oral intake.",
+              wrongExplanations:{"A":"You included the specific sport (Choice 5) instead of insulin pump/medication inquiry (Choice 3). While exertion exacerbates hypoglycemia, the specific sport does not change management. Knowing about insulin delivery is far more critical.","B":"You excluded diabetes history (Choice 1) and dietary intake (Choice 4) in favour of class size (Choice 2) and sport type (Choice 5). Neither class size nor sport type changes your management.","D":"You included class size (Choice 2) and sport type (Choice 5) instead of insulin pump inquiry (Choice 3) and dietary intake (Choice 4). Both omitted questions directly inform treatment decisions."},
+              reference:"ALS PCS \u2014 Hypoglycemia Medical Directive"
+            }
+          ]
+        },
+        {
+          text: "A teacher retrieves the child\u2019s medical file and confirms his name is Aiden. He has Type 1 diabetes and wears an insulin pump. The teacher thinks he bolused insulin before gym class but is not certain. He ate breakfast this morning but skipped his morning snack. He has no allergies. His emergency contact information lists his mother\u2019s cell phone number.\n\nWhile you are obtaining this information, your partner alerts you that the child has begun having a generalized tonic-clonic seizure. Your assessment prior to seizure onset was: heart rate 118, full and regular; blood pressure 102/68; respirations 26 and unlaboured; SpO\u2082 97% on room air; GCS 9 (E2, V3, M4); pupils equal and reactive; skin pale, cool and diaphoretic. Blood glucose remains 2.1 mmol/L.",
+          questions: [
+            { id:28, type:"Application", category:"Hypoglycemia / Seizure", stem:"Which of the following statements is true regarding the relationship between this patient\u2019s seizure and his hypoglycemia?", format:"standard",
+              options:[{letter:"A",text:"The seizure and the hypoglycemia are two separate, unrelated events \u2014 Type 1 diabetics have a higher baseline risk of epilepsy, and this is most likely a primary seizure disorder coinciding with a low blood glucose"},{letter:"B",text:"Hypoglycemia causes seizures through dehydration of brain tissue as intracellular water shifts out of neurons, which is why the primary treatment is an intravenous fluid bolus rather than dextrose"},{letter:"C",text:"The seizure is a direct consequence of the critically low blood glucose \u2014 neurons require a constant supply of glucose for normal function, and when glucose falls below a critical threshold the resulting metabolic crisis disrupts normal electrical activity in the brain, producing seizure activity"},{letter:"D",text:"Hypoglycemia-induced seizures only occur in patients under the age of 2, as older children and adults have sufficient glycogen reserves in the brain to prevent neuronal dysfunction regardless of blood glucose level"}],
+              correctAnswer:"C",
+              rationale:"Neurons are obligate glucose users. When blood glucose drops below a critical threshold (2.1 mmol/L is well below <4.0 mmol/L), neurons are deprived of their primary energy source, disrupting normal electrochemical gradients and producing seizure activity.",
+              wrongExplanations:{"A":"The temporal relationship between the confirmed hypoglycemia of 2.1 mmol/L and the seizure onset makes coincidence unreasonable. This is a symptomatic seizure secondary to the glucose deficit.","B":"Hypoglycemia does not cause seizures through tissue dehydration or osmotic water shifts. The mechanism is glucose deprivation of neurons. Treatment is glucose replacement, not fluid bolus.","D":"Hypoglycemic seizures can occur at any age. The brain does not maintain glycogen reserves sufficient to prevent neuronal dysfunction during significant hypoglycemia."},
+              reference:"BLS PCS \u2014 Seizure Standard, ALS PCS \u2014 Hypoglycemia Medical Directive"
+            },
+            { id:29, type:"Rationale", category:"Diabetes / Insulin Pump", stem:"The reason this child\u2019s insulin pump is clinically significant in this situation is:", format:"standard",
+              options:[{letter:"A",text:"The insulin pump continues to deliver a basal rate of insulin even when the child is not eating, and if a bolus was administered before exercise without adequate food intake, the combination of exogenous insulin and increased glucose utilization from physical activity likely drove the blood glucose to critically low levels"},{letter:"B",text:"Insulin pumps are contraindicated during physical activity, and the school should not have allowed the child to participate in gym class while wearing the device"},{letter:"C",text:"Insulin pumps deliver glucagon in addition to insulin, and the glucagon reservoir may be depleted, requiring external glucagon administration"},{letter:"D",text:"The insulin pump must be removed before any prehospital treatment can begin, as it will interfere with the administration of dextrose"}],
+              correctAnswer:"A",
+              rationale:"Insulin pumps deliver continuous basal insulin and allow bolus doses. If Aiden bolused before gym without eating his snack, the combination of exogenous insulin and physical exertion created a significant hypoglycemic event.",
+              wrongExplanations:{"B":"Insulin pumps are not contraindicated during exercise. They are designed for continuous use and can be adjusted for activity levels.","C":"Insulin pumps deliver insulin only, not glucagon. There is no glucagon reservoir in an insulin pump.","D":"The insulin pump does not need to be removed before administering dextrose. It does not interfere with glucose replacement therapy."},
+              reference:"ALS PCS \u2014 Hypoglycemia Medical Directive"
+            },
+            { id:30, type:"Interpretation", category:"Hypoglycemia / Seizure Management", stem:"The seizure has terminated after 90 seconds. The child remains unconscious with a GCS of 6. Given the complete clinical picture, your best course of action is to:", format:"combination",
+              subOptions:[{num:1,text:"Administer dextrose 10% IV at 0.2 g/kg to address the underlying hypoglycemia"},{num:2,text:"Administer oral glucose now that the seizure has stopped"},{num:3,text:"Continue to monitor the airway and prepare for recurrent seizures"},{num:4,text:"Obtain a repeat blood glucometry after treatment to confirm response"},{num:5,text:"Administer midazolam 0.2 mg/kg IM as the primary treatment for the seizure"}],
+              options:[{letter:"A",text:"1, 2 and 5"},{letter:"B",text:"1, 3 and 4"},{letter:"C",text:"2, 4 and 5"},{letter:"D",text:"1, 2 and 3"}],
+              correctAnswer:"B",
+              rationale:"The priority is correcting the hypoglycemia. Dextrose 10% IV at 0.2 g/kg (Choice 1) is appropriate per the Hypoglycemia Medical Directive. Monitoring the airway and preparing for recurrent seizures (Choice 3) is indicated per the Seizure Standard. Repeat glucometry (Choice 4) confirms effectiveness.",
+              wrongExplanations:{"A":"You included oral glucose (Choice 2) and midazolam (Choice 5). GCS of 6 means the child cannot safely swallow oral glucose. The seizure has already terminated \u2014 midazolam would further depress LOC without addressing the glucose deficit.","C":"You excluded dextrose (Choice 1) and airway monitoring (Choice 3). The underlying cause is hypoglycemia \u2014 dextrose is the definitive treatment. Airway monitoring is essential with a GCS of 6. Oral glucose (Choice 2) is unsafe.","D":"You included oral glucose (Choice 2) instead of repeat glucometry (Choice 4). The child has a GCS of 6 and cannot safely swallow. Repeat glucometry is needed to confirm treatment response."},
+              reference:"ALS PCS \u2014 Hypoglycemia Medical Directive, BLS PCS \u2014 Seizure Standard"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+};
+
+// Topic color mapping
+const topicColors = {
+  "Submersion Injury / Hypothermia": {bg: "rgba(186,117,23,0.12)", fg: "#FAC775"},
+  "Submersion Injury": {bg: "rgba(186,117,23,0.12)", fg: "#FAC775"},
+  "Submersion Injury / Spinal Motion Restriction": {bg: "rgba(186,117,23,0.12)", fg: "#FAC775"},
+  "Hypothermia / Submersion Injury": {bg: "rgba(186,117,23,0.12)", fg: "#FAC775"},
+  "Spinal Motion Restriction": {bg: "rgba(186,117,23,0.12)", fg: "#FAC775"},
+  "Load and Go / Patient Management": {bg: "rgba(186,117,23,0.12)", fg: "#FAC775"},
+  "Seizure": {bg: "rgba(206,203,246,0.1)", fg: "#CECBF6"},
+  "Seizure / Pediatrics": {bg: "rgba(206,203,246,0.1)", fg: "#CECBF6"},
+  "Seizure / Hypoglycemia": {bg: "rgba(206,203,246,0.1)", fg: "#CECBF6"},
+  "Seizure / Blood Glucometry": {bg: "rgba(206,203,246,0.1)", fg: "#CECBF6"},
+  "Load and Go / Seizure": {bg: "rgba(206,203,246,0.1)", fg: "#CECBF6"},
+  "Infectious Disease / Pediatrics": {bg: "rgba(206,203,246,0.1)", fg: "#CECBF6"},
+  "Burns / Child Protection": {bg: "rgba(240,153,123,0.1)", fg: "#F0997B"},
+  "Child in Need of Protection": {bg: "rgba(240,153,123,0.1)", fg: "#F0997B"},
+  "Burns (Thermal)": {bg: "rgba(240,153,123,0.1)", fg: "#F0997B"},
+  "Burns / Child Protection / Transport": {bg: "rgba(240,153,123,0.1)", fg: "#F0997B"},
+  "Cardiac Arrest / Pediatrics": {bg: "rgba(181,212,244,0.1)", fg: "#B5D4F4"},
+  "Pediatric Cardiac Arrest": {bg: "rgba(181,212,244,0.1)", fg: "#B5D4F4"},
+  "Cardiac Arrest / Reversible Causes": {bg: "rgba(181,212,244,0.1)", fg: "#B5D4F4"},
+  "Pediatric Cardiac Arrest / Pathophysiology": {bg: "rgba(181,212,244,0.1)", fg: "#B5D4F4"},
+  "Cardiac Arrest Classification": {bg: "rgba(181,212,244,0.1)", fg: "#B5D4F4"},
+  "ROSC / Post-Resuscitation Care": {bg: "rgba(181,212,244,0.1)", fg: "#B5D4F4"},
+  "Hypoglycemia / Altered LOC": {bg: "rgba(244,192,209,0.1)", fg: "#F4C0D1"},
+  "Hypoglycemia": {bg: "rgba(244,192,209,0.1)", fg: "#F4C0D1"},
+  "Hypoglycemia / Diabetes": {bg: "rgba(244,192,209,0.1)", fg: "#F4C0D1"},
+  "Hypoglycemia / Seizure": {bg: "rgba(244,192,209,0.1)", fg: "#F4C0D1"},
+  "Diabetes / Insulin Pump": {bg: "rgba(244,192,209,0.1)", fg: "#F4C0D1"},
+  "Hypoglycemia / Seizure Management": {bg: "rgba(244,192,209,0.1)", fg: "#F4C0D1"}
+};
+
+function getTopicColor(cat) {
+  return topicColors[cat] || {bg: "rgba(255,255,255,0.06)", fg: "#7a786f"};
+}
+
+// Flatten
+let allQuestions = [];
+let questionNarratives = {};
+
+examData.scenarios.forEach(s => {
+  s.blocks.forEach(b => {
+    b.questions.forEach(q => {
+      allQuestions.push(q);
+      if (b.text) questionNarratives[q.id] = b.text;
+    });
+  });
+});
+
+const totalQ = allQuestions.length;
+let answers = {};
+let currentIndex = 0;
+let flagged = {};
+let reviewMode = false;
+let lastNarrativeShown = null;
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function startExam() {
+  currentIndex = 0;
+  answers = {};
+  flagged = {};
+  reviewMode = false;
+  lastNarrativeShown = null;
+  showPage('examPage');
+  renderQuestion();
+}
+
+function renderProgressTicks() {
+  const wrap = document.getElementById('progressTicks');
+  let html = '';
+  for (let i = 0; i < totalQ; i++) {
+    const q = allQuestions[i];
+    let cls = 'tick';
+    if (i === currentIndex && !reviewMode) cls += ' current';
+    else if (answers[q.id]) {
+      cls += answers[q.id] === q.correctAnswer ? ' correct' : ' incorrect';
+    }
+    html += '<div class="' + cls + '"></div>';
+  }
+  wrap.innerHTML = html;
+  document.getElementById('progressCount').textContent = (currentIndex + 1) + ' / ' + totalQ;
+}
+
+function renderQuestion() {
+  const q = allQuestions[currentIndex];
+  const answered = !!answers[q.id];
+  const isCorrect = answers[q.id] === q.correctAnswer;
+  const tc = getTopicColor(q.category);
+  const narrative = questionNarratives[q.id];
+  const showNarrative = narrative && narrative !== lastNarrativeShown;
+  if (narrative) lastNarrativeShown = narrative;
+
+  renderProgressTicks();
+
+  let html = '';
+
+  // Narrative block
+  if (showNarrative) {
+    html += '<div class="narrative">' + narrative.split('\n\n').map(p => '<p>' + p + '</p>').join('') + '</div>';
+  }
+
+  // Answer status
+  if (answered) {
+    const iconClass = isCorrect ? 'correct' : 'incorrect';
+    const svgIcon = isCorrect
+      ? '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#5DCAA5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
+      : '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#F09595" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+    const label = isCorrect ? 'Correct' : 'Incorrect \u2014 you chose ' + answers[q.id];
+    html += '<div class="answer-status visible"><div class="status-icon ' + iconClass + '-icon">' + svgIcon + '</div><span class="status-text ' + iconClass + '-text">' + label + '</span></div>';
+  }
+
+  // Meta
+  html += '<div class="q-meta"><span class="q-category" style="background:' + tc.bg + ';color:' + tc.fg + '">' + q.category + '</span><span class="q-type">' + q.type + '</span></div>';
+
+  // Stem
+  html += '<div class="q-stem">' + q.stem + '</div>';
+
+  // Sub-options
+  if (q.format === 'combination' && q.subOptions) {
+    html += '<div class="sub-options"><div class="sub-options-label">Select the correct combination</div>';
+    q.subOptions.forEach(so => {
+      html += '<div class="sub-option"><span class="sub-option-num">' + so.num + '.</span><span>' + so.text + '</span></div>';
+    });
+    html += '</div>';
+  }
+
+  // Options
+  html += '<div class="options">';
+  q.options.forEach(o => {
+    let cls = 'option';
+    let tag = '';
+    if (answered) {
+      cls += ' disabled';
+      if (o.letter === answers[q.id] && isCorrect) cls += ' selected-correct';
+      else if (o.letter === answers[q.id] && !isCorrect) cls += ' selected-incorrect';
+      else if (o.letter === q.correctAnswer && !isCorrect) cls += ' show-correct';
+
+      if (o.letter === answers[q.id] && !isCorrect) tag = '<span class="option-tag" style="color:var(--incorrect)">Yours</span>';
+      if (o.letter === q.correctAnswer) tag = '<span class="option-tag" style="color:var(--correct)">Correct</span>';
+    }
+    html += '<div class="' + cls + '" onclick="selectAnswer(' + q.id + ',\'' + o.letter + '\')">';
+    html += '<span class="option-letter">' + o.letter + '</span>';
+    html += '<span class="option-text">' + o.text + '</span>';
+    html += tag;
+    html += '</div>';
+  });
+  html += '</div>';
+
+  // Rationale
+  if (answered) {
+    html += '<div class="rationale-wrap visible">';
+    html += '<div class="rationale-block correct-block"><div class="rationale-label correct-label">Why ' + q.correctAnswer + ' is correct</div><div class="rationale-text">' + q.rationale + '</div></div>';
+    if (!isCorrect && q.wrongExplanations && q.wrongExplanations[answers[q.id]]) {
+      html += '<div class="rationale-block incorrect-block"><div class="rationale-label incorrect-label">Where you went wrong</div><div class="rationale-text">' + q.wrongExplanations[answers[q.id]] + '</div></div>';
+    }
+    if (q.reference) {
+      html += '<div class="rationale-block ref-block"><div class="rationale-label ref-label">Reference</div><div class="rationale-ref">' + q.reference + '</div></div>';
+    }
+    html += '</div>';
+  }
+
+  // Footer
+  html += '<div class="q-footer">';
+  html += '<button class="btn-nav" onclick="prevQuestion()" ' + (currentIndex === 0 ? 'disabled' : '') + '>Previous</button>';
+
+  if (!answered && !reviewMode) {
+    html += '<button class="btn-flag ' + (flagged[q.id] ? 'flagged' : '') + '" onclick="toggleFlag(' + q.id + ')">' + (flagged[q.id] ? 'Flagged' : 'Flag for review') + '</button>';
+  } else {
+    if (currentIndex < totalQ - 1) {
+      html += '<button class="btn-next" onclick="nextQuestion()">Next question</button>';
+    } else {
+      const allAnswered = Object.keys(answers).length === totalQ;
+      if (allAnswered && !reviewMode) {
+        html += '<button class="btn-next" onclick="showResults()">See results</button>';
+      } else if (reviewMode) {
+        html += '<button class="btn-next" onclick="showResults()">Back to results</button>';
+      } else {
+        html += '<button class="btn-flag ' + (flagged[q.id] ? 'flagged' : '') + '" onclick="toggleFlag(' + q.id + ')">' + (flagged[q.id] ? 'Flagged' : 'Flag for review') + '</button>';
+      }
+    }
+  }
+  html += '</div>';
+
+  document.getElementById('questionArea').innerHTML = html;
+  document.getElementById('questionArea').scrollTop = 0;
+  window.scrollTo(0, 0);
+}
+
+function selectAnswer(qId, letter) {
+  if (answers[qId]) return;
+  answers[qId] = letter;
+  renderQuestion();
+}
+
+function nextQuestion() {
+  if (currentIndex < totalQ - 1) { currentIndex++; renderQuestion(); }
+}
+
+function prevQuestion() {
+  if (currentIndex > 0) { currentIndex--; renderQuestion(); }
+}
+
+function toggleFlag(qId) {
+  flagged[qId] = !flagged[qId];
+  renderQuestion();
+}
+
+function showResults() {
+  const correct = allQuestions.filter(q => answers[q.id] === q.correctAnswer).length;
+  const pct = Math.round((correct / totalQ) * 100);
+  const pass = pct >= 70;
+
+  document.getElementById('scorePct').textContent = pct + '%';
+  document.getElementById('statCorrect').textContent = correct;
+  document.getElementById('statIncorrect').textContent = totalQ - correct;
+  document.getElementById('statTotal').textContent = totalQ;
+
+  const pf = document.getElementById('passFail');
+  pf.textContent = pass ? 'Pass' : 'Fail';
+  pf.className = 'pass-fail-badge ' + (pass ? 'pass' : 'fail');
+
+  const ring = document.getElementById('ringFill');
+  ring.className = 'ring-fill ' + (pass ? 'pass' : 'fail');
+  const circ = 2 * Math.PI * 68;
+  ring.style.strokeDasharray = circ;
+  ring.style.strokeDashoffset = circ;
+  setTimeout(() => { ring.style.strokeDashoffset = circ - (circ * pct / 100); }, 50);
+
+  // Topic breakdown
+  const topics = {};
+  const topicOrder = [];
+  examData.scenarios.forEach(s => {
+    const name = s.title;
+    if (!topics[name]) { topics[name] = {correct: 0, total: 0}; topicOrder.push(name); }
+    s.blocks.forEach(b => b.questions.forEach(q => {
+      topics[name].total++;
+      if (answers[q.id] === q.correctAnswer) topics[name].correct++;
+    }));
+  });
+
+  const ts = document.getElementById('topicSection');
+  let thtml = '<div class="topic-label">Performance by topic</div>';
+  topicOrder.forEach(name => {
+    const t = topics[name];
+    const tpct = Math.round((t.correct / t.total) * 100);
+    let barColor = tpct >= 80 ? 'var(--correct)' : tpct >= 60 ? 'var(--amber)' : 'var(--incorrect)';
+    let scoreColor = tpct >= 80 ? 'var(--correct)' : tpct >= 60 ? '#FAC775' : 'var(--incorrect)';
+    thtml += '<div class="topic-row"><div class="topic-row-header"><span class="topic-name">' + name + '</span><span class="topic-score" style="color:' + scoreColor + '">' + t.correct + '/' + t.total + '</span></div><div class="topic-bar"><div class="topic-bar-fill" style="width:' + tpct + '%;background:' + barColor + '"></div></div></div>';
+  });
+  ts.innerHTML = thtml;
+
+  showPage('resultsPage');
+  window.scrollTo(0, 0);
+}
+
+function reviewExam() {
+  reviewMode = true;
+  currentIndex = 0;
+  lastNarrativeShown = null;
+  showPage('examPage');
+  renderQuestion();
+}
+
+function restartExam() {
+  showPage('introPage');
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
