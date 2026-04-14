@@ -1,0 +1,3553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEMCA — Practice Exam</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap');
+
+/* ── LIQUID GLASS LIGHT (default) ── */
+:root {
+  --bg-primary: linear-gradient(145deg, #e3e8f0 0%, #c9d6e8 25%, #d5c8db 50%, #c8d5e0 75%, #dde4ed 100%);
+  --bg-primary-solid: #dde1ea;
+  --bg-secondary: rgba(255,255,255,0.35);
+  --bg-card: rgba(255,255,255,0.45);
+  --bg-card-hover: rgba(255,255,255,0.6);
+  --glass-border: rgba(255,255,255,0.65);
+  --glass-inner: 0 1px 0 rgba(255,255,255,0.8) inset;
+  --border: rgba(255,255,255,0.55);
+  --border-active: #007AFF;
+  --text-primary: #1d1d1f;
+  --text-secondary: rgba(0,0,0,0.55);
+  --text-muted: rgba(0,0,0,0.35);
+  --accent: #007AFF;
+  --accent-light: #3395FF;
+  --accent-dim: rgba(0,122,255,0.1);
+  --accent-glow: rgba(0,122,255,0.2);
+  --correct: #34c759;
+  --correct-bg: rgba(52,199,89,0.12);
+  --correct-border: rgba(52,199,89,0.4);
+  --incorrect: #ff3b30;
+  --incorrect-bg: rgba(255,59,48,0.08);
+  --incorrect-border: rgba(255,59,48,0.35);
+  --radius: 14px;
+  --radius-lg: 22px;
+  --shadow: 0 8px 32px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+  --card-shadow: 0 8px 32px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.03);
+  --toggle-bg: rgba(255,255,255,0.5);
+  --toggle-knob: #ffffff;
+  --blur: blur(40px);
+  --option-bg: rgba(255,255,255,0.45);
+  --option-border: rgba(255,255,255,0.55);
+  --narrative-bg: rgba(255,255,255,0.3);
+  --sub-bg: rgba(255,255,255,0.35);
+  --progress-track: rgba(0,0,0,0.06);
+  --progress-bg: rgba(255,255,255,0.55);
+  --stat-bg: rgba(255,255,255,0.45);
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  --font-display: 'DM Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+}
+
+/* ── LIQUID GLASS DARK ── */
+[data-theme="dark"] {
+  --bg-primary: linear-gradient(145deg, #0c0e14 0%, #111520 25%, #14111c 50%, #0f1318 75%, #0e1016 100%);
+  --bg-primary-solid: #0f1117;
+  --bg-secondary: rgba(255,255,255,0.06);
+  --bg-card: rgba(255,255,255,0.08);
+  --bg-card-hover: rgba(255,255,255,0.12);
+  --glass-border: rgba(255,255,255,0.12);
+  --glass-inner: 0 1px 0 rgba(255,255,255,0.08) inset;
+  --border: rgba(255,255,255,0.1);
+  --border-active: #0A84FF;
+  --text-primary: #f5f5f7;
+  --text-secondary: rgba(255,255,255,0.6);
+  --text-muted: rgba(255,255,255,0.35);
+  --accent: #0A84FF;
+  --accent-light: #409CFF;
+  --accent-dim: rgba(10,132,255,0.15);
+  --accent-glow: rgba(10,132,255,0.25);
+  --correct: #30d158;
+  --correct-bg: rgba(48,209,88,0.12);
+  --correct-border: rgba(48,209,88,0.35);
+  --incorrect: #ff453a;
+  --incorrect-bg: rgba(255,69,58,0.1);
+  --incorrect-border: rgba(255,69,58,0.35);
+  --shadow: 0 8px 32px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.4);
+  --card-shadow: 0 8px 32px rgba(0,0,0,0.25), 0 1px 2px rgba(0,0,0,0.15);
+  --toggle-bg: rgba(255,255,255,0.1);
+  --toggle-knob: #ffffff;
+  --option-bg: rgba(255,255,255,0.06);
+  --option-border: rgba(255,255,255,0.1);
+  --narrative-bg: rgba(255,255,255,0.04);
+  --sub-bg: rgba(255,255,255,0.05);
+  --progress-track: rgba(255,255,255,0.06);
+  --progress-bg: rgba(255,255,255,0.08);
+  --stat-bg: rgba(255,255,255,0.07);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-primary);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  line-height: 1.65;
+  min-height: 100vh;
+  transition: background 0.5s ease, color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+}
+
+/* ── AMBIENT GLOW ORBS ── */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.5s ease;
+}
+body::before {
+  top: -150px;
+  right: -100px;
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, rgba(0,122,255,0.1) 0%, transparent 70%);
+}
+body::after {
+  bottom: -120px;
+  left: -80px;
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, rgba(175,130,220,0.08) 0%, transparent 70%);
+}
+[data-theme="dark"] body::before {
+  background: radial-gradient(circle, rgba(10,132,255,0.08) 0%, transparent 70%);
+}
+[data-theme="dark"] body::after {
+  background: radial-gradient(circle, rgba(130,80,200,0.06) 0%, transparent 70%);
+}
+
+/* ── THEME TOGGLE ── */
+.theme-toggle-wrap {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.25rem;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--bg-card);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 980px;
+  padding: 5px 12px 5px 14px;
+  box-shadow: var(--shadow), var(--glass-inner);
+}
+.theme-toggle-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.theme-toggle {
+  position: relative;
+  width: 44px;
+  height: 26px;
+  background: var(--toggle-bg);
+  border-radius: 13px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  border: 1px solid var(--border);
+  outline: none;
+}
+.theme-toggle::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: var(--toggle-knob);
+  border-radius: 50%;
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+[data-theme="dark"] .theme-toggle {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.15);
+}
+[data-theme="dark"] .theme-toggle::after {
+  transform: translateX(18px);
+}
+
+/* ── INTRO PAGE ── */
+.intro-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+.intro-icon {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, var(--accent), #5856d6);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  color: #fff;
+  box-shadow: 0 4px 20px var(--accent-glow);
+}
+.intro-subtitle {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.intro-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+.intro-meta {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 2.5rem;
+  font-weight: 400;
+}
+.intro-meta span {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+.btn-start {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.9rem 2.5rem;
+  background: rgba(0,122,255,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 980px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+  letter-spacing: 0.01em;
+  box-shadow: 0 4px 16px var(--accent-glow), 0 1px 0 rgba(255,255,255,0.2) inset;
+}
+[data-theme="dark"] .btn-start {
+  background: rgba(10,132,255,0.75);
+  border-color: rgba(255,255,255,0.15);
+}
+.btn-start:hover {
+  background: rgba(0,122,255,0.95);
+  transform: scale(1.04);
+  box-shadow: 0 6px 24px var(--accent-glow), 0 1px 0 rgba(255,255,255,0.2) inset;
+}
+.btn-start:active { transform: scale(0.98); }
+
+/* ── EXAM CONTAINER ── */
+.exam-container {
+  display: none;
+  max-width: 740px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── PROGRESS BAR ── */
+.progress-bar-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--progress-bg);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  padding: 0.85rem 1.1rem 0.75rem;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  margin-bottom: 2rem;
+  transition: all 0.4s ease;
+  box-shadow: var(--shadow), var(--glass-inner);
+}
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.progress-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+}
+.progress-count {
+  font-size: 0.75rem;
+  color: var(--accent);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.progress-track {
+  height: 4px;
+  background: var(--progress-track);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #5AC8FA);
+  border-radius: 2px;
+  transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+  width: 0%;
+}
+
+/* ── SCENARIO BLOCKS ── */
+.scenario-header {
+  font-size: 0.7rem;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.4rem;
+  padding-top: 1.5rem;
+  font-weight: 700;
+}
+.scenario-title {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+  letter-spacing: -0.01em;
+}
+.block-narrative {
+  background: var(--narrative-bg);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.75rem;
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.8;
+  box-shadow: var(--shadow), var(--glass-inner);
+}
+
+/* ── QUESTION CARD ── */
+.question-card {
+  background: var(--bg-card);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--card-shadow), var(--glass-inner);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.question-meta {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.85rem;
+  flex-wrap: wrap;
+}
+.q-badge {
+  font-size: 0.6rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+}
+.q-number {
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+.q-type {
+  background: rgba(142,142,147,0.08);
+  color: var(--text-muted);
+}
+[data-theme="dark"] .q-type {
+  background: rgba(255,255,255,0.06);
+}
+.q-format {
+  background: rgba(142,142,147,0.05);
+  color: var(--text-muted);
+}
+[data-theme="dark"] .q-format {
+  background: rgba(255,255,255,0.04);
+}
+.question-stem {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  line-height: 1.55;
+  letter-spacing: -0.005em;
+}
+
+/* ── SUB-OPTIONS ── */
+.sub-options {
+  background: var(--sub-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.85rem 1.1rem;
+  margin-bottom: 1rem;
+}
+.sub-option {
+  padding: 0.3rem 0;
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+}
+.sub-option span {
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-right: 0.5rem;
+}
+
+/* ── ANSWER OPTIONS ── */
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.option-btn {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  background: var(--option-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1.5px solid var(--option-border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  width: 100%;
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+.option-btn:hover:not(.disabled) {
+  background: var(--bg-card-hover);
+  border-color: var(--accent);
+  color: var(--text-primary);
+  box-shadow: 0 0 0 1px var(--accent-glow);
+}
+.option-letter {
+  font-weight: 700;
+  font-size: 0.75rem;
+  min-width: 1.6rem;
+  height: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.6);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+  margin-top: 1px;
+  transition: all 0.2s ease;
+}
+[data-theme="dark"] .option-letter {
+  background: rgba(255,255,255,0.08);
+}
+.option-btn.selected-correct {
+  background: var(--correct-bg);
+  border-color: var(--correct-border);
+  color: var(--text-primary);
+}
+.option-btn.selected-correct .option-letter {
+  background: var(--correct);
+  color: #fff;
+  border-color: var(--correct);
+}
+.option-btn.selected-incorrect {
+  background: var(--incorrect-bg);
+  border-color: var(--incorrect-border);
+  color: var(--text-primary);
+}
+.option-btn.selected-incorrect .option-letter {
+  background: var(--incorrect);
+  color: #fff;
+  border-color: var(--incorrect);
+}
+.option-btn.show-correct {
+  border-color: var(--correct-border);
+}
+.option-btn.show-correct .option-letter {
+  background: var(--correct);
+  color: #fff;
+  border-color: var(--correct);
+}
+.option-btn.disabled { cursor: default; opacity: 0.65; }
+.option-btn.selected-correct.disabled,
+.option-btn.selected-incorrect.disabled,
+.option-btn.show-correct.disabled { opacity: 1; }
+
+/* ── RATIONALE ── */
+.rationale {
+  display: none;
+  margin-top: 1rem;
+  padding: 1rem 1.25rem;
+  background: rgba(52,199,89,0.06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-left: 3px solid var(--correct);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+}
+.rationale-label {
+  font-size: 0.65rem;
+  color: var(--correct);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.4rem;
+  font-weight: 700;
+}
+
+/* ── RESULTS PAGE ── */
+.results-page {
+  display: none;
+  max-width: 740px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+.results-score-ring {
+  width: 180px;
+  height: 180px;
+  margin: 0 auto 2rem;
+  position: relative;
+}
+.results-score-ring svg { transform: rotate(-90deg); }
+.ring-bg { stroke: var(--progress-track); }
+.ring-fill {
+  stroke: var(--accent);
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1);
+}
+.ring-fill.pass { stroke: var(--correct); }
+.ring-fill.fail { stroke: var(--incorrect); }
+.score-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.score-pct {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+}
+.score-label {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+}
+.results-stats {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+}
+.stat-box {
+  background: var(--stat-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 1rem 1.5rem;
+  min-width: 110px;
+  box-shadow: var(--glass-inner);
+}
+.stat-val {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.stat-val.green { color: var(--correct); }
+.stat-val.red { color: var(--incorrect); }
+.stat-lbl {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 0.2rem;
+  font-weight: 600;
+}
+.pass-fail {
+  font-size: 0.85rem;
+  padding: 0.45rem 1.5rem;
+  border-radius: 980px;
+  display: inline-block;
+  margin-bottom: 2rem;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+}
+.pass-fail.pass {
+  background: var(--correct-bg);
+  color: var(--correct);
+}
+.pass-fail.fail {
+  background: var(--incorrect-bg);
+  color: var(--incorrect);
+}
+.btn-review, .btn-restart {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.85rem 2rem;
+  border: none;
+  border-radius: 980px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  margin: 0 0.35rem;
+}
+.btn-review {
+  background: rgba(0,122,255,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.25);
+  box-shadow: 0 4px 16px var(--accent-glow), 0 1px 0 rgba(255,255,255,0.2) inset;
+}
+[data-theme="dark"] .btn-review {
+  background: rgba(10,132,255,0.75);
+  border-color: rgba(255,255,255,0.15);
+}
+.btn-review:hover {
+  background: rgba(0,122,255,0.95);
+  transform: scale(1.03);
+  box-shadow: 0 6px 24px var(--accent-glow), 0 1px 0 rgba(255,255,255,0.2) inset;
+}
+.btn-restart {
+  background: var(--stat-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: var(--text-secondary);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-inner);
+}
+.btn-restart:hover {
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .intro-title { font-size: 1.8rem; }
+  .exam-container, .results-page { padding: 1rem; }
+  .question-card { padding: 1.15rem; }
+  .block-narrative { padding: 1rem; }
+  .results-stats { gap: 0.6rem; }
+  .stat-box { min-width: 85px; padding: 0.75rem; }
+  .theme-toggle-wrap { top: 0.75rem; right: 0.75rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="theme-toggle-wrap">
+  <span class="theme-toggle-label" id="themeLabel">Dark</span>
+  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle dark mode"></button>
+</div>
+
+<div class="intro-page" id="introPage">
+  <div class="intro-title" style="margin-top:0.5rem">AEMCA</div>
+  <div class="intro-subtitle" style="margin-bottom:2.5rem">Practice Exam</div>
+  <button class="btn-start" onclick="startExam()">Begin Exam</button>
+</div>
+
+<div class="exam-container" id="examContainer"></div>
+
+<div class="results-page" id="resultsPage">
+  <div class="results-score-ring">
+    <svg width="180" height="180">
+      <circle class="ring-bg" cx="90" cy="90" r="78" fill="none" stroke-width="8"/>
+      <circle class="ring-fill" id="ringFill" cx="90" cy="90" r="78" fill="none" stroke-width="8"
+        stroke-dasharray="490" stroke-dashoffset="490" stroke-linecap="round"/>
+    </svg>
+    <div class="score-text">
+      <div class="score-pct" id="scorePct">0%</div>
+      <div class="score-label">Score</div>
+    </div>
+  </div>
+  <div class="pass-fail" id="passFail"></div>
+  <div class="results-stats">
+    <div class="stat-box"><div class="stat-val green" id="statCorrect">0</div><div class="stat-lbl">Correct</div></div>
+    <div class="stat-box"><div class="stat-val red" id="statIncorrect">0</div><div class="stat-lbl">Incorrect</div></div>
+    <div class="stat-box"><div class="stat-val" id="statTotal" style="color:var(--text-primary)">66</div><div class="stat-lbl">Total</div></div>
+  </div>
+  <button class="btn-review" onclick="reviewExam()">Review Answers</button>
+  <button class="btn-restart" onclick="restartExam()">Restart</button>
+</div>
+
+<script>
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeLabel').textContent = isDark ? 'Dark' : 'Light';
+  localStorage.setItem('aemca-theme', isDark ? 'light' : 'dark');
+}
+(function() {
+  const saved = localStorage.getItem('aemca-theme');
+  if (saved === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('themeLabel').textContent = 'Light';
+    });
+  }
+})();
+
+const examData = {
+  "title": "AEMCA — Practice Exam",
+  "scenarios": [
+    {
+      "id": 1,
+      "title": "COPD Exacerbation / Language Barrier",
+      "blocks": [
+        {
+          "text": "You are dispatched priority 3 to a residential apartment building for a person in respiratory distress. On arrival, you are met at the door by a young woman who speaks English and tells you her grandmother is having trouble breathing. She leads you to the living room where you find your patient, approximately 75 years old, weighing approximately 55 kilograms, sitting upright in a recliner in tripod position. The television is on in the background showing a cooking program. You observe a home oxygen concentrator running at 2 L/min via nasal cannula next to the patient’s chair. The patient is using accessory muscles, speaking in one-to-two word phrases, and appears cyanotic around her lips. Upon initial assessment, you note audible expiratory wheezing. The granddaughter informs you that her grandmother speaks only Cantonese and has COPD. She introduces her grandmother as Mrs. Chen.",
+          "questions": [
+            {
+              "id": 1,
+              "type": "Prioritization",
+              "category": "Shortness of Breath / COPD",
+              "stem": "Your priority at this time is to:",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "Remove Mrs. Chen’s home nasal cannula and apply high-concentration oxygen via a non-rebreather mask at 15 L/min"
+                },
+                {
+                  "num": 2,
+                  "text": "Titrate oxygen to achieve an SpO2 of 88–92% as per the COPD Oxygen Therapy guidelines"
+                },
+                {
+                  "num": 3,
+                  "text": "Auscultate lung sounds bilaterally"
+                },
+                {
+                  "num": 4,
+                  "text": "Begin preparing a salbutamol treatment immediately"
+                },
+                {
+                  "num": 5,
+                  "text": "Establish Mrs. Chen’s medication history through the granddaughter"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "1, 3 and 5"
+                },
+                {
+                  "letter": "B",
+                  "text": "1, 4 and 5"
+                },
+                {
+                  "letter": "C",
+                  "text": "2, 3 and 4"
+                },
+                {
+                  "letter": "D",
+                  "text": "2, 4 and 5"
+                }
+              ],
+              "correctAnswer": "C",
+              "rationale": "Mrs. Chen is in severe respiratory distress with audible wheezing and cyanosis. Choice 1 is tempting because non-rebreather masks deliver high-concentration oxygen — however, the BLS PCS Oxygen Therapy Standard specifies titrating to 88–92% for COPD patients, not administering high-concentration oxygen which could suppress the hypoxic respiratory drive. Choice 2 is correct. Choice 3 is correct — auscultation is critical to characterize the respiratory presentation. Choice 4 is correct — given audible wheezing in a known COPD patient, salbutamol is indicated under the Bronchoconstriction Medical Directive. Choice 5 is tempting but is not the immediate priority when the patient is cyanotic and in severe distress."
+            },
+            {
+              "id": 2,
+              "type": "Application",
+              "category": "Respiratory Pathophysiology",
+              "stem": "Which of the following statements is true regarding the pathophysiology of an acute COPD exacerbation?",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "COPD exacerbations are caused primarily by sudden collapse of the pulmonary vasculature, reducing blood flow to functional alveoli and creating a right-to-left cardiac shunt that cannot be corrected with supplemental oxygen"
+                },
+                {
+                  "letter": "B",
+                  "text": "Air trapping in COPD occurs because the elastic recoil of lung tissue is increased during an exacerbation, causing airways to snap shut during inspiration and preventing fresh air from reaching the alveoli"
+                },
+                {
+                  "letter": "C",
+                  "text": "Hypoxemia in COPD exacerbations results exclusively from airway obstruction at the level of the trachea, which is why patients present with stridor rather than wheezing"
+                },
+                {
+                  "letter": "D",
+                  "text": "Chronic destruction of alveolar walls reduces the surface area for gas exchange, and during an exacerbation, bronchospasm and mucus plugging further increase ventilation-perfusion mismatch, leading to hypoxemia and CO2 retention"
+                }
+              ],
+              "correctAnswer": "D",
+              "rationale": "Choice A is tempting because it uses correct terminology — however, COPD does not involve pulmonary vascular collapse or a true right-to-left shunt. The hypoxemia is largely correctable with supplemental oxygen. Choice B is incorrect — elastic recoil is decreased in COPD, not increased. This loss causes airways to collapse during expiration, trapping air distally. Choice C is incorrect — COPD obstruction occurs at the bronchi and bronchioles, not the trachea. Stridor indicates upper airway obstruction; COPD produces wheezing. Choice D is correct — COPD involves chronic alveolar destruction and chronic bronchitis. During exacerbation, bronchospasm and mucus further obstruct airways, worsening V/Q mismatch and CO2 retention."
+            },
+            {
+              "id": 3,
+              "type": "Judgement",
+              "category": "Bronchoconstriction Medical Directive",
+              "stem": "Which of the following questions are most important to ask Mrs. Chen’s granddaughter at this time?",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "“Has your grandmother been on any oral or injectable steroids recently?”"
+                },
+                {
+                  "num": 2,
+                  "text": "“How long has she been on home oxygen?”"
+                },
+                {
+                  "num": 3,
+                  "text": "“Does she have any allergies to medications?”"
+                },
+                {
+                  "num": 4,
+                  "text": "“When did she last eat or drink anything?”"
+                },
+                {
+                  "num": 5,
+                  "text": "“Has she ever been diagnosed with asthma in addition to her COPD?”"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "1, 3 and 5"
+                },
+                {
+                  "letter": "B",
+                  "text": "1, 2 and 4"
+                },
+                {
+                  "letter": "C",
+                  "text": "2, 3 and 4"
+                },
+                {
+                  "letter": "D",
+                  "text": "3, 4 and 5"
+                }
+              ],
+              "correctAnswer": "A",
+              "rationale": "The critical questions determine medication eligibility under the Bronchoconstriction Medical Directive. Choice 1 is correct — current use of oral or parenteral steroids is a contraindication to dexamethasone. Choice 2 is tempting but does not change the immediate medication decision. Choice 3 is correct — allergy to salbutamol, epinephrine, or steroids is a contraindication. Choice 4 is tempting as part of SAMPLE but does not alter medication eligibility. Choice 5 is correct — differentiating asthma from COPD determines whether epinephrine can be considered (requires asthma history)."
+            }
+          ]
+        },
+        {
+          "text": "Through Mrs. Chen’s granddaughter, you learn that Mrs. Chen has no medication allergies. She takes tiotropium and a salbutamol inhaler as needed, and was on a course of prednisone that she completed two weeks ago. She has been feeling increasingly short of breath over the past two days. She has no history of asthma. Assessment reveals: SpO2 84% on her home 2 L/min; heart rate 108, full and regular; blood pressure 152/88; respirations 30 and laboured with diffuse bilateral expiratory wheezing; ETCO2 58 mmHg. Skin is cool and diaphoretic. GCS 15 — she is alert and following commands communicated through her granddaughter.",
+          "questions": [
+            {
+              "id": 4,
+              "type": "Application",
+              "category": "COPD / ETCO2 Monitoring",
+              "stem": "Which of the following statements is true of the relationship between COPD and ETCO2 monitoring in this patient?",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "An ETCO2 of 58 mmHg confirms that Mrs. Chen is in respiratory failure and must immediately be ventilated with a BVM to bring her ETCO2 below 40 mmHg"
+                },
+                {
+                  "letter": "B",
+                  "text": "In COPD patients with an initial ETCO2 greater than 50 mmHg, the paramedic should attempt to maintain ETCO2 between 50–60 mmHg to prevent further respiratory compromise from hypercapnia and to avoid worsening acidosis"
+                },
+                {
+                  "letter": "C",
+                  "text": "ETCO2 monitoring is unreliable in COPD patients because their chronic CO2 retention makes all readings elevated, so the paramedic should disregard ETCO2 and rely solely on SpO2"
+                },
+                {
+                  "letter": "D",
+                  "text": "An elevated ETCO2 in a COPD patient indicates that the patient’s hypoxic drive has been eliminated by supplemental oxygen, and the paramedic should immediately discontinue all oxygen therapy"
+                }
+              ],
+              "correctAnswer": "B",
+              "rationale": "Choice A is tempting because 58 mmHg is above normal — however, aggressively ventilating a COPD patient to normal ETCO2 can worsen their condition. Choice B is correct — as per the ALS PCS Companion Document, for COPD patients with initial ETCO2 >50 mmHg, maintain between 50–60 mmHg. Choice C is tempting because COPD patients do retain CO2 — however, ETCO2 remains a valuable trending tool. Choice D is incorrect — the response is titration to 88–92%, not discontinuation in a patient with SpO2 84%."
+            },
+            {
+              "id": 5,
+              "type": "Rationale",
+              "category": "Oxygen Therapy / COPD",
+              "stem": "The reason Mrs. Chen’s oxygen saturation target is 88–92% rather than the standard 92–96% is because:",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "COPD patients have chronic airway obstruction that physically prevents hemoglobin from binding oxygen, making higher targets unachievable"
+                },
+                {
+                  "letter": "B",
+                  "text": "Supplemental oxygen causes direct bronchospasm in COPD patients by triggering a parasympathetic reflex"
+                },
+                {
+                  "letter": "C",
+                  "text": "COPD patients may have blunted sensitivity of central chemoreceptors to CO2, meaning they rely on peripheral chemoreceptor detection of hypoxia to maintain respiratory drive, and excessive oxygen can diminish this stimulus"
+                },
+                {
+                  "letter": "D",
+                  "text": "The lower target reflects that COPD patients always have low saturations and achieving normal levels would require flow rates beyond ambulance equipment capacity"
+                }
+              ],
+              "correctAnswer": "C",
+              "rationale": "Choice A is incorrect — the issue is respiratory drive physiology, not inability to bind oxygen. Choice B is incorrect — oxygen does not cause bronchospasm through a parasympathetic reflex. Choice C is correct — chronic hypercapnia blunts central chemoreceptor CO2 sensitivity, making respiratory drive dependent on peripheral hypoxia detection. Excessive oxygen diminishes this stimulus, causing hypoventilation. Choice D is incorrect — ambulance systems can achieve normal saturations; the limitation is clinical."
+            },
+            {
+              "id": 6,
+              "type": "Interpretation",
+              "category": "Bronchoconstriction / Consent",
+              "stem": "Given Mrs. Chen’s current presentation and the information obtained, your best course of action is to:",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "Administer salbutamol 5.0 mg nebulized with oxygen"
+                },
+                {
+                  "num": 2,
+                  "text": "Administer dexamethasone 0.5 mg/kg PO to a maximum of 8 mg"
+                },
+                {
+                  "num": 3,
+                  "text": "Titrate oxygen starting at 4 L/min via nasal cannula to target 88–92%"
+                },
+                {
+                  "num": 4,
+                  "text": "Administer epinephrine 0.01 mg/kg IM as she is in severe respiratory distress"
+                },
+                {
+                  "num": 5,
+                  "text": "Obtain informed consent for treatment through the granddaughter acting as interpreter"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "1, 2 and 5"
+                },
+                {
+                  "letter": "B",
+                  "text": "2, 4 and 5"
+                },
+                {
+                  "letter": "C",
+                  "text": "1, 3 and 5"
+                },
+                {
+                  "letter": "D",
+                  "text": "1, 4 and 5"
+                }
+              ],
+              "correctAnswer": "A",
+              "rationale": "Choice 1 is correct — salbutamol 5.0 mg nebulized is appropriate for bronchoconstriction in a patient ≥25 kg. Choice 2 is correct — dexamethasone is indicated for COPD; she completed prednisone two weeks ago and is no longer on it (the contraindication is ‘currently on PO or parenteral steroids’). Choice 3 is tempting — however, stepping down to 4 L/min nasal cannula when SpO2 is 84% in severe distress is inappropriate. Nebulization delivers oxygen simultaneously. Choice 4 is incorrect — epinephrine requires asthma history AND BVM ventilation required. Mrs. Chen has COPD, not asthma. Choice 5 is correct — informed consent must be obtained using the granddaughter as interpreter."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Pediatric Drowning / Hypothermia",
+      "blocks": [
+        {
+          "text": "You are dispatched priority 4 to a private residence for a child who has fallen into a backyard pool. It is late October and outdoor temperatures are approximately 8°C. You arrive on scene and are met by a frantic mother at the front door who tells you her daughter fell into their above-ground pool. Fire personnel are on scene and have removed the child from the water. The family dog is barking from inside a kennel near the back fence.\n\nYou approach the patient on the pool deck and observe a female child approximately 4 years old, weighing approximately 18 kilograms. She has been placed on a blanket by firefighters. She is conscious, shivering violently, and crying weakly. Her skin is pale and cool to the touch, her lips are cyanotic, and her clothing is soaking wet. She is moving all extremities. Upon auscultation, you note scattered crackles bilaterally with diminished air entry at the bases. A firefighter tells you the child was in the water for approximately 3 to 4 minutes.",
+          "questions": [
+            {
+              "id": 7,
+              "type": "Prioritization",
+              "category": "Submersion Injury / Hypothermia",
+              "stem": "Your priority at this time is to:",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "Remove the child’s wet clothing and wrap her in dry blankets"
+                },
+                {
+                  "num": 2,
+                  "text": "Perform a full secondary survey from toe to head"
+                },
+                {
+                  "num": 3,
+                  "text": "Administer oxygen via non-rebreather mask at 15 L/min"
+                },
+                {
+                  "num": 4,
+                  "text": "Apply the cardiac monitor"
+                },
+                {
+                  "num": 5,
+                  "text": "Begin assisted ventilations with a BVM"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "2, 3 and 4"
+                },
+                {
+                  "letter": "B",
+                  "text": "1, 3 and 4"
+                },
+                {
+                  "letter": "C",
+                  "text": "1, 2 and 5"
+                },
+                {
+                  "letter": "D",
+                  "text": "3, 4 and 5"
+                }
+              ],
+              "correctAnswer": "B",
+              "rationale": "This child is conscious, breathing spontaneously, and has bilateral crackles consistent with aspiration. The immediate priorities are to prevent further heat loss by removing wet clothing and wrapping in dry blankets (Choice 1 — correct, as per the Cold Injury Standard and General Pediatric Standard), administer high concentration oxygen given the cyanosis and crackles (Choice 3 — correct, as per the Oxygen Therapy Standard for patients with respiratory distress and cyanosis), and apply the cardiac monitor given the risk of hypothermia-related dysrhythmias (Choice 4 — correct). Choice 2 is tempting because pediatric secondary surveys are conducted toe-to-head, but a full secondary survey is not the immediate priority when critical interventions are needed. Choice 5 is incorrect because the child is breathing spontaneously and crying — assisted ventilations are indicated only if respirations become inadequate."
+            },
+            {
+              "id": 8,
+              "type": "Factual",
+              "category": "Submersion Injury",
+              "stem": "In addition to asphyxia and aspiration, which of the following is a life/limb/function threat you should consider in a submersion injury?",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "Tension pneumothorax secondary to water pressure on the chest wall"
+                },
+                {
+                  "letter": "B",
+                  "text": "Mesenteric ischemia caused by the diving reflex"
+                },
+                {
+                  "letter": "C",
+                  "text": "Rhabdomyolysis resulting from prolonged cold water exposure"
+                },
+                {
+                  "letter": "D",
+                  "text": "Underlying disorders which may have precipitated the event, such as hypoglycemia, cardiac dysrhythmias, or trauma including spinal or head injury"
+                }
+              ],
+              "correctAnswer": "D",
+              "rationale": "As per the Submersion Injury Standard, paramedics must consider underlying disorders that may have precipitated the submersion, including drug or alcohol consumption, hypoglycemia, cardiac dysrhythmias, and trauma such as spinal or head injury. Choice D is correct. Choice A is tempting because pneumothorax is a real emergency, but the Standard does not list tension pneumothorax from water pressure — it is specific to scuba-diving related barotrauma. Choice B sounds physiologically sophisticated but mesenteric ischemia from the diving reflex is not a recognized prehospital life threat. Choice C is plausible because cold exposure can theoretically damage muscle tissue, but rhabdomyolysis is not listed in the Submersion Injury Standard."
+            },
+            {
+              "id": 9,
+              "type": "Judgement",
+              "category": "Submersion Injury / Spinal Motion Restriction",
+              "stem": "Which of the following questions are most important to ask the mother at this time?",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "“Does your daughter know how to swim?”"
+                },
+                {
+                  "num": 2,
+                  "text": "“Did she hit her head or dive into the pool?”"
+                },
+                {
+                  "num": 3,
+                  "text": "“Has she had anything to eat today?”"
+                },
+                {
+                  "num": 4,
+                  "text": "“Does she have any medical conditions or take any medications?”"
+                },
+                {
+                  "num": 5,
+                  "text": "“What temperature is your pool set to?”"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "1, 3 and 5"
+                },
+                {
+                  "letter": "B",
+                  "text": "2, 4 and 5"
+                },
+                {
+                  "letter": "C",
+                  "text": "2, 3 and 4"
+                },
+                {
+                  "letter": "D",
+                  "text": "1, 4 and 5"
+                }
+              ],
+              "correctAnswer": "C",
+              "rationale": "The critical questions determine whether there is a concurrent spinal injury requiring SMR, an underlying disorder that precipitated the event, or a need for specific medical directives. Asking whether the child hit her head or dove in (Choice 2 — correct) directly determines whether spinal motion restriction is indicated per the SMR Standard. Asking whether she has eaten today (Choice 3 — correct) helps rule out hypoglycemia as a precipitating or complicating factor. Asking about medical conditions and medications (Choice 4 — correct) identifies underlying disorders as per the Submersion Injury Standard. Asking whether the child can swim (Choice 1) does not change your immediate management. Asking about pool temperature (Choice 5) is tempting, but you can assess hypothermia severity clinically."
+            }
+          ]
+        },
+        {
+          "text": "The mother tells you that her daughter slipped on the wet deck and fell in — she did not witness the child diving or hitting her head. She says her daughter had a small breakfast this morning but has not eaten since. The child has no known medical conditions and takes no medications. She has no allergies. The firefighter who pulled her from the water notes he found her face down and flipped her over before lifting her out.\n\nYour assessment reveals: heart rate 110, weak and regular; blood pressure 84/52; respirations 28, shallow and regular with continued bilateral crackles; SpO₂ 88% on non-rebreather at 15 L/min; GCS 13 (E3, V4, M6); pupils equal and reactive; skin pale, cool and moist; temperature by tympanic reading is 34.2°C. The child is no longer shivering as vigorously and appears increasingly lethargic. Blood glucose reads 4.8 mmol/L.",
+          "questions": [
+            {
+              "id": 10,
+              "type": "Application",
+              "category": "Hypothermia / Submersion Injury",
+              "stem": "Which of the following statements is true regarding this patient’s presentation?",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "The decrease in shivering with increasing lethargy suggests the child’s core temperature is dropping further, which in the presence of hypothermia indicates a worsening condition rather than an improvement"
+                },
+                {
+                  "letter": "B",
+                  "text": "The SpO₂ reading of 88% is within acceptable range for a pediatric submersion patient and does not require further intervention beyond the current oxygen therapy"
+                },
+                {
+                  "letter": "C",
+                  "text": "The bilateral crackles are most likely caused by bronchospasm secondary to cold water inhalation, and the primary intervention should be nebulized salbutamol"
+                },
+                {
+                  "letter": "D",
+                  "text": "A blood glucose of 4.8 mmol/L in a 4-year-old confirms hypoglycemia and requires immediate administration of dextrose per the Hypoglycemia Medical Directive"
+                }
+              ],
+              "correctAnswer": "A",
+              "rationale": "In hypothermia, shivering is an active thermoregulatory response. When shivering decreases while the patient becomes more lethargic, it suggests the core temperature is continuing to fall — the body is losing its ability to generate heat. Choice A is correct. Choice B is tempting because some clinicians accept lower SpO₂ targets in certain conditions, but 88% in a pediatric patient is critically low — the Oxygen Therapy Standard directs maintaining SpO₂ between 92–96%. Choice C is tempting but the crackles are from aspirated water, not bronchospasm — there is no wheezing described. Choice D is incorrect because 4.8 mmol/L is above the pediatric hypoglycemia threshold of <4.0 mmol/L for patients ≥2 years per the ALS PCS."
+            },
+            {
+              "id": 11,
+              "type": "Rationale",
+              "category": "Spinal Motion Restriction",
+              "stem": "The reason you should consider spinal motion restriction for this patient despite the absence of a witnessed diving mechanism is:",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "All submersion patients automatically require full spinal motion restriction regardless of mechanism"
+                },
+                {
+                  "letter": "B",
+                  "text": "The child’s GCS of 13 indicates a head injury has occurred, which always necessitates SMR"
+                },
+                {
+                  "letter": "C",
+                  "text": "The child’s lethargy is the result of a cervical spine injury causing neurogenic shock"
+                },
+                {
+                  "letter": "D",
+                  "text": "The child was found face down in the water and was unwitnessed, meaning a mechanism involving an axial load to the head or impact cannot be reliably excluded"
+                }
+              ],
+              "correctAnswer": "D",
+              "rationale": "Submersion injuries are listed as a mechanism suggestive of potential spine or spinal cord injury in the SMR Standard. The entry was unwitnessed and the child was found face down, meaning the paramedic cannot reliably exclude an axial load or impact. Combined with the altered LOC (GCS 13, a risk criterion), SMR should be applied. Choice D is correct. Choice A is tempting but the SMR Standard does not mandate automatic SMR for all submersion patients — it requires assessing for risk criteria. Choice B is tempting because altered GCS is a risk criterion, but GCS 13 does not confirm head injury — it could be from hypothermia or hypoxia. Choice C is incorrect because neurogenic shock would present with bradycardia, not tachycardia at 110."
+            },
+            {
+              "id": 12,
+              "type": "Interpretation",
+              "category": "Load and Go / Patient Management",
+              "stem": "Given the complete clinical picture, your best course of action at this time is to:",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "Initiate rapid transport as a load-and-go patient"
+                },
+                {
+                  "num": 2,
+                  "text": "Perform assisted ventilations with BVM given the SpO₂ of 88%"
+                },
+                {
+                  "num": 3,
+                  "text": "Continue passive rewarming efforts and monitor for dysrhythmias"
+                },
+                {
+                  "num": 4,
+                  "text": "Apply spinal motion restriction using a cervical collar and secure to the stretcher"
+                },
+                {
+                  "num": 5,
+                  "text": "Administer nebulized salbutamol at 5.0 mg for the bilateral crackles"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "1, 2 and 5"
+                },
+                {
+                  "letter": "B",
+                  "text": "1, 3 and 4"
+                },
+                {
+                  "letter": "C",
+                  "text": "2, 4 and 5"
+                },
+                {
+                  "letter": "D",
+                  "text": "2, 3 and 5"
+                }
+              ],
+              "correctAnswer": "B",
+              "rationale": "This child meets load-and-go criteria — CTAS 1 with respiratory distress, altered LOC, and hemodynamic instability (pediatric normotension is SBP ≥ 90 + (2 × 4) = 98 mmHg; her SBP of 84 is below this). Choice 1 is correct. Passive rewarming and cardiac monitoring (Choice 3) are indicated for hypothermia. SMR (Choice 4) is indicated given the unwitnessed mechanism combined with altered LOC. Choice 2 is tempting because SpO₂ is 88%, but the child is breathing spontaneously at 28 with GCS 13 — BVM is indicated for inadequate or absent respirations, not low saturations alone. Choice 5 is incorrect — salbutamol treats bronchoconstriction with wheezing, not crackles from aspiration."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Cerebrovascular Accident / Hypoglycemia",
+      "blocks": [
+        {
+          "text": "You are dispatched priority 4 to a residential home for a person “not acting right.” The patient’s wife meets you at the door and tells you her husband was watching television when she noticed him suddenly unable to speak properly. You enter the living room and find your patient, Dale, approximately 68 years old, weighing approximately 90 kilograms, sitting slumped to the left in a recliner. A dog is sleeping in a crate in the corner of the room. On the kitchen counter, you notice an insulin pen and a blood glucose meter beside a half-eaten sandwich. Dale is conscious but confused, with obvious left-sided facial droop and slurred speech. His wife states his symptoms began approximately 40 minutes ago. He opens his eyes spontaneously, his speech is confused, and he localizes to pain on his left side only.",
+          "questions": [
+            {
+              "id": 13,
+              "type": "Prioritization",
+              "category": "CVA / Hypoglycemia",
+              "stem": "Your priority at this time is to:",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "Obtain a blood glucose reading"
+                },
+                {
+                  "num": 2,
+                  "text": "Complete a LAMS assessment for LVO screening"
+                },
+                {
+                  "num": 3,
+                  "text": "Initiate cardiac monitoring"
+                },
+                {
+                  "num": 4,
+                  "text": "Request Dale’s wife provide a complete medication list"
+                },
+                {
+                  "num": 5,
+                  "text": "Perform a stroke assessment including facial symmetry, arm drift, and speech"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "2, 3 and 4"
+                },
+                {
+                  "letter": "B",
+                  "text": "1, 4 and 5"
+                },
+                {
+                  "letter": "C",
+                  "text": "2, 4 and 5"
+                },
+                {
+                  "letter": "D",
+                  "text": "1, 3 and 5"
+                }
+              ],
+              "correctAnswer": "D",
+              "rationale": "Dale presents with signs suggestive of stroke, but the BLS PCS CVA Standard directs consideration of stroke mimics including hypoglycemia. The insulin pen on the counter is significant. Choice 1 is correct — blood glucose is an immediate priority because hypoglycemia is a reversible stroke mimic and BGL <3 mmol/L is a Stroke Bypass contraindication. Choice 2 is tempting but LAMS is a secondary screen performed after confirming probable stroke. Choice 3 is correct — cardiac monitoring is indicated for neurological compromise per the Patient Assessment Standard. Choice 4 is tempting but not an immediate priority over ruling out reversible causes. Choice 5 is correct — a systematic stroke assessment characterizes the presentation."
+            },
+            {
+              "id": 14,
+              "type": "Application",
+              "category": "Stroke Pathophysiology",
+              "stem": "Which of the following statements is true regarding the pathophysiology of an acute ischemic stroke?",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "When a cerebral artery is occluded, all brain tissue supplied by that vessel dies immediately and irreversibly, which is why stroke symptoms appear suddenly and do not fluctuate"
+                },
+                {
+                  "letter": "B",
+                  "text": "Surrounding the core of infarcted tissue is a region called the ischemic penumbra — tissue that is hypoperfused and functionally impaired but not yet irreversibly damaged. This penumbra can potentially be salvaged if blood flow is restored in time, which is the basis for time-sensitive stroke interventions"
+                },
+                {
+                  "letter": "C",
+                  "text": "An ischemic stroke causes global cerebral hypoxia affecting both hemispheres equally, which is why stroke patients typically present with bilateral weakness rather than unilateral deficits"
+                },
+                {
+                  "letter": "D",
+                  "text": "The neurological deficits in an ischemic stroke are caused by cerebral edema compressing healthy brain tissue rather than by ischemia of the tissue itself, which is why symptoms typically worsen over several days rather than presenting acutely"
+                }
+              ],
+              "correctAnswer": "B",
+              "rationale": "Choice A is tempting because symptoms do appear suddenly — however, not all tissue dies immediately. The core infarcts rapidly, but surrounding tissue remains viable. Choice B is correct — the ischemic penumbra receives enough collateral blood flow to remain alive but not function normally. If reperfusion is achieved within the treatment window, this tissue can recover. Every minute of delay results in additional penumbral tissue progressing to irreversible infarction — this is why the Acute Stroke Bypass Protocol emphasizes time-to-treatment. Choice C is incorrect — ischemic strokes produce unilateral deficits because each hemisphere has its own arterial supply. Choice D is incorrect — acute deficits are caused by ischemia, not edema."
+            },
+            {
+              "id": 15,
+              "type": "Judgement",
+              "category": "Acute Stroke Bypass Protocol",
+              "stem": "Which of the following questions are most important to ask Dale’s wife at this time?",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "“What medications does Dale take and has he taken his insulin today?”"
+                },
+                {
+                  "num": 2,
+                  "text": "“Does Dale have any history of previous strokes?”"
+                },
+                {
+                  "num": 3,
+                  "text": "“Has Dale experienced any seizures since the symptoms began?”"
+                },
+                {
+                  "num": 4,
+                  "text": "“What is the exact time this began, or when was Dale last seen in his usual state of health?”"
+                },
+                {
+                  "num": 5,
+                  "text": "“How many alcoholic drinks has Dale had today?”"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "1, 2 and 4"
+                },
+                {
+                  "letter": "B",
+                  "text": "2, 3 and 5"
+                },
+                {
+                  "letter": "C",
+                  "text": "1, 3 and 4"
+                },
+                {
+                  "letter": "D",
+                  "text": "1, 4 and 5"
+                }
+              ],
+              "correctAnswer": "C",
+              "rationale": "Choice 1 is correct — determining insulin compliance informs whether hypoglycemia is causing symptoms. Choice 2 is tempting but prior stroke history does not change immediate protocol decisions. Choice 3 is correct — seizure at onset is a specific Acute Stroke Bypass contraindication. Choice 4 is correct — time of onset is critical because the Protocol requires transport to a Designated Stroke Centre within 6 hours. Choice 5 is tempting but does not directly change protocol eligibility."
+            }
+          ]
+        },
+        {
+          "text": "Dale’s wife confirms he took his morning insulin as usual but says “he barely touched his breakfast.” She denies observing any seizures. She says symptoms began at approximately 10:15 this morning, about 40 minutes ago. Your blood glucose reading returns at 2.4 mmol/L. Dale’s vitals: heart rate 84, full and regular; blood pressure 168/96; respirations 16, regular; SpO2 97% on room air; GCS 12 (E4V3M5). He has no allergies.",
+          "questions": [
+            {
+              "id": 16,
+              "type": "Application",
+              "category": "CVA / Hypoglycemia",
+              "stem": "Which of the following statements is true regarding the relationship between hypoglycemia and stroke assessment in this patient?",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "Because Dale’s blood glucose is below 3 mmol/L, his neurological symptoms are definitively caused by hypoglycemia, and the stroke bypass protocol should be cancelled entirely"
+                },
+                {
+                  "letter": "B",
+                  "text": "A blood glucose below 3 mmol/L is a contraindication to the Acute Stroke Bypass Protocol; however, if symptoms persist after correction of the blood glucose level, the patient is no longer contraindicated and stroke bypass should be reconsidered"
+                },
+                {
+                  "letter": "C",
+                  "text": "The Acute Stroke Bypass Protocol has no glucose-related contraindications, so Dale should be transported immediately to a Designated Stroke Centre"
+                },
+                {
+                  "letter": "D",
+                  "text": "Hypoglycemia can only mimic stroke symptoms if blood glucose drops below 2.0 mmol/L, so Dale’s level of 2.4 is unlikely to be contributing"
+                }
+              ],
+              "correctAnswer": "B",
+              "rationale": "Choice A is tempting but dangerous — Dale may have both hypoglycemia and a concurrent stroke. Correcting glucose and reassessing is essential. Choice B is correct — the BLS PCS specifically notes that if symptoms persist after glucose correction, the patient is no longer contraindicated. Choice C is incorrect — BGL <3 mmol/L is listed as a contraindication. Choice D is incorrect — the threshold is <3 mmol/L, and hypoglycemia can mimic neurological deficits across a range of low values."
+            },
+            {
+              "id": 17,
+              "type": "Rationale",
+              "category": "Acute Stroke Protocol / LAMS",
+              "stem": "The reason the BLS PCS directs that the LAMS assessment should be performed for all probable stroke patients presenting within 24 hours of symptom onset is because:",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "A LAMS score of 4 or greater indicates a higher probability of large vessel occlusion, which may require endovascular therapy, and early identification allows optimal destination planning"
+                },
+                {
+                  "letter": "B",
+                  "text": "The LAMS score replaces the need for a CT scan, allowing paramedics to definitively diagnose large vessel occlusion prehospitally"
+                },
+                {
+                  "letter": "C",
+                  "text": "The LAMS assessment determines whether thrombolytics should be administered in the field"
+                },
+                {
+                  "letter": "D",
+                  "text": "The LAMS score is required to determine CTAS level, which determines whether the patient can be transported under the Acute Stroke Bypass Protocol"
+                }
+              ],
+              "correctAnswer": "A",
+              "rationale": "Choice A is correct — the BLS PCS specifies that LAMS ≥4 results in CTAS 2 classification, and in select regions, LVO-positive patients may be redirected to EVT centres. Early identification enables optimal destination decisions. Choice B is incorrect — LAMS is a screening tool, not a replacement for imaging. Choice C is incorrect — paramedics do not administer thrombolytics. Choice D is tempting — while LAMS affects CTAS classification, protocol eligibility is based on symptoms and time window, not the LAMS score."
+            },
+            {
+              "id": 18,
+              "type": "Interpretation",
+              "category": "CVA / Stroke Bypass",
+              "stem": "You administer oral glucose, and after 10 minutes Dale’s blood glucose rises to 5.8 mmol/L. However, his facial droop, arm drift, and speech disturbance persist unchanged. His GCS remains 12. Your best course of action is to:",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "Activate the Acute Stroke Bypass Protocol and transport to the closest Designated Stroke Centre"
+                },
+                {
+                  "num": 2,
+                  "text": "Perform a LAMS assessment and inform the receiving hospital whether the LVO Clinical Screen is positive or negative"
+                },
+                {
+                  "num": 3,
+                  "text": "Refrain from activating the stroke bypass protocol because Dale’s GCS is below 15, which excludes him"
+                },
+                {
+                  "num": 4,
+                  "text": "Re-check the blood glucose in 5 minutes before making any transport decision"
+                },
+                {
+                  "num": 5,
+                  "text": "Ensure adequate support for Dale’s affected limbs during movement"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "1, 3 and 4"
+                },
+                {
+                  "letter": "B",
+                  "text": "2, 4 and 5"
+                },
+                {
+                  "letter": "C",
+                  "text": "3, 4 and 5"
+                },
+                {
+                  "letter": "D",
+                  "text": "1, 2 and 5"
+                }
+              ],
+              "correctAnswer": "D",
+              "rationale": "Dale’s glucose is corrected but neurological symptoms persist — he is no longer contraindicated. Choice 1 is correct — Dale meets Acute Stroke Bypass criteria: symptoms within 6 hours, GCS ≥10. Choice 2 is correct — LAMS must be performed for all probable stroke patients within 24 hours. Choice 3 is incorrect — the GCS contraindication is <10, not <15. Dale’s GCS of 12 does not exclude him. Choice 4 is incorrect — glucose is corrected to 5.8; delaying transport wastes critical time. Choice 5 is correct — the CVA Standard directs adequate limb support."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Pediatric Seizure / Febrile Illness",
+      "blocks": [
+        {
+          "text": "You are dispatched priority 4 to a daycare centre for a child having a seizure. You arrive on scene and are met by a daycare supervisor at the front entrance. She tells you that a boy in the toddler room began shaking all over about five minutes ago and has not stopped. She is visibly upset and tells you she has never seen anything like this. You notice artwork and craft supplies scattered across the entrance table, and there is a strong smell of hand sanitizer in the hallway.\n\nYou enter the toddler room and observe a male child approximately 3 years old, weighing approximately 14 kilograms, lying on a nap mat on the floor. He is experiencing a generalized tonic-clonic seizure — his entire body is rigid with rhythmic jerking of all four extremities. His eyes are deviated upward. You note he is flushed, his skin is hot and dry to the touch, and there is a small amount of frothy saliva at his mouth. He is incontinent of urine. A staff member is holding a cloth near his mouth. A child’s lunch box is open on a nearby shelf with an uneaten sandwich inside.",
+          "questions": [
+            {
+              "id": 19,
+              "type": "Prioritization",
+              "category": "Seizure",
+              "stem": "Your priority at this time is to:",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "Instruct the staff member to stop placing the cloth near the child’s mouth"
+                },
+                {
+                  "num": 2,
+                  "text": "Attempt to position the child in the recovery position"
+                },
+                {
+                  "num": 3,
+                  "text": "Restrain the child’s extremities to prevent injury during the seizure"
+                },
+                {
+                  "num": 4,
+                  "text": "Attempt to protect the child from injury by moving nearby objects"
+                },
+                {
+                  "num": 5,
+                  "text": "Insert an oropharyngeal airway to protect the airway during the seizure"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "1, 2 and 4"
+                },
+                {
+                  "letter": "B",
+                  "text": "1, 3 and 5"
+                },
+                {
+                  "letter": "C",
+                  "text": "2, 4 and 5"
+                },
+                {
+                  "letter": "D",
+                  "text": "1, 3 and 4"
+                }
+              ],
+              "correctAnswer": "A",
+              "rationale": "As per the Seizure Standard, the paramedic should attempt to position the patient in the recovery position and protect from injury. The staff member placing a cloth near the mouth risks airway obstruction — stopping this is an immediate safety priority. Choice 1 is correct. Choice 2 is correct per the Seizure Standard. Choice 4 is correct — protecting from injury is explicitly directed. Choice 3 is incorrect — restraining extremities during a seizure is contraindicated and can cause injury. Choice 5 is incorrect — inserting an OPA during an active tonic-clonic seizure is not appropriate; the jaw is clenched during the tonic phase."
+            },
+            {
+              "id": 20,
+              "type": "Factual",
+              "category": "Seizure / Pediatrics",
+              "stem": "In young children, which of the following is a common cause of seizures that should be considered when the child presents with hot, dry, flushed skin?",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "Meningitis, which typically presents with a rapid onset of generalized seizure activity within minutes of bacterial invasion of the cerebrospinal fluid"
+                },
+                {
+                  "letter": "B",
+                  "text": "Hypoglycemia, which causes seizure activity exclusively through dehydration of neural tissue in the pediatric brain"
+                },
+                {
+                  "letter": "C",
+                  "text": "Febrile convulsions associated with infection, which are the most common cause of seizures in young children and are triggered by a rapid rise in body temperature"
+                },
+                {
+                  "letter": "D",
+                  "text": "Epilepsy, which is characterised by the presence of fever and flushed skin as a hallmark feature distinguishing it from other seizure disorders"
+                }
+              ],
+              "correctAnswer": "C",
+              "rationale": "As per the BLS PCS Seizure Standard, in young children, febrile convulsions associated with infection are a recognized cause of seizures. The hot, dry, flushed skin strongly suggests fever. Choice C is correct. Choice A is tempting because meningitis can cause seizures and fever, but bacterial invasion causing seizure “within minutes” is inaccurate — meningitis develops over hours to days. Choice B is tempting because hypoglycemia is a recognized cause of seizures, but it does not cause seizures through “dehydration of neural tissue.” Choice D is incorrect — fever and flushed skin are not hallmark features of epilepsy."
+            },
+            {
+              "id": 21,
+              "type": "Judgement",
+              "category": "Seizure / Hypoglycemia",
+              "stem": "The seizure has stopped. The child is now post-ictal, with sonorous respirations and decreased level of consciousness. Which of the following questions or assessments are most important at this time?",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "“Does this child have any known medical conditions such as epilepsy or diabetes?”"
+                },
+                {
+                  "num": 2,
+                  "text": "“What did the child eat for lunch today?”"
+                },
+                {
+                  "num": 3,
+                  "text": "“When did the child’s fever start, and has he been ill recently?”"
+                },
+                {
+                  "num": 4,
+                  "text": "Perform blood glucometry"
+                },
+                {
+                  "num": 5,
+                  "text": "“How many staff members were supervising the toddler room?”"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "1, 2 and 5"
+                },
+                {
+                  "letter": "B",
+                  "text": "2, 3 and 5"
+                },
+                {
+                  "letter": "C",
+                  "text": "1, 3 and 5"
+                },
+                {
+                  "letter": "D",
+                  "text": "1, 3 and 4"
+                }
+              ],
+              "correctAnswer": "D",
+              "rationale": "Asking about known conditions (Choice 1 — correct) determines whether this is a first seizure or known disorder. Asking about fever onset and recent illness (Choice 3 — correct) helps determine if this is a febrile convulsion. Performing blood glucometry (Choice 4 — correct) is essential — the BLS PCS Seizure Standard lists hypoglycemia as an underlying cause to consider, and blood glucose should be checked in patients who have not returned to baseline LOA. Choice 2 is tempting but glucometry provides a definitive answer — asking about lunch is less efficient. Choice 5 is irrelevant to clinical management."
+            }
+          ]
+        },
+        {
+          "text": "The daycare supervisor tells you the child’s name is Ethan. He has no known medical conditions and takes no medications. He has no known allergies. She says he was fine this morning when his father dropped him off but seemed “a little warm” at snack time about an hour ago. She did not take his temperature. He has been irritable and clingy all morning but had no other symptoms.\n\nYour assessment reveals: heart rate 148, full and regular; blood pressure 92/58; respirations 22, now clearing with occasional snoring; SpO₂ 94% on non-rebreather at 15 L/min; GCS 10 (E2, V3, M5); pupils equal and reactive but sluggish; skin hot, dry and flushed; tympanic temperature 39.8°C. Blood glucose is 5.2 mmol/L. There is no evidence of tongue injury, and no secondary injuries are noted. You observe a small, non-blanching, petechial rash on his trunk that the supervisor says she did not notice earlier.",
+          "questions": [
+            {
+              "id": 22,
+              "type": "Application",
+              "category": "Infectious Disease / Pediatrics",
+              "stem": "Which of the following statements is true regarding the petechial rash observed on Ethan’s trunk?",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "Petechiae are caused by histamine release during the febrile seizure and will resolve spontaneously once the child’s temperature normalizes"
+                },
+                {
+                  "letter": "B",
+                  "text": "A non-blanching petechial rash in a febrile child is a concerning finding that may indicate a serious systemic infection such as meningococcemia, and should heighten the urgency of transport"
+                },
+                {
+                  "letter": "C",
+                  "text": "Petechiae in children are a normal finding following tonic-clonic seizures and are caused by increased intrathoracic pressure during the tonic phase"
+                },
+                {
+                  "letter": "D",
+                  "text": "The petechial rash confirms that this seizure was caused by a viral exanthem, and the child should be isolated but does not require emergent transport"
+                }
+              ],
+              "correctAnswer": "B",
+              "rationale": "A non-blanching petechial rash in a febrile child is a red flag for serious bacterial infection, particularly meningococcemia. This should significantly increase the urgency of transport. Choice B is correct. Choice A is incorrect — petechiae are not caused by histamine release during seizures. Choice C is tempting because petechiae can occasionally appear after forceful seizures, but the combination with high fever makes infection far more significant. Choice D is incorrect — viral exanthems are typically blanching maculopapular rashes, not non-blanching petechiae."
+            },
+            {
+              "id": 23,
+              "type": "Rationale",
+              "category": "Seizure / Blood Glucometry",
+              "stem": "The reason blood glucose was checked in this patient despite the seizure likely being febrile in origin is:",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "Hypoglycemia is a recognized cause of seizures listed in the BLS PCS Seizure Standard, and blood glucose should be checked in any patient who has not returned to their baseline level of consciousness after a seizure to rule out a treatable underlying metabolic cause"
+                },
+                {
+                  "letter": "B",
+                  "text": "The BLS PCS requires blood glucometry on all pediatric patients regardless of their presenting complaint as part of the mandatory primary survey"
+                },
+                {
+                  "letter": "C",
+                  "text": "Blood glucose testing is required before a paramedic can administer midazolam, as the Seizure Medical Directive requires a documented normoglycemic reading prior to benzodiazepine administration"
+                },
+                {
+                  "letter": "D",
+                  "text": "A febrile seizure cannot be confirmed until a normal blood glucose is documented, as the BLS PCS classifies any seizure with an unknown glucose as a diabetic emergency"
+                }
+              ],
+              "correctAnswer": "A",
+              "rationale": "As per the BLS PCS Seizure Standard, hypoglycemia is listed as a potential underlying life/limb/function threat (paragraph 1b). Ethan’s GCS remains 10 post-ictally — he has not returned to a normal baseline, meaning an underlying metabolic cause cannot be excluded on presentation alone. Blood glucometry provides a definitive answer. Choice A is correct. Choice B is incorrect — glucometry is not mandatory for all pediatric patients in the primary survey. Choice C is incorrect — the Seizure Medical Directive for midazolam is an ACP-level directive, and it does not require a documented normoglycemic reading prior to administration. Choice D is incorrect — no BLS PCS classification reclassifies a seizure as a diabetic emergency based on an unknown glucose."
+            },
+            {
+              "id": 24,
+              "type": "Interpretation",
+              "category": "Load and Go / Seizure",
+              "stem": "Given the complete clinical picture including the petechial rash, your best course of action is to:",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "Initiate rapid transport as a load-and-go patient"
+                },
+                {
+                  "num": 2,
+                  "text": "Cool the child by removing clothing and applying tepid sponging to reduce the fever before transport"
+                },
+                {
+                  "num": 3,
+                  "text": "Continue oxygen therapy and monitor airway given the decreased LOC"
+                },
+                {
+                  "num": 4,
+                  "text": "Contact the child’s father and wait for him to arrive before transporting"
+                },
+                {
+                  "num": 5,
+                  "text": "Position the child in the recovery position and prepare for recurrent seizures"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "2, 3 and 4"
+                },
+                {
+                  "letter": "B",
+                  "text": "1, 3 and 4"
+                },
+                {
+                  "letter": "C",
+                  "text": "1, 3 and 5"
+                },
+                {
+                  "letter": "D",
+                  "text": "2, 4 and 5"
+                }
+              ],
+              "correctAnswer": "C",
+              "rationale": "This child has a GCS of 10, high fever with a non-blanching petechial rash suggesting possible meningococcemia — a CTAS 1 patient requiring rapid transport (Choice 1 — correct). Continuing oxygen therapy and monitoring the airway (Choice 3 — correct) is essential given the decreased LOC and sonorous respirations. Positioning in recovery position and preparing for recurrent seizures (Choice 5 — correct) is indicated per the Seizure Standard. Choice 2 is tempting but active cooling delays transport in a load-and-go patient. Choice 4 is incorrect — waiting for the father delays definitive care for a critically ill child."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Cocaine Toxicity / Sympathomimetic Crisis",
+      "blocks": [
+        {
+          "text": "You are dispatched priority 4 to a nightclub for a “person acting erratically.” Police are already on scene and have confirmed scene safety. In the parking lot, you find your patient, Marcus, approximately 28 years old, weighing approximately 85 kilograms, pacing rapidly between two parked cars. A bouncer is standing near the entrance watching. Marcus is shirtless, diaphoretic, and agitated. His friends report he was using cocaine inside the club and then began complaining of chest pain about 15 minutes ago. He started removing his clothing saying he was “burning up.” Marcus is alert but combative with his speech — he is yelling that “something is wrong with my heart” and refusing to sit down. You observe dilated pupils and note his skin is flushed and hot to the touch.",
+          "questions": [
+            {
+              "id": 25,
+              "type": "Prioritization",
+              "category": "Toxicological Emergency",
+              "stem": "Your priority at this time is to:",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "Attempt to speak calmly with Marcus and gain his cooperation for assessment"
+                },
+                {
+                  "num": 2,
+                  "text": "Request that police restrain Marcus so you can initiate treatment"
+                },
+                {
+                  "num": 3,
+                  "text": "Initiate cardiac monitoring given his complaint of chest pain"
+                },
+                {
+                  "num": 4,
+                  "text": "Administer high-concentration oxygen via non-rebreather mask"
+                },
+                {
+                  "num": 5,
+                  "text": "Obtain a blood glucose reading"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "1, 3 and 5"
+                },
+                {
+                  "letter": "B",
+                  "text": "2, 3 and 4"
+                },
+                {
+                  "letter": "C",
+                  "text": "1, 4 and 5"
+                },
+                {
+                  "letter": "D",
+                  "text": "2, 4 and 5"
+                }
+              ],
+              "correctAnswer": "A",
+              "rationale": "Marcus presents with a sympathomimetic toxidrome. Choice 1 is correct — establishing rapport is the appropriate first step per the Violent/Aggressive Patient Standard. Marcus is agitated but not violent; forced restraint would be premature and could worsen hyperthermia, acidosis, and cardiac risk. Choice 2 is incorrect at this time. Choice 3 is correct — chest pain with stimulant use warrants cardiac monitoring. Choice 4 is tempting — however, attempting to apply a mask to an agitated, uncooperative patient will likely escalate the situation. Choice 5 is correct — blood glucose should be checked in any patient with altered behaviour."
+            },
+            {
+              "id": 26,
+              "type": "Factual",
+              "category": "Toxicological Pathophysiology",
+              "stem": "Cocaine toxicity produces a sympathomimetic toxidrome. Which of the following clinical findings is most consistent with this presentation?",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "Bradycardia, miosis, and hypothermia due to cocaine’s parasympathomimetic effects on the autonomic nervous system"
+                },
+                {
+                  "letter": "B",
+                  "text": "Hypertension, tachycardia, hyperthermia, and mydriasis due to cocaine’s inhibition of norepinephrine and dopamine reuptake at synaptic junctions"
+                },
+                {
+                  "letter": "C",
+                  "text": "Hypotension, bradycardia, and bronchospasm due to cocaine’s blocking effect on beta-adrenergic receptors"
+                },
+                {
+                  "letter": "D",
+                  "text": "Nausea, constricted pupils, and respiratory depression due to cocaine’s cross-reactivity with opioid receptors"
+                }
+              ],
+              "correctAnswer": "B",
+              "rationale": "Choice A describes a cholinergic/opioid toxidrome, not sympathomimetic. Choice B is correct — cocaine blocks norepinephrine and dopamine reuptake, producing hypertension, tachycardia, hyperthermia, and mydriasis. Choice C describes beta-blocker toxicity. Choice D describes an opioid toxidrome."
+            },
+            {
+              "id": 27,
+              "type": "Judgement",
+              "category": "Cardiac Ischemia Medical Directive",
+              "stem": "Marcus has allowed you to approach. Which of the following questions are most important to ask Marcus and his friends at this time?",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "“How much cocaine did you use and when did you last use it?”"
+                },
+                {
+                  "num": 2,
+                  "text": "“Have you taken any erectile dysfunction medications such as Viagra in the past 48 hours?”"
+                },
+                {
+                  "num": 3,
+                  "text": "“Do you have a history of heart problems or take any heart medications?”"
+                },
+                {
+                  "num": 4,
+                  "text": "“How many alcoholic drinks have you had tonight?”"
+                },
+                {
+                  "num": 5,
+                  "text": "“Have you experienced any tingling, numbness, or weakness on one side of your body?”"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "1, 3 and 4"
+                },
+                {
+                  "letter": "B",
+                  "text": "1, 4 and 5"
+                },
+                {
+                  "letter": "C",
+                  "text": "2, 4 and 5"
+                },
+                {
+                  "letter": "D",
+                  "text": "2, 3 and 5"
+                }
+              ],
+              "correctAnswer": "D",
+              "rationale": "The critical questions determine medication eligibility and rule out concurrent emergencies. Choice 1 is tempting — however, exact quantity does not change treatment approach. Choice 2 is correct — PDE5 inhibitor use within 48 hours is a nitroglycerin contraindication. Choice 3 is correct — prior cardiac history and nitroglycerin use directly determine medication eligibility. Choice 4 is tempting but does not alter immediate medication decisions. Choice 5 is correct — the BLS PCS CVA Standard lists cocaine as a stroke mimic. Unilateral symptoms would change management."
+            }
+          ]
+        },
+        {
+          "text": "Marcus confirms he has not taken any erectile dysfunction medications. He has no medical history, takes no medications, and has no allergies. Assessment reveals: heart rate 146, strong and irregular; blood pressure 204/118; respirations 28; SpO2 96% on room air; temperature 39.6°C; pupils 6 mm, equal and reactive; BGL 6.2 mmol/L; GCS 15. His 12-lead ECG shows sinus tachycardia with no ST changes. He denies numbness, weakness, or vision changes. Chest pain is 8/10, substernal, pressure-like. He is becoming more cooperative.",
+          "questions": [
+            {
+              "id": 28,
+              "type": "Application",
+              "category": "Cardiac Ischemia / Cocaine",
+              "stem": "Marcus has a heart rate of 146 and chest pain. Which of the following statements is true regarding the Cardiac Ischemia Medical Directive as it applies to Marcus?",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "Nitroglycerin should be administered immediately because his blood pressure is well above 100 mmHg and his chest pain is severe"
+                },
+                {
+                  "letter": "B",
+                  "text": "Neither nitroglycerin nor ASA should be administered because cocaine-induced chest pain is a specific contraindication in the Cardiac Ischemia Medical Directive"
+                },
+                {
+                  "letter": "C",
+                  "text": "Because Marcus has no prior history of nitroglycerin use and no IV access has been obtained, he does not meet the conditions for nitroglycerin administration — ASA should be considered if he can chew and swallow"
+                },
+                {
+                  "letter": "D",
+                  "text": "Marcus’s heart rate of 146 is outside the 60–159 bpm condition for nitroglycerin, so it cannot be administered regardless of other conditions"
+                }
+              ],
+              "correctAnswer": "C",
+              "rationale": "Choice A is incorrect — meeting the BP condition alone is insufficient; all conditions must be met including prior history or IV access. Choice B is incorrect — cocaine-induced chest pain is not a specific contraindication listed in the Directive. Choice C is correct — the Medical Directive requires prior history of NTG use OR IV access obtained. Marcus has neither. ASA should be considered as he meets conditions: ≥18, unaltered LOA, able to chew and swallow, no contraindications. Choice D is incorrect — 146 is within 60–159 bpm."
+            },
+            {
+              "id": 29,
+              "type": "Application",
+              "category": "Cocaine / Coronary Vasospasm",
+              "stem": "Which of the following statements is true regarding the mechanism by which cocaine causes myocardial ischemia?",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "Cocaine directly blocks calcium channels in coronary artery smooth muscle, causing excessive vasodilation and reducing coronary perfusion pressure"
+                },
+                {
+                  "letter": "B",
+                  "text": "Cocaine inhibits norepinephrine reuptake at sympathetic nerve terminals in the coronary vasculature, causing sustained coronary artery vasospasm. Combined with cocaine’s prothrombotic effects and increased myocardial oxygen demand from tachycardia and hypertension, this creates conditions for ischemia even in patients with normal coronary arteries"
+                },
+                {
+                  "letter": "C",
+                  "text": "Cocaine acts as a direct cardiotoxin that destroys cardiomyocytes on contact, producing diffuse myocardial necrosis indistinguishable from a STEMI on 12-lead ECG"
+                },
+                {
+                  "letter": "D",
+                  "text": "Cocaine causes myocardial ischemia exclusively through dehydration and electrolyte imbalance from excessive sweating, which reduces blood volume and coronary perfusion"
+                }
+              ],
+              "correctAnswer": "B",
+              "rationale": "Choice A is incorrect — cocaine causes vasoconstriction through enhanced sympathetic stimulation, not vasodilation. Choice B is correct — cocaine inhibits norepinephrine reuptake, causing coronary vasospasm via alpha-adrenergic stimulation. It also promotes platelet aggregation and thrombus formation. The tachycardia and hypertension dramatically increase myocardial oxygen demand. This combination of reduced supply and increased demand produces genuine ischemia even in young patients without atherosclerosis. Choice C is incorrect — the mechanism is ischemic, not directly cytotoxic. Choice D is incorrect — dehydration is not the primary mechanism."
+            },
+            {
+              "id": 30,
+              "type": "Interpretation",
+              "category": "Toxicological Emergency / Cardiac",
+              "stem": "Given Marcus’s current presentation and all available information, your best course of action is to:",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "Administer ASA 160 mg PO, withhold nitroglycerin as the conditions are not met, initiate transport, and prepare for potential deterioration including seizures and cardiac arrest"
+                },
+                {
+                  "letter": "B",
+                  "text": "Administer nitroglycerin 0.4 mg SL and ASA 160 mg PO, as his vital signs meet all conditions of the Cardiac Ischemia Medical Directive"
+                },
+                {
+                  "letter": "C",
+                  "text": "Withhold all medications because his chest pain is cocaine-induced rather than ischemic, and focus solely on passive cooling and rapid transport"
+                },
+                {
+                  "letter": "D",
+                  "text": "Administer salbutamol 5.0 mg nebulized because his shallow respirations suggest possible cocaine-induced bronchospasm"
+                }
+              ],
+              "correctAnswer": "A",
+              "rationale": "Choice A is correct — Marcus meets ASA conditions with no contraindications. NTG cannot be given (no prior history, no IV access). Transport with preparation for seizures, cardiac arrest, and other toxicological complications is appropriate. Choice B is incorrect — NTG conditions are not met. Choice C is tempting — however, cocaine can cause genuine ischemia through coronary vasospasm, and ASA is indicated. Choice D is incorrect — no wheezing or bronchospasm signs are present."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Pediatric Burns / Non-Accidental Injury",
+      "blocks": [
+        {
+          "text": "You are dispatched priority 3 to a residential apartment for a child with a burn injury. You arrive on scene and are met by a male adult at the apartment door who identifies himself as the child’s mother’s boyfriend. He tells you the child pulled a pot of boiling water off the stove about 20 minutes ago. The apartment is dimly lit and the hallway has several garbage bags piled against the wall. You notice a stack of folded towels on the kitchen counter.\n\nYou enter the kitchen and observe a female child approximately 5 years old, weighing approximately 20 kilograms, sitting on the floor whimpering. She is wearing a t-shirt and underwear — her pants have been removed. You observe circumferential, bright red, blistering burns with well-defined margins to both lower legs from the knees down, including the feet. The burn pattern is symmetric and stocking-like in distribution. The child avoids eye contact with the boyfriend and flinches when he moves closer. She has no burns to her hands or arms.",
+          "questions": [
+            {
+              "id": 31,
+              "type": "Prioritization",
+              "category": "Burns / Child Protection",
+              "stem": "Your priority at this time is to:",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "Cool the burns with cool water and limit cooling to less than 30 minutes"
+                },
+                {
+                  "num": 2,
+                  "text": "Question the boyfriend further about the exact mechanism of the burn injury"
+                },
+                {
+                  "num": 3,
+                  "text": "Administer oxygen and complete the primary survey"
+                },
+                {
+                  "num": 4,
+                  "text": "Immediately confront the boyfriend about the suspected abuse"
+                },
+                {
+                  "num": 5,
+                  "text": "Assess the child’s airway for signs of inhalation injury"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "2, 3 and 5"
+                },
+                {
+                  "letter": "B",
+                  "text": "1, 4 and 5"
+                },
+                {
+                  "letter": "C",
+                  "text": "1, 2 and 3"
+                },
+                {
+                  "letter": "D",
+                  "text": "1, 3 and 4"
+                }
+              ],
+              "correctAnswer": "C",
+              "rationale": "The immediate priorities are to initiate cooling of the burns (Choice 1 — correct, as per the Burns Standard for <15% BSA), obtain a detailed mechanism history (Choice 2 — correct), and complete the primary survey (Choice 3 — correct). Choice 4 is incorrect — confronting the boyfriend about suspected abuse could escalate the situation and compromise a potential investigation. The duty is to report to a Children’s Aid Society. Choice 5 is tempting but this is a scald burn, not a fire — there is no smoke or enclosed space, so inhalation injury is not expected."
+            },
+            {
+              "id": 32,
+              "type": "Factual",
+              "category": "Child in Need of Protection",
+              "stem": "Which of the following types of pediatric injuries is specifically identified by the BLS PCS as requiring attention when determining if a patient may be a child in need of protection?",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "All burns, submersion injuries, accidental ingestions or poisonings, and other types of in-home injuries such as falls"
+                },
+                {
+                  "letter": "B",
+                  "text": "Only third-degree burns and fractures in non-mobile infants, as these are the sole indicators listed in the Standard"
+                },
+                {
+                  "letter": "C",
+                  "text": "Any injury occurring in a low-income household, as socioeconomic status is a primary indicator in the Child in Need of Protection Standard"
+                },
+                {
+                  "letter": "D",
+                  "text": "Burns that exceed 20% body surface area, as smaller burns are considered too minor to indicate non-accidental injury"
+                }
+              ],
+              "correctAnswer": "A",
+              "rationale": "The BLS PCS Child in Need of Protection Standard guideline specifically identifies submersion injury, all burns, accidental ingestions/poisoning, and other in-home injuries such as falls. Choice A is correct. Choice B is incorrect — the Standard specifies “all burns” without severity qualification. Choice C is incorrect — socioeconomic status is not a listed indicator. Choice D is incorrect — there is no BSA threshold below which burns are excluded from consideration."
+            },
+            {
+              "id": 33,
+              "type": "Judgement",
+              "category": "Burns / Child Protection",
+              "stem": "Which of the following questions or observations are most important to guide your assessment at this time?",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "“Where were you when this happened?”"
+                },
+                {
+                  "num": 2,
+                  "text": "“Has this child been seen by a doctor recently for any other injuries?”"
+                },
+                {
+                  "num": 3,
+                  "text": "“What is your relationship to this child’s mother?”"
+                },
+                {
+                  "num": 4,
+                  "text": "Note whether the child’s reaction and demeanour toward the boyfriend is consistent with a safe caregiver relationship"
+                },
+                {
+                  "num": 5,
+                  "text": "“How old is this apartment building?”"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "1, 3 and 5"
+                },
+                {
+                  "letter": "B",
+                  "text": "1, 2 and 4"
+                },
+                {
+                  "letter": "C",
+                  "text": "2, 3 and 5"
+                },
+                {
+                  "letter": "D",
+                  "text": "1, 4 and 5"
+                }
+              ],
+              "correctAnswer": "B",
+              "rationale": "The burn pattern is inconsistent with the reported mechanism. Asking where the boyfriend was (Choice 1 — correct) determines supervision and identifies discrepancies. Asking about recent doctor visits for other injuries (Choice 2 — correct) identifies a pattern of repeated injury. Noting the child’s reaction to the boyfriend (Choice 4 — correct) provides important behavioural evidence. Choice 3 is tempting but knowing his exact relationship does not change management or duty to report. Choice 5 is irrelevant."
+            }
+          ]
+        },
+        {
+          "text": "The boyfriend tells you he was in the bathroom when he heard the child screaming. He says he ran out and found her standing in the kitchen with the pot on the floor. He removed her pants and ran cold water over her legs. When you ask if the child has been to the doctor recently, he becomes agitated and says “she’s just clumsy — she’s always bumping into things.” The child’s mother is not home. The boyfriend cannot confirm the child’s allergies or medications. He says the mother will “be back later.”\n\nYour secondary survey reveals: heart rate 132, full and regular; blood pressure 96/60; respirations 24, unlaboured and clear bilaterally; SpO₂ 98% on room air; GCS 15; pupils equal and reactive; skin warm and dry (non-burned areas). The burns to both lower legs are estimated at approximately 10% BSA — bright red with blistering, consistent with second-degree burns. No other injuries are noted on initial survey. The child winces during the assessment but does not cry out.",
+          "questions": [
+            {
+              "id": 34,
+              "type": "Application",
+              "category": "Burns (Thermal)",
+              "stem": "Which of the following statements is true regarding the management of second-degree burns estimated to involve less than 15% body surface area?",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "All second-degree burns regardless of size should be covered with dry, sterile dressings to prevent heat loss and contamination"
+                },
+                {
+                  "letter": "B",
+                  "text": "Burns under 15% BSA do not require any dressing and should be left open to air to promote healing during transport"
+                },
+                {
+                  "letter": "C",
+                  "text": "Second-degree burns under 15% BSA should be covered with a moist sterile dressing first, then covered with a dry sheet or blanket, and blisters should be debrided to prevent infection"
+                },
+                {
+                  "letter": "D",
+                  "text": "Second-degree burns estimated to involve less than 15% BSA should be covered with moist, sterile dressings and then covered with a dry sheet or blanket, and blisters should be left intact"
+                }
+              ],
+              "correctAnswer": "D",
+              "rationale": "As per the BLS PCS Burns Standard, second-degree burns <15% BSA should be covered with moist, sterile dressing, and dry sheet or blanket (paragraph 9). Blisters should be left intact (paragraph 15). Choice D is correct. Choice A is tempting but dry dressings are for third-degree burns and second-degree burns ≥15% BSA. Choice B is incorrect — all burns receive dressing. Choice C gets moist dressing correct but blisters should be left intact, not debrided."
+            },
+            {
+              "id": 35,
+              "type": "Rationale",
+              "category": "Burns / Child Protection",
+              "stem": "The reason the burn pattern observed on this child is inconsistent with the reported mechanism is:",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "Boiling water pulled from a stove would produce only first-degree burns on the lower extremities, and the presence of second-degree blistering indicates a longer exposure time than a splash event"
+                },
+                {
+                  "letter": "B",
+                  "text": "A child’s reflex to move away from a heat source would prevent circumferential, symmetric burns — the stocking pattern with well-defined margins is more consistent with forced immersion in hot liquid"
+                },
+                {
+                  "letter": "C",
+                  "text": "A pull-down scald from a pot would produce burns to the hands, arms and chest in an irregular splash pattern — the symmetric stocking distribution to both lower legs with well-defined margins and no burns to the hands or arms is inconsistent with a splash mechanism"
+                },
+                {
+                  "letter": "D",
+                  "text": "The absence of burns above the knee proves the child was sitting in a bathtub, not standing in a kitchen, which directly contradicts the boyfriend’s statement"
+                }
+              ],
+              "correctAnswer": "C",
+              "rationale": "When a child pulls a pot of boiling liquid from a stove, the expected pattern is an irregular splash contacting the hands, arms, and upper body first. This child has symmetric, stocking-like burns with well-defined upper margins at both knees, circumferential distribution, and critically, no burns to the hands or arms — the very extremities that would contact the pot. This pattern is characteristic of forced immersion. Choice C is correct. Choice A is incorrect — boiling water can produce second-degree burns through a splash mechanism. Choice B is tempting and partially correct but overstates that reflexes would “prevent” circumferential burns. Choice D is incorrect — the absence of burns above the knee suggests immersion but does not “prove” a specific location."
+            },
+            {
+              "id": 36,
+              "type": "Interpretation",
+              "category": "Burns / Child Protection / Transport",
+              "stem": "Given the complete clinical picture, your best course of action at this time is to:",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "Transport the child to hospital and report your suspicion of non-accidental injury to a Children’s Aid Society"
+                },
+                {
+                  "num": 2,
+                  "text": "Request police attendance at the scene before transporting"
+                },
+                {
+                  "num": 3,
+                  "text": "Dress the burns with moist sterile dressings, cover with a dry sheet, and keep the patient warm"
+                },
+                {
+                  "num": 4,
+                  "text": "Refuse to allow the boyfriend to accompany the child in the ambulance"
+                },
+                {
+                  "num": 5,
+                  "text": "Document your objective findings including the burn pattern, the boyfriend’s statements, and the child’s behaviour"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "1, 3 and 5"
+                },
+                {
+                  "letter": "B",
+                  "text": "2, 4 and 5"
+                },
+                {
+                  "letter": "C",
+                  "text": "1, 2 and 3"
+                },
+                {
+                  "letter": "D",
+                  "text": "2, 3 and 4"
+                }
+              ],
+              "correctAnswer": "A",
+              "rationale": "As per the Child in Need of Protection Standard, report suspicion directly to a Children’s Aid Society. The child requires transport for burn care (Choice 1 — correct). Dress burns per the Burns Standard (Choice 3 — correct). Document objective findings (Choice 5 — correct) for the medical record and child protection report. Choice 2 is tempting but the child is in your care and will be transported — requesting police would delay transport. Choice 4 is incorrect — paramedics cannot refuse a caregiver’s accompaniment based on suspicion alone unless they are interfering with care."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Penetrating Trauma / Hemorrhagic Shock",
+      "blocks": [
+        {
+          "text": "You are dispatched priority 4 to a report of a shooting behind a bar. Police are on scene and have confirmed scene safety. You approach and find your patient, Jamal, approximately 34 years old, weighing approximately 80 kilograms, lying supine in the parking lot. A bystander is kneeling beside him holding a bar towel against his right side. There is broken glass from a beer bottle scattered on the pavement near the patient’s feet. You observe a single apparent gunshot wound to the right upper quadrant of the abdomen with moderate bleeding soaking through the towel. Jamal is conscious, alert, and tells you he was shot about 10 minutes ago. He denies losing consciousness. He is anxious and says “I don’t want to die.”",
+          "questions": [
+            {
+              "id": 37,
+              "type": "Prioritization",
+              "category": "Penetrating Trauma / Hemorrhage",
+              "stem": "Your priority at this time is to:",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "Apply well-aimed, direct manual pressure with a flat palm and dressing to the abdominal wound"
+                },
+                {
+                  "num": 2,
+                  "text": "Perform a complete secondary survey of all body systems"
+                },
+                {
+                  "num": 3,
+                  "text": "Assess Jamal for signs of shock including skin colour, temperature, and capillary refill"
+                },
+                {
+                  "num": 4,
+                  "text": "Attempt to roll Jamal to inspect for an exit wound on his posterior torso"
+                },
+                {
+                  "num": 5,
+                  "text": "Initiate immediate transport to the closest emergency department"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "2, 3 and 5"
+                },
+                {
+                  "letter": "B",
+                  "text": "1, 2 and 5"
+                },
+                {
+                  "letter": "C",
+                  "text": "2, 4 and 5"
+                },
+                {
+                  "letter": "D",
+                  "text": "1, 3 and 4"
+                }
+              ],
+              "correctAnswer": "D",
+              "rationale": "Choice 1 is correct — the BLS PCS Soft Tissue Injuries Standard specifies flat palm manual pressure for abdominal wounds. Packing into the abdominal cavity is contraindicated. Choice 2 is tempting but should not delay hemorrhage control and shock assessment. Choice 3 is correct — assessing for hemorrhagic shock informs Field Trauma Triage decisions. Choice 4 is correct — inspecting for an exit wound informs the clinical picture and can be done during primary assessment. Choice 5 is tempting but hemorrhage control and primary assessment must come first."
+            },
+            {
+              "id": 38,
+              "type": "Factual",
+              "category": "Soft Tissue Injuries",
+              "stem": "Under the BLS PCS, which of the following statements is correct regarding hemorrhage control for a wound located in the abdominal cavity?",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "The wound should be tightly packed with hemostatic dressing to fill the cavity and achieve direct pressure on bleeding vessels"
+                },
+                {
+                  "letter": "B",
+                  "text": "A tourniquet should be applied proximal to the wound to restrict arterial inflow"
+                },
+                {
+                  "letter": "C",
+                  "text": "Manual pressure should be applied with a flat palm and dressing, and the paramedic should not pack dressings of any kind into the hollow spaces of the abdomen"
+                },
+                {
+                  "letter": "D",
+                  "text": "The wound should be covered loosely with dry dressings only, as direct pressure risks further organ displacement"
+                }
+              ],
+              "correctAnswer": "C",
+              "rationale": "Choice A is incorrect — the Standard explicitly prohibits packing into hollow abdominal spaces. Wound packing is for extremity and junctional wounds. Choice B is incorrect — tourniquets are for extremity hemorrhage only. Choice C is correct — the Standard specifies flat palm manual pressure with dressing and prohibits packing into the abdomen. Choice D is incorrect — the Standard directs firm manual pressure, not loose covering."
+            },
+            {
+              "id": 39,
+              "type": "Judgement",
+              "category": "Field Trauma Triage",
+              "stem": "Which of the following findings are most important for determining Jamal’s immediate transport priority?",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "Whether his systolic blood pressure is below 90 mmHg"
+                },
+                {
+                  "num": 2,
+                  "text": "Whether he is able to follow commands"
+                },
+                {
+                  "num": 3,
+                  "text": "Whether the broken glass on the pavement could have caused additional lacerations"
+                },
+                {
+                  "num": 4,
+                  "text": "Whether his respiratory rate is below 10 or 30 or greater breaths per minute"
+                },
+                {
+                  "num": 5,
+                  "text": "Whether he consumed alcohol prior to the shooting"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "1, 2 and 4"
+                },
+                {
+                  "letter": "B",
+                  "text": "1, 3 and 5"
+                },
+                {
+                  "letter": "C",
+                  "text": "2, 3 and 4"
+                },
+                {
+                  "letter": "D",
+                  "text": "1, 4 and 5"
+                }
+              ],
+              "correctAnswer": "A",
+              "rationale": "The Field Trauma Triage Standard Step 1 assesses physiological criteria. Choice 1 is correct — SBP <90 is a Step 1 criterion. Choice 2 is correct — ‘patient does not follow commands’ is Step 1. Choice 3 is incorrect — the broken glass is scene noise; the penetrating wound alone triggers Step 2 anatomic criteria. Choice 4 is correct — RR <10 or ≥30 is Step 1. Choice 5 is tempting but does not change the triage decision."
+            }
+          ]
+        },
+        {
+          "text": "No exit wound is found. Jamal’s vitals: heart rate 128, weak and thready; blood pressure 82/56; respirations 26 and shallow; SpO2 92% on room air; GCS 15. Skin is cool, pale, and diaphoretic. Abdomen is rigid and distended on the right side with guarding. He has no medical history, takes no medications, and has no allergies. Transport time to the closest ED is 8 minutes. Transport time to the Lead Trauma Hospital is 22 minutes.",
+          "questions": [
+            {
+              "id": 40,
+              "type": "Application",
+              "category": "Field Trauma Triage / Transport",
+              "stem": "Which of the following statements is true regarding the Field Trauma Triage Standard as applied to Jamal?",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "Jamal meets only Step 2 anatomic criteria but not Step 1 because he has a GCS of 15 and follows commands"
+                },
+                {
+                  "letter": "B",
+                  "text": "Because transport time to the LTH exceeds 20 minutes, he should be transported to the closest ED for stabilization"
+                },
+                {
+                  "letter": "C",
+                  "text": "Jamal does not meet Field Trauma Triage criteria because his GCS is 15 and respiratory rate is within normal limits"
+                },
+                {
+                  "letter": "D",
+                  "text": "Jamal meets Step 1 physiological criteria because his SBP is below 90 mmHg, triggering direct transport to a Lead Trauma Hospital, and 22 minutes is within the threshold"
+                }
+              ],
+              "correctAnswer": "D",
+              "rationale": "Choice A is incorrect — his SBP of 82 meets Step 1 regardless of GCS. Choice B is incorrect — the threshold is <30 minutes (may be extended to 60 by local PPS). Choice C is incorrect — SBP of 82 meets Step 1. Choice D is correct — SBP <90 meets Step 1, 22 minutes is within the threshold, and patients with penetrating torso trauma should be directed to the LTH."
+            },
+            {
+              "id": 41,
+              "type": "Application",
+              "category": "Hemorrhagic Shock Pathophysiology",
+              "stem": "Which of the following statements is true regarding the pathophysiology of hemorrhagic shock as it applies to Jamal’s presentation?",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "Jamal’s tachycardia and cool, diaphoretic skin represent sympathetic nervous system compensation — catecholamine release causes peripheral vasoconstriction and increased heart rate to maintain cardiac output despite volume loss. His narrowing pulse pressure (82/56) suggests compensation is beginning to fail, indicating progression toward decompensated shock"
+                },
+                {
+                  "letter": "B",
+                  "text": "Jamal’s hypotension indicates minimal blood loss, as the body cannot compensate for any blood loss in the presence of a penetrating wound, and hypotension occurs after the first 250 mL of hemorrhage"
+                },
+                {
+                  "letter": "C",
+                  "text": "The tachycardia in hemorrhagic shock is caused by direct irritation of the cardiac conduction system by inflammatory mediators released from damaged tissue, not by sympathetic activation"
+                },
+                {
+                  "letter": "D",
+                  "text": "Jamal’s cool and diaphoretic skin is caused by hypothermia from lying on the pavement rather than peripheral vasoconstriction, and would normalize in the warm ambulance"
+                }
+              ],
+              "correctAnswer": "A",
+              "rationale": "Choice A is correct — the body responds to hemorrhage with baroreceptor-mediated sympathetic activation, releasing catecholamines that produce tachycardia and peripheral vasoconstriction (cool, pale, diaphoretic skin). The narrowing pulse pressure (26 mmHg) indicates falling stroke volume while vasoconstriction maintains diastolic pressure — a hallmark of progression from compensated to decompensated shock, suggesting approximately 30–40% blood volume loss. Choice B is incorrect — the body has significant compensatory capacity; hypotension appears after approximately 15–30% volume loss. Choice C is incorrect — tachycardia is driven by the baroreceptor reflex, not inflammatory mediators. Choice D is incorrect — cool skin is a classic sign of sympathetic vasoconstriction, diagnostically significant."
+            },
+            {
+              "id": 42,
+              "type": "Interpretation",
+              "category": "Load and Go / Trauma Transport",
+              "stem": "Given Jamal’s presentation and transport times, your best course of action is to:",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "Initiate rapid transport directly to the Lead Trauma Hospital, 22 minutes away"
+                },
+                {
+                  "num": 2,
+                  "text": "Maintain direct manual pressure on the abdominal wound during transport"
+                },
+                {
+                  "num": 3,
+                  "text": "Transport to the closest ED, 8 minutes away, for stabilization before transfer"
+                },
+                {
+                  "num": 4,
+                  "text": "Administer high-concentration oxygen and monitor SpO2 during transport"
+                },
+                {
+                  "num": 5,
+                  "text": "Apply a pelvic binder to support the abdominal wound and reduce blood loss"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "1, 4 and 5"
+                },
+                {
+                  "letter": "B",
+                  "text": "2, 3 and 4"
+                },
+                {
+                  "letter": "C",
+                  "text": "1, 2 and 4"
+                },
+                {
+                  "letter": "D",
+                  "text": "3, 4 and 5"
+                }
+              ],
+              "correctAnswer": "C",
+              "rationale": "Choice 1 is correct — Jamal meets Step 1 and Step 2 criteria with LTH within 30 minutes. The FTTG notes patients with penetrating torso trauma should be directed to the LTH. Choice 2 is correct — continued manual pressure is appropriate ongoing hemorrhage control. Choice 3 is incorrect — diverting to the closest ED would delay definitive surgical care. Choice 4 is correct — supplemental oxygen is indicated for a patient in shock. Choice 5 is incorrect — pelvic binders are for pelvic fractures, not abdominal gunshot wounds."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Pediatric VSA / Respiratory Failure (Asthma)",
+      "blocks": [
+        {
+          "text": "You are dispatched priority 4 to a residential home for a child who is not breathing. You arrive on scene and are met at the front door by a father who is carrying his son and screaming for help. He tells you the boy was using his puffer and then suddenly stopped breathing. A second child is watching from the top of the staircase. You notice a cat sleeping on the couch in the living room.\n\nYou take the child from the father and place him on the living room floor. You observe a male child approximately 7 years old, weighing approximately 24 kilograms. He is unresponsive, cyanotic, and apneic. You check for a pulse — there is no palpable carotid or brachial pulse. There is a metered dose inhaler on the floor beside where the father was standing.",
+          "questions": [
+            {
+              "id": 43,
+              "type": "Prioritization",
+              "category": "Cardiac Arrest / Pediatrics",
+              "stem": "Your priority at this time is to:",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "Obtain a detailed history from the father about the child’s asthma medications"
+                },
+                {
+                  "num": 2,
+                  "text": "Position the patient on a firm surface and initiate CPR"
+                },
+                {
+                  "num": 3,
+                  "text": "Apply defibrillation pads"
+                },
+                {
+                  "num": 4,
+                  "text": "Establish a patent airway using authorized techniques"
+                },
+                {
+                  "num": 5,
+                  "text": "Administer nebulized salbutamol to treat the underlying bronchoconstriction"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "1, 2 and 5"
+                },
+                {
+                  "letter": "B",
+                  "text": "2, 3 and 5"
+                },
+                {
+                  "letter": "C",
+                  "text": "1, 4 and 5"
+                },
+                {
+                  "letter": "D",
+                  "text": "2, 3 and 4"
+                }
+              ],
+              "correctAnswer": "D",
+              "rationale": "This child is VSA. As per the Cardiac Arrest Standard, the priorities are to position on a firm surface and initiate CPR (Choice 2 — correct), apply defibrillation pads (Choice 3 — correct), and establish a patent airway (Choice 4 — correct). Choice 1 is tempting but obtaining a detailed history is not the priority in a VSA patient. Choice 5 is incorrect — a VSA patient cannot inhale nebulized medication; CPR and BVM ventilation are the priorities."
+            },
+            {
+              "id": 44,
+              "type": "Factual",
+              "category": "Pediatric Cardiac Arrest",
+              "stem": "Which of the following is a critical difference between pediatric and adult cardiac arrest that the paramedic should be aware of?",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "Pediatric patients in cardiac arrest should not receive defibrillation because their hearts are too small for the electrical current to be effective"
+                },
+                {
+                  "letter": "B",
+                  "text": "Respiratory arrest is the primary cause of pediatric cardiac arrest, unlike in adults where cardiac etiology predominates"
+                },
+                {
+                  "letter": "C",
+                  "text": "CPR in children aged 24 hours to puberty requires a compression-to-ventilation ratio of 30:2 regardless of the number of rescuers"
+                },
+                {
+                  "letter": "D",
+                  "text": "Pediatric patients in cardiac arrest do not require airway management because their airways are proportionally larger and more resistant to obstruction"
+                }
+              ],
+              "correctAnswer": "B",
+              "rationale": "As per the BLS PCS General Pediatric Standard, respiratory arrest is the primary cause of pediatric cardiac arrest. This is a fundamental difference from adult arrest where cardiac etiology predominates. Choice B is correct. Choice A is incorrect — pediatric patients can receive defibrillation (≥24 hours per ALS PCS). Choice C is incorrect — with two rescuers for a child (24 hours to puberty), the ratio is 15:2 per current HSFC Guidelines. Choice D is incorrect — pediatric airways are proportionally smaller and more prone to obstruction."
+            },
+            {
+              "id": 45,
+              "type": "Judgement",
+              "category": "Cardiac Arrest / Reversible Causes",
+              "stem": "CPR is in progress. While your partner continues compressions, which of the following questions are most important to ask the father at this time?",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "“Was he choking on anything or did he put anything in his mouth before this happened?”"
+                },
+                {
+                  "num": 2,
+                  "text": "“How long ago did he stop breathing?”"
+                },
+                {
+                  "num": 3,
+                  "text": "“What medications does he take for his asthma?”"
+                },
+                {
+                  "num": 4,
+                  "text": "“Has he ever been hospitalized or intubated for his asthma before?”"
+                },
+                {
+                  "num": 5,
+                  "text": "“What grade is he in at school?”"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "1, 2 and 3"
+                },
+                {
+                  "letter": "B",
+                  "text": "2, 4 and 5"
+                },
+                {
+                  "letter": "C",
+                  "text": "1, 4 and 5"
+                },
+                {
+                  "letter": "D",
+                  "text": "2, 3 and 5"
+                }
+              ],
+              "correctAnswer": "A",
+              "rationale": "During CPR, questions must target information that affects immediate management. Asking about choking or foreign body (Choice 1 — correct) determines whether an airway obstruction precipitated the arrest, which changes airway management. As per the Cardiac Arrest Standard, consider reversible causes. Asking about downtime (Choice 2 — correct) provides the critical estimate for prognostication and transport decisions. Asking about asthma medications (Choice 3 — correct) confirms the clinical picture and informs whether bronchospasm is the precipitating event. Choice 4 is tempting but does not change the immediate CPR algorithm. Choice 5 is irrelevant."
+            }
+          ]
+        },
+        {
+          "text": "The father tells you the child’s name is Marcus. He has asthma and uses a salbutamol MDI as needed and a fluticasone inhaler daily. He has no allergies. The father says Marcus was wheezing badly after playing with the cat and used his puffer, then suddenly became unresponsive — he estimates this was about 4 to 5 minutes before you arrived. He has never been intubated but was hospitalized once last year for a bad asthma attack.\n\nYou have applied defibrillation pads — the rhythm analysis shows asystole. You are ventilating with a BVM and obtaining chest rise. CPR quality is adequate. After two minutes of CPR, you reassess — the rhythm remains asystole. There is no pulse. ETCO₂ reads 14 mmHg.",
+          "questions": [
+            {
+              "id": 46,
+              "type": "Application",
+              "category": "Pediatric Cardiac Arrest / Pathophysiology",
+              "stem": "Which of the following statements is true regarding this patient’s cardiac arrest?",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "Asystole in a pediatric patient is a shockable rhythm and should be treated with defibrillation at 2 J/kg"
+                },
+                {
+                  "letter": "B",
+                  "text": "The ETCO₂ of 14 mmHg indicates the child is being hyperventilated and the ventilation rate should be immediately reduced to maintain ETCO₂ between 35–45 mmHg"
+                },
+                {
+                  "letter": "C",
+                  "text": "Given that respiratory arrest is the primary cause of pediatric cardiac arrest, this child’s arrest was most likely precipitated by severe bronchospasm leading to hypoxia, progressing to respiratory failure and then cardiac arrest"
+                },
+                {
+                  "letter": "D",
+                  "text": "Because the arrest occurred while the child was using his inhaler, the most likely cause is salbutamol toxicity from overdose"
+                }
+              ],
+              "correctAnswer": "C",
+              "rationale": "As per the General Pediatric Standard, respiratory arrest is the primary cause of pediatric cardiac arrest. Marcus’s severe wheezing likely progressed to respiratory failure, then hypoxia, then cardiac arrest — the classic pediatric arrest pathway. Choice C is correct. Choice A is incorrect — asystole is a non-shockable rhythm. Choice B is tempting but during cardiac arrest, ETCO₂ reflects CPR quality and perfusion, not ventilation adequacy — the 35–45 target applies to patients with spontaneous circulation. Choice D is incorrect — fatal toxicity from an MDI is exceedingly rare."
+            },
+            {
+              "id": 47,
+              "type": "Rationale",
+              "category": "Cardiac Arrest Classification",
+              "stem": "The reason this patient’s cardiac arrest is classified as a medical cardiac arrest rather than a trauma cardiac arrest is:",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "All pediatric cardiac arrests are classified as medical arrests regardless of the underlying cause"
+                },
+                {
+                  "letter": "B",
+                  "text": "There are no obvious external signs of significant blunt trauma, and the arrest was preceded by a medical condition — severe bronchoconstriction — making a medical etiology the most likely cause"
+                },
+                {
+                  "letter": "C",
+                  "text": "The child was found indoors, and trauma cardiac arrests only occur in outdoor or vehicular settings"
+                },
+                {
+                  "letter": "D",
+                  "text": "The father witnessed the arrest, and witnessed arrests are automatically classified as medical in origin"
+                }
+              ],
+              "correctAnswer": "B",
+              "rationale": "The ALS PCS Trauma Cardiac Arrest clinical considerations state that if no obvious external signs of significant blunt trauma are present, consider medical cardiac arrest. Marcus has no traumatic mechanism — the arrest was preceded by severe wheezing in a child with known asthma. Choice B is correct. Choice A is incorrect — pediatric trauma arrests exist (e.g., MVC, falls). Choice C is incorrect — traumatic arrests can occur indoors. Choice D is incorrect — witnessed status does not determine classification."
+            },
+            {
+              "id": 48,
+              "type": "Interpretation",
+              "category": "ROSC / Post-Resuscitation Care",
+              "stem": "After four minutes of CPR, the rhythm analysis shows a narrow-complex rhythm. You palpate a brachial pulse — present, weak, at approximately 68 beats per minute. The child remains apneic. Your best course of action is to:",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "Discontinue CPR and continue assisted ventilations with the BVM"
+                },
+                {
+                  "num": 2,
+                  "text": "Administer oxygen to attempt to maintain SpO₂ between 94–98%"
+                },
+                {
+                  "num": 3,
+                  "text": "Perform a detailed secondary survey on scene to identify the cause of arrest before transporting"
+                },
+                {
+                  "num": 4,
+                  "text": "Continue cardiac monitoring and obtain vital signs at least every 15 minutes for the first hour after ROSC"
+                },
+                {
+                  "num": 5,
+                  "text": "Resume CPR immediately because the heart rate of 68 is below the pediatric threshold requiring chest compressions"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "1, 3 and 5"
+                },
+                {
+                  "letter": "B",
+                  "text": "3, 4 and 5"
+                },
+                {
+                  "letter": "C",
+                  "text": "2, 3 and 4"
+                },
+                {
+                  "letter": "D",
+                  "text": "1, 2 and 4"
+                }
+              ],
+              "correctAnswer": "D",
+              "rationale": "This child has achieved ROSC but remains apneic. As per the Cardiac Arrest Standard: continue to ventilate if apneic (Choice 1 — correct), administer oxygen to maintain SpO₂ 94–98% (Choice 2 — correct), and continue cardiac monitoring with vitals every 15 minutes for the first hour (Choice 4 — correct). Choice 3 is tempting but the cause is clinically apparent — a detailed on-scene survey delays transport. Choice 5 is incorrect — the pediatric CPR threshold is HR <60 with signs of poor perfusion; 68 is above this threshold and there is a palpable pulse."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Chest Pain / STEMI with Complication",
+      "blocks": [
+        {
+          "text": "You are dispatched priority 4 to a residential home for a 56-year-old male with chest pain. The patient’s wife meets you at the door and tells you her husband woke up about 30 minutes ago with severe chest pain. You enter the bedroom and find your patient, Robert, approximately 56 years old, weighing approximately 95 kilograms, sitting upright on the edge of the bed. A laundry basket sits in the hallway outside the bedroom. On the nightstand, you notice a nitroglycerin spray next to a glass of water. Robert is conscious, alert, and in obvious distress. He is clutching his chest and describes a crushing, substernal pain radiating to his left arm and jaw. He is nauseated, diaphoretic, and pale. He tells you this feels “completely different and much worse” than his usual angina.",
+          "questions": [
+            {
+              "id": 49,
+              "type": "Prioritization",
+              "category": "Chest Pain / Cardiac",
+              "stem": "Your priority at this time is to:",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "Administer oxygen as per the Oxygen Therapy Standard"
+                },
+                {
+                  "num": 2,
+                  "text": "Acquire a 12-lead ECG"
+                },
+                {
+                  "num": 3,
+                  "text": "Initiate cardiac monitoring"
+                },
+                {
+                  "num": 4,
+                  "text": "Administer Robert’s nitroglycerin spray 0.4 mg SL from his bedside"
+                },
+                {
+                  "num": 5,
+                  "text": "Complete a full SAMPLE and OPQRST history"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "1, 2 and 3"
+                },
+                {
+                  "letter": "B",
+                  "text": "1, 3 and 5"
+                },
+                {
+                  "letter": "C",
+                  "text": "2, 4 and 5"
+                },
+                {
+                  "letter": "D",
+                  "text": "3, 4 and 5"
+                }
+              ],
+              "correctAnswer": "A",
+              "rationale": "Choice 1 is correct — oxygen therapy should be initiated. Choice 2 is correct — the BLS PCS Chest Pain Standard directs 12-lead ECG acquisition, with a goal of <10 minutes from patient contact. Identifying STEMI early is critical. Choice 3 is correct — cardiac monitoring is indicated for suspected ischemia. Choice 4 is tempting because the NTG spray is present and Robert has a prior history — however, contraindications have not been screened (PDE5 inhibitor use, right ventricular MI) and administering before the ECG could mask the clinical picture. Choice 5 is important but should not delay immediate priorities."
+            },
+            {
+              "id": 50,
+              "type": "Factual",
+              "category": "STEMI Identification",
+              "stem": "Which of the following 12-lead ECG findings is consistent with a STEMI as defined by the BLS PCS STEMI Hospital Bypass Protocol?",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "ST depression of at least 2 mm in two or more contiguous leads"
+                },
+                {
+                  "letter": "B",
+                  "text": "The presence of pathological Q waves in leads V1–V4 without ST elevation"
+                },
+                {
+                  "letter": "C",
+                  "text": "At least 1 mm ST elevation in at least two anatomically contiguous leads, or at least 2 mm in V1–V3 in at least two contiguous leads"
+                },
+                {
+                  "letter": "D",
+                  "text": "T-wave inversion in leads I and aVL with a normal ST segment"
+                }
+              ],
+              "correctAnswer": "C",
+              "rationale": "Choice A describes ischemia or reciprocal changes, not STEMI criteria. Choice B indicates previous infarction. Choice C is correct — the Protocol specifies ≥2 mm ST elevation in V1–V3 in at least two contiguous leads AND/OR ≥1 mm in at least two other contiguous leads, OR computer interpretation and paramedic agrees. Choice D does not meet STEMI criteria."
+            },
+            {
+              "id": 51,
+              "type": "Judgement",
+              "category": "Cardiac Ischemia Medical Directive",
+              "stem": "Which of the following questions are most important to ask Robert at this time?",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "“Have you taken any erectile dysfunction medications such as Viagra, Cialis, or Levitra in the past 48 hours?”"
+                },
+                {
+                  "num": 2,
+                  "text": "“Have you taken any of your own nitroglycerin before we arrived?”"
+                },
+                {
+                  "num": 3,
+                  "text": "“Do you have a family history of heart disease?”"
+                },
+                {
+                  "num": 4,
+                  "text": "“Are you allergic to Aspirin or any anti-inflammatory medications?”"
+                },
+                {
+                  "num": 5,
+                  "text": "“When exactly did the chest pain begin?”"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "1, 3 and 5"
+                },
+                {
+                  "letter": "B",
+                  "text": "1, 2 and 4"
+                },
+                {
+                  "letter": "C",
+                  "text": "2, 3 and 4"
+                },
+                {
+                  "letter": "D",
+                  "text": "1, 4 and 5"
+                }
+              ],
+              "correctAnswer": "B",
+              "rationale": "Choice 1 is correct — PDE5 inhibitor use within 48 hours is a nitroglycerin contraindication. Choice 2 is correct — knowing whether Robert self-administered NTG informs dose calculation and clinical picture. Choice 3 is tempting but does not change immediate medication decisions. Choice 4 is correct — NSAID allergy is an ASA contraindication. Choice 5 is tempting but onset has been established by the wife (~30 minutes ago)."
+            }
+          ]
+        },
+        {
+          "text": "Robert’s 12-lead ECG reveals ST elevation in leads II, III, and aVF — consistent with an inferior STEMI. Your V4R shows 2 mm of ST elevation. Robert’s vitals: heart rate 62, full and regular; blood pressure 108/72; respirations 20, regular; SpO2 94% on room air. He confirms he took Viagra (sildenafil) approximately 18 hours ago. He took one of his own NTG sprays about 10 minutes before your arrival without relief. No allergies. Medications: nitroglycerin spray, atorvastatin, metoprolol. He denies recent bleeding, stroke, or head injury.",
+          "questions": [
+            {
+              "id": 52,
+              "type": "Application",
+              "category": "STEMI / Right Ventricular MI",
+              "stem": "Robert’s 12-lead shows an inferior STEMI with ST elevation in V4R. Which of the following statements is true?",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "V4R elevation is a normal variant in lead placement and does not change the treatment approach"
+                },
+                {
+                  "letter": "B",
+                  "text": "V4R elevation indicates posterior extension of the infarct, making the patient eligible for higher nitroglycerin doses"
+                },
+                {
+                  "letter": "C",
+                  "text": "Right ventricular involvement only affects the decision to administer ASA, not nitroglycerin"
+                },
+                {
+                  "letter": "D",
+                  "text": "ST elevation in V4R confirms a right ventricular infarction, and nitroglycerin is specifically contraindicated because these patients are preload dependent and nitroglycerin may cause severe hypotension"
+                }
+              ],
+              "correctAnswer": "D",
+              "rationale": "Choice A is incorrect — V4R elevation ≥1 mm is clinically significant, not a normal variant. Choice B is incorrect — posterior extension is assessed with V8–V9, not V4R. Choice C is incorrect — right ventricular function directly affects hemodynamic response to vasodilators. Choice D is correct — the ALS PCS lists ‘ECG compatible with Right Ventricular MI’ as a nitroglycerin contraindication. The Companion Document explains these patients are preload dependent and NTG may cause significant hypotension."
+            },
+            {
+              "id": 53,
+              "type": "Application",
+              "category": "STEMI Pathophysiology",
+              "stem": "Which of the following statements is true regarding the pathophysiology of Robert’s inferior STEMI?",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "An inferior STEMI is caused by occlusion of the left anterior descending artery, which supplies the inferior wall of the left ventricle"
+                },
+                {
+                  "letter": "B",
+                  "text": "ST elevation on the ECG represents the electrical signature of myocardial injury — injured cells develop altered resting membrane potentials creating a current of injury. The inferior leads (II, III, aVF) show this because the right coronary artery, which typically supplies the inferior wall, is the most likely occluded vessel"
+                },
+                {
+                  "letter": "C",
+                  "text": "ST elevation indicates the affected tissue has already progressed to complete and irreversible necrosis, and no intervention can salvage it once ST elevation appears"
+                },
+                {
+                  "letter": "D",
+                  "text": "Inferior STEMIs are clinically benign compared to anterior STEMIs because the inferior wall contributes minimally to cardiac output"
+                }
+              ],
+              "correctAnswer": "B",
+              "rationale": "Choice A is incorrect — the LAD supplies the anterior wall. The inferior wall is supplied by the right coronary artery in approximately 85% of patients. Choice B is correct — ST elevation reflects a current of injury from altered ionic balance in damaged cells. Leads II, III, aVF face the inferior wall supplied by the RCA. This also explains why V4R is important — the RCA also supplies the right ventricle. Choice C is incorrect — ST elevation represents injury, not completed necrosis. Tissue can be salvaged through reperfusion, which is the basis for the STEMI Bypass Protocol. Choice D is incorrect — inferior STEMIs can involve the right ventricle, produce bradycardia (RCA supplies the AV node), and cause cardiogenic shock."
+            },
+            {
+              "id": 54,
+              "type": "Interpretation",
+              "category": "STEMI Management / Bypass",
+              "stem": "Given Robert’s findings, vital signs, and medication history, your best course of action is to:",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "Administer nitroglycerin 0.4 mg SL, as he has a prior history and meets the blood pressure condition"
+                },
+                {
+                  "num": 2,
+                  "text": "Administer ASA 160 mg PO and instruct him to chew before swallowing"
+                },
+                {
+                  "num": 3,
+                  "text": "Withhold nitroglycerin due to both the confirmed right ventricular MI on V4R and his use of sildenafil within 48 hours"
+                },
+                {
+                  "num": 4,
+                  "text": "Activate the STEMI Hospital Bypass Protocol and transport to a PCI-capable hospital"
+                },
+                {
+                  "num": 5,
+                  "text": "Apply defibrillation pads and maintain continuous cardiac monitoring"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "1, 2 and 5"
+                },
+                {
+                  "letter": "B",
+                  "text": "2, 3 and 5"
+                },
+                {
+                  "letter": "C",
+                  "text": "1, 4 and 5"
+                },
+                {
+                  "letter": "D",
+                  "text": "2, 3 and 4"
+                }
+              ],
+              "correctAnswer": "D",
+              "rationale": "Choice 1 is incorrect — nitroglycerin is contraindicated for two independent reasons: right ventricular MI on V4R AND sildenafil use within 48 hours. Choice 2 is correct — Robert meets all ASA conditions with no contraindications. Choice 3 is correct — both RV MI and PDE5 inhibitor use are independent NTG contraindications. Choice 4 is correct — Robert meets STEMI Bypass indications: ≥18, chest pain consistent with ischemia, onset <12 hours, ECG confirming STEMI. Choice 5 is important but the three most critical management decisions are ASA, withholding NTG, and activating bypass."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "title": "Pediatric Hypoglycemia / Seizure",
+      "blocks": [
+        {
+          "text": "You are dispatched priority 3 to an elementary school for a child who has collapsed. You arrive on scene and are directed to the school office by the principal. She tells you a boy in grade 5 became confused during gym class and then fell to the ground. The school secretary is sitting beside the child, who is lying on the floor of the office. You notice a fire evacuation map on the wall and a trophy case in the hallway.\n\nYou approach the patient and observe a male child approximately 10 years old, weighing approximately 30 kilograms. He is lying supine on the floor. His eyes are open but he appears confused and disoriented, responding to verbal commands with inappropriate words. He is pale, diaphoretic, and trembling. His breathing is rapid but unlaboured. A teacher is holding a juice box, telling you she tried to give it to him but he wouldn’t take it.",
+          "questions": [
+            {
+              "id": 55,
+              "type": "Prioritization",
+              "category": "Hypoglycemia / Altered LOC",
+              "stem": "Your priority at this time is to:",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "Administer the juice box orally since the teacher has already attempted this"
+                },
+                {
+                  "num": 2,
+                  "text": "Complete the primary survey including assessment of airway, breathing, circulation and level of consciousness"
+                },
+                {
+                  "num": 3,
+                  "text": "Perform blood glucometry"
+                },
+                {
+                  "num": 4,
+                  "text": "Contact the child’s parents before initiating any assessment or treatment"
+                },
+                {
+                  "num": 5,
+                  "text": "Obtain a set of baseline vital signs"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "1, 3 and 4"
+                },
+                {
+                  "letter": "B",
+                  "text": "2, 3 and 5"
+                },
+                {
+                  "letter": "C",
+                  "text": "1, 2 and 4"
+                },
+                {
+                  "letter": "D",
+                  "text": "3, 4 and 5"
+                }
+              ],
+              "correctAnswer": "B",
+              "rationale": "The immediate priorities are to complete the primary survey (Choice 2 — correct), perform blood glucometry to confirm suspected hypoglycemia (Choice 3 — correct), and obtain baseline vital signs (Choice 5 — correct). Choice 1 is tempting but the child is confused and using inappropriate words — he cannot safely swallow liquids. Oral glucose is only appropriate when the patient can safely consume it. Choice 4 is incorrect — parental contact must not delay assessment of a potentially hypoglycemic child."
+            },
+            {
+              "id": 56,
+              "type": "Factual",
+              "category": "Hypoglycemia",
+              "stem": "At what blood glucose level is a 10-year-old patient considered hypoglycemic as per the ALS PCS?",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "Below 4.0 mmol/L"
+                },
+                {
+                  "letter": "B",
+                  "text": "Below 3.0 mmol/L"
+                },
+                {
+                  "letter": "C",
+                  "text": "Below 5.0 mmol/L"
+                },
+                {
+                  "letter": "D",
+                  "text": "Below 2.5 mmol/L"
+                }
+              ],
+              "correctAnswer": "A",
+              "rationale": "As per the ALS PCS preamble, for patients ≥2 years of age, hypoglycemia is defined as blood glucose <4.0 mmol/L. For patients <2 years, the threshold is <3.0 mmol/L. A 10-year-old falls into the ≥2 years category. Choice A is correct. Choice B (<3.0 mmol/L) is tempting — it is the correct threshold for patients under 2 years, not this patient. Choice C (<5.0 mmol/L) is a common misconception. Choice D (<2.5 mmol/L) is not reflected in the ALS PCS."
+            },
+            {
+              "id": 57,
+              "type": "Judgement",
+              "category": "Hypoglycemia / Diabetes",
+              "stem": "Blood glucometry reveals a reading of 2.1 mmol/L. Which of the following questions are most important to ask the school staff at this time?",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "“Does this child have diabetes? What type?”"
+                },
+                {
+                  "num": 2,
+                  "text": "“How many students are in his class?”"
+                },
+                {
+                  "num": 3,
+                  "text": "“Does he carry an insulin pump or have medication at the school?”"
+                },
+                {
+                  "num": 4,
+                  "text": "“Has he eaten today, and when was his last meal?”"
+                },
+                {
+                  "num": 5,
+                  "text": "“What sport was he playing in gym class?”"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "1, 4 and 5"
+                },
+                {
+                  "letter": "B",
+                  "text": "2, 3 and 5"
+                },
+                {
+                  "letter": "C",
+                  "text": "1, 3 and 4"
+                },
+                {
+                  "letter": "D",
+                  "text": "1, 2 and 5"
+                }
+              ],
+              "correctAnswer": "C",
+              "rationale": "With confirmed hypoglycemia, critical questions guide treatment. Asking about diabetes and type (Choice 1 — correct) determines whether insulin is involved. Asking about medication or insulin pump at school (Choice 3 — correct) identifies recent insulin administration. Asking about dietary intake and last meal (Choice 4 — correct) addresses the most common cause — insulin with inadequate oral intake. Choice 2 is irrelevant. Choice 5 is tempting because exertion exacerbates hypoglycemia, but the specific sport does not change management."
+            }
+          ]
+        },
+        {
+          "text": "A teacher retrieves the child’s medical file and confirms his name is Aiden. He has Type 1 diabetes and wears an insulin pump. The teacher thinks he bolused insulin before gym class but is not certain. He ate breakfast this morning but skipped his morning snack. He has no allergies. His emergency contact information lists his mother’s cell phone number.\n\nWhile you are obtaining this information, your partner alerts you that the child has begun having a generalized tonic-clonic seizure. Your assessment prior to seizure onset was: heart rate 118, full and regular; blood pressure 102/68; respirations 26 and unlaboured; SpO₂ 97% on room air; GCS 9 (E2, V3, M4); pupils equal and reactive; skin pale, cool and diaphoretic. Blood glucose remains 2.1 mmol/L.",
+          "questions": [
+            {
+              "id": 58,
+              "type": "Application",
+              "category": "Hypoglycemia / Seizure",
+              "stem": "Which of the following statements is true regarding the relationship between this patient’s seizure and his hypoglycemia?",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "The seizure and the hypoglycemia are two separate, unrelated events — Type 1 diabetics have a higher baseline risk of epilepsy, and this is most likely a primary seizure disorder coinciding with a low blood glucose"
+                },
+                {
+                  "letter": "B",
+                  "text": "Hypoglycemia causes seizures through dehydration of brain tissue as intracellular water shifts out of neurons, which is why the primary treatment is an intravenous fluid bolus rather than dextrose"
+                },
+                {
+                  "letter": "C",
+                  "text": "The seizure is a direct consequence of the critically low blood glucose — neurons require a constant supply of glucose for normal function, and when glucose falls below a critical threshold the resulting metabolic crisis disrupts normal electrical activity in the brain, producing seizure activity"
+                },
+                {
+                  "letter": "D",
+                  "text": "Hypoglycemia-induced seizures only occur in patients under the age of 2, as older children and adults have sufficient glycogen reserves in the brain to prevent neuronal dysfunction regardless of blood glucose level"
+                }
+              ],
+              "correctAnswer": "C",
+              "rationale": "Neurons are obligate glucose users. When blood glucose drops below a critical threshold (2.1 mmol/L is well below the <4.0 mmol/L definition for patients ≥2 years), neurons are deprived of their primary energy source, disrupting normal electrochemical gradients and producing seizure activity. The BLS PCS Seizure Standard lists hypoglycemia as an underlying cause (paragraph 1b). The seizure is symptomatic of the glucose deficit, directing the paramedic toward correcting the underlying cause with dextrose or glucagon. Choice C is correct. Choice A is incorrect — the temporal relationship makes coincidence unreasonable. Choice B is incorrect — hypoglycemia does not cause seizures through tissue dehydration; treatment is glucose replacement, not fluids. Choice D is incorrect — hypoglycemic seizures can occur at any age."
+            },
+            {
+              "id": 59,
+              "type": "Rationale",
+              "category": "Diabetes / Insulin Pump",
+              "stem": "The reason this child’s insulin pump is clinically significant in this situation is:",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "The insulin pump continues to deliver a basal rate of insulin even when the child is not eating, and if a bolus was administered before exercise without adequate food intake, the combination of exogenous insulin and increased glucose utilization from physical activity likely drove the blood glucose to critically low levels"
+                },
+                {
+                  "letter": "B",
+                  "text": "Insulin pumps are contraindicated during physical activity, and the school should not have allowed the child to participate in gym class while wearing the device"
+                },
+                {
+                  "letter": "C",
+                  "text": "Insulin pumps deliver glucagon in addition to insulin, and the glucagon reservoir may be depleted, requiring external glucagon administration"
+                },
+                {
+                  "letter": "D",
+                  "text": "The insulin pump must be removed before any prehospital treatment can begin, as it will interfere with the administration of dextrose"
+                }
+              ],
+              "correctAnswer": "A",
+              "rationale": "Insulin pumps deliver continuous basal insulin and allow bolus doses. If Aiden bolused before gym without eating his snack, the combination of exogenous insulin and physical exertion created a significant hypoglycemic event. Choice A is correct. Choice B is incorrect — insulin pumps are not contraindicated during exercise. Choice C is incorrect — pumps deliver insulin only, not glucagon. Choice D is incorrect — the pump does not need to be removed before administering dextrose."
+            },
+            {
+              "id": 60,
+              "type": "Interpretation",
+              "category": "Hypoglycemia / Seizure Management",
+              "stem": "The seizure has terminated after 90 seconds. The child remains unconscious with a GCS of 6. Given the complete clinical picture, your best course of action is to:",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "Administer dextrose 10% IV at 0.2 g/kg to address the underlying hypoglycemia"
+                },
+                {
+                  "num": 2,
+                  "text": "Administer oral glucose now that the seizure has stopped"
+                },
+                {
+                  "num": 3,
+                  "text": "Continue to monitor the airway and prepare for recurrent seizures"
+                },
+                {
+                  "num": 4,
+                  "text": "Obtain a repeat blood glucometry after treatment to confirm response"
+                },
+                {
+                  "num": 5,
+                  "text": "Administer midazolam 0.2 mg/kg IM as the primary treatment for the seizure"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "1, 2 and 5"
+                },
+                {
+                  "letter": "B",
+                  "text": "1, 3 and 4"
+                },
+                {
+                  "letter": "C",
+                  "text": "2, 4 and 5"
+                },
+                {
+                  "letter": "D",
+                  "text": "1, 2 and 3"
+                }
+              ],
+              "correctAnswer": "B",
+              "rationale": "The priority is correcting the hypoglycemia. Dextrose 10% IV at 0.2 g/kg (Choice 1 — correct) is the appropriate treatment per the Hypoglycemia Medical Directive for a patient ≥2 years with hypoglycemia and altered LOA. Monitoring the airway and preparing for recurrent seizures (Choice 3 — correct) is indicated per the Seizure Standard. Repeat glucometry after treatment (Choice 4 — correct) confirms effectiveness. Choice 2 is incorrect — GCS of 6 means the child cannot safely swallow oral glucose. Choice 5 is tempting but the seizure has already terminated and the underlying cause is hypoglycemia — midazolam would further depress LOC without addressing the glucose deficit."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "title": "Polypharmacy Self-Harm / Capacity Assessment",
+      "blocks": [
+        {
+          "text": "You are dispatched priority 4 to a residential apartment for a “suicide attempt.” The patient’s roommate meets you in the lobby and escorts you upstairs. He tells you he came home from work to find his roommate “acting weird” with pill bottles on the table. You enter the apartment and find your patient, Sarah, approximately 42 years old, weighing approximately 65 kilograms, sitting on the couch. A cat is sitting on the windowsill. On the coffee table, you observe an empty wine bottle and three prescription medication bottles, two of which appear empty. Sarah is conscious but drowsy. Her speech is slow but coherent. She makes eye contact and says quietly, “I just want everyone to leave me alone.”",
+          "questions": [
+            {
+              "id": 61,
+              "type": "Prioritization",
+              "category": "Mental Health / Toxicological",
+              "stem": "Your priority at this time is to:",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "Approach Sarah calmly with non-threatening communication and establish rapport"
+                },
+                {
+                  "num": 2,
+                  "text": "Immediately gather the pill bottles from the table to identify the medications"
+                },
+                {
+                  "num": 3,
+                  "text": "Perform a primary survey assessing airway, breathing, and circulation"
+                },
+                {
+                  "num": 4,
+                  "text": "Ask Sarah directly whether she has thoughts of harming herself or ending her life"
+                },
+                {
+                  "num": 5,
+                  "text": "Contact the base hospital physician for a Form 1 to transport Sarah without consent"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "1, 2 and 5"
+                },
+                {
+                  "letter": "B",
+                  "text": "1, 3 and 4"
+                },
+                {
+                  "letter": "C",
+                  "text": "2, 3 and 5"
+                },
+                {
+                  "letter": "D",
+                  "text": "3, 4 and 5"
+                }
+              ],
+              "correctAnswer": "B",
+              "rationale": "Choice 1 is correct — calm, non-threatening communication is essential per the Mental Health Standard. Choice 2 is tempting — however, grabbing items in front of a distressed patient can damage rapport. Medication identification follows initial rapport and primary survey. Choice 3 is correct — toxicological emergencies can cause rapid deterioration; primary survey is essential. Choice 4 is correct — the BLS PCS Mental Health Standard specifically directs that in suspected suicide attempts, the paramedic shall ask directly about ideation or intent. Choice 5 is incorrect — a Form 1 is signed by a physician; paramedics cannot obtain one through the BHP for this purpose."
+            },
+            {
+              "id": 62,
+              "type": "Application",
+              "category": "SSRI Toxicology / Serotonin Syndrome",
+              "stem": "Sarah’s roommate identifies one of the empty bottles as sertraline, an SSRI antidepressant. Which of the following statements is true regarding the toxicological risk of a selective serotonin reuptake inhibitor overdose?",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "SSRI overdose carries a risk of serotonin toxicity, which manifests as a triad of neuromuscular excitation (clonus, hyperreflexia, tremor), autonomic instability (tachycardia, hyperthermia, diaphoresis), and altered mental status — these findings can progress to seizures, severe hyperthermia, and cardiovascular collapse"
+                },
+                {
+                  "letter": "B",
+                  "text": "SSRIs are completely safe in overdose at any quantity because they have an extremely wide therapeutic index, and the only concern is increased drowsiness"
+                },
+                {
+                  "letter": "C",
+                  "text": "SSRI overdose primarily causes profound bradycardia and hypothermia because excess serotonin activates the parasympathetic nervous system"
+                },
+                {
+                  "letter": "D",
+                  "text": "The primary danger of SSRI overdose is acute renal failure caused by direct nephrotoxicity of serotonin metabolites"
+                }
+              ],
+              "correctAnswer": "A",
+              "rationale": "Choice A is correct — SSRI overdose can produce serotonin toxicity characterized by the clinical triad of neuromuscular hyperactivity, autonomic dysfunction (tachycardia, hypertension, hyperthermia, diaphoresis), and altered mental status. In severe cases, it can progress to seizures, severe hyperthermia, rhabdomyolysis, and cardiovascular collapse. Choice B is incorrect — while SSRIs are safer than older antidepressants, they are not safe at any dose. Serotonin toxicity is a genuine risk. Choice C is incorrect — excess serotonin produces sympathomimetic-like effects, not parasympathetic. Choice D is incorrect — the primary danger is neurotoxicity and cardiovascular instability, not renal toxicity."
+            },
+            {
+              "id": 63,
+              "type": "Judgement",
+              "category": "Toxicological Emergency",
+              "stem": "Sarah confirms she took “a bunch of pills.” Which of the following questions are most important to ask Sarah at this time?",
+              "format": "combination",
+              "subOptions": [
+                {
+                  "num": 1,
+                  "text": "“What medications did you take, and approximately how many of each?”"
+                },
+                {
+                  "num": 2,
+                  "text": "“When did you take the pills?”"
+                },
+                {
+                  "num": 3,
+                  "text": "“Do you have a therapist or counselor you see regularly?”"
+                },
+                {
+                  "num": 4,
+                  "text": "“Have you consumed any alcohol today?”"
+                },
+                {
+                  "num": 5,
+                  "text": "“Do you have any allergies to medications?”"
+                }
+              ],
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "2, 3 and 5"
+                },
+                {
+                  "letter": "B",
+                  "text": "1, 3 and 5"
+                },
+                {
+                  "letter": "C",
+                  "text": "2, 4 and 5"
+                },
+                {
+                  "letter": "D",
+                  "text": "1, 2 and 4"
+                }
+              ],
+              "correctAnswer": "D",
+              "rationale": "The BLS PCS Toxicological Emergency Standard directs identifying agent(s), quantity, time, and route. Choice 1 is correct — identifying medications and quantities is critical. Choice 2 is correct — time of ingestion is essential for the toxicity timeline. Choice 3 is tempting but does not change immediate management. Choice 4 is correct — alcohol co-ingestion potentiates medication effects and affects capacity assessment. The empty wine bottle makes this especially important. Choice 5 is tempting but in an intentional overdose, the patient has already ingested the medications."
+            }
+          ]
+        },
+        {
+          "text": "Sarah tells you she took approximately 30 sertraline tablets (50 mg each) and about 20 acetaminophen tablets (500 mg each — approximately 10 grams total) about 2 hours ago. She drank most of a bottle of wine. Vitals: heart rate 112, regular; blood pressure 102/68; respirations 18, regular; SpO2 97% on room air; BGL 5.4 mmol/L; GCS 14 (E4V4M6). Pupils 4 mm, equal and reactive. Skin warm and dry. She becomes tearful and states, “I don’t want to go to the hospital. I just want to sleep. You can’t make me go.” No family or substitute decision-maker is present.",
+          "questions": [
+            {
+              "id": 64,
+              "type": "Application",
+              "category": "Consent / Capacity Assessment",
+              "stem": "Which of the following statements is true regarding Sarah’s capacity to refuse treatment and transport?",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "Sarah has the right to refuse because she is awake, communicating, and has expressed a clear preference"
+                },
+                {
+                  "letter": "B",
+                  "text": "A suicide attempt automatically revokes a patient’s right to refuse treatment under the Ambulance Act"
+                },
+                {
+                  "letter": "C",
+                  "text": "The paramedic must assess whether Sarah can understand the information relevant to her treatment decision and appreciate the foreseeable consequences of refusing care, given her GCS of 14 and the substances impairing her cognitive function"
+                },
+                {
+                  "letter": "D",
+                  "text": "Because no substitute decision-maker is present, the paramedic cannot transport and must wait for police under section 17 of the Mental Health Act"
+                }
+              ],
+              "correctAnswer": "C",
+              "rationale": "Choice A is tempting — capacity is presumed in conscious patients, but Sarah’s GCS is 14 (confused speech) and she has ingested substances impairing cognition. The paramedic has reasonable grounds to question capacity. Choice B is incorrect — a suicide attempt does not automatically revoke capacity. Choice C is correct — per the ALS PCS Preamble, capacity requires understanding relevant information and appreciating foreseeable consequences. Given altered GCS, 10 g acetaminophen (potentially fatal), SSRI overdose, and alcohol, capacity assessment is mandatory. Choice D is incorrect — emergency treatment provisions apply independently of police if the patient is incapable and at risk."
+            },
+            {
+              "id": 65,
+              "type": "Rationale",
+              "category": "Acetaminophen Toxicology",
+              "stem": "The reason acetaminophen overdose is particularly concerning even though Sarah currently appears relatively stable is because:",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "Acetaminophen causes immediate liver failure upon ingestion, so Sarah’s stability indicates the ingestion was not significant"
+                },
+                {
+                  "letter": "B",
+                  "text": "Acetaminophen toxicity follows a delayed and insidious course — hepatotoxicity typically develops 24–72 hours after ingestion, meaning current stability does not reflect severity. Without timely hospital treatment with N-acetylcysteine, fatal liver failure can occur"
+                },
+                {
+                  "letter": "C",
+                  "text": "Acetaminophen reacts with alcohol to form a metabolite causing immediate kidney failure"
+                },
+                {
+                  "letter": "D",
+                  "text": "Acetaminophen in overdose damages the cardiac conduction system, and her heart rate of 112 is the first sign of cardiotoxicity"
+                }
+              ],
+              "correctAnswer": "B",
+              "rationale": "Choice A is dangerously incorrect — the early stability is misleading, not reassuring. Acetaminophen toxicity has a deceptive early phase. Choice B is correct — acetaminophen overdose follows a delayed pattern. Patients may be asymptomatic initially while hepatotoxicity develops as glutathione depletes and the toxic metabolite NAPQI accumulates. Without N-acetylcysteine (hospital antidote), fatal hepatic failure can develop at 24–72 hours. This is why urgent transport is essential despite apparent stability. Choice C is incorrect — the primary target organ is the liver. Choice D is incorrect — acetaminophen toxicity affects the liver, not the cardiac system. Her tachycardia is likely from sertraline and anxiety."
+            },
+            {
+              "id": 66,
+              "type": "Interpretation",
+              "category": "Mental Health / Emergency Transport",
+              "stem": "Given Sarah’s refusal, ingestion history, and current presentation, your best course of action is to:",
+              "format": "standard",
+              "options": [
+                {
+                  "letter": "A",
+                  "text": "Respect Sarah’s refusal, complete a patient refusal form, and advise her to call 911 if she changes her mind"
+                },
+                {
+                  "letter": "B",
+                  "text": "Request police attend and wait for them to take Sarah into custody under section 17 before transporting"
+                },
+                {
+                  "letter": "C",
+                  "text": "Contact the base hospital physician for consultation, perform a capacity assessment, and if Sarah is found to lack capacity, initiate emergency transport without consent as she is at risk of sustaining serious bodily harm"
+                },
+                {
+                  "letter": "D",
+                  "text": "Administer activated charcoal to treat the overdose on scene, then reassess her willingness to be transported"
+                }
+              ],
+              "correctAnswer": "C",
+              "rationale": "Choice A is incorrect — accepting this refusal without capacity assessment when there are reasonable grounds to question capacity would be clinically negligent. Ten grams of acetaminophen is potentially fatal. Choice B is tempting — however, the paramedic does not need to wait for police if emergency transport criteria are met (incapable, at risk of serious bodily harm, delay increases risk). Waiting delays potentially life-saving treatment. Choice C is correct — capacity assessment is required. If Sarah is incapable, the Patient Refusal/Emergency Treatment Standard authorizes emergency transport. BHP consultation is appropriate. Choice D is incorrect — activated charcoal is not a standard PCP intervention in Ontario, and on-scene treatment does not address the need for hospital-based N-acetylcysteine."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+};
+
+// ── STATE ──
+let answers = {};
+let totalQuestions = 0;
+
+function getAllQuestions() {
+  const qs = [];
+  examData.scenarios.forEach(s => s.blocks.forEach(b => b.questions.forEach(q => qs.push(q))));
+  return qs;
+}
+
+// ── START ──
+function startExam() {
+  document.getElementById('introPage').style.display = 'none';
+  document.getElementById('examContainer').style.display = 'block';
+  totalQuestions = getAllQuestions().length;
+  renderExam();
+}
+
+// ── RENDER ──
+function renderExam() {
+  const c = document.getElementById('examContainer');
+  let html = `<div class="progress-bar-wrap"><div class="progress-header"><span class="progress-label">Progress</span><span class="progress-count" id="progCount">0 / ${totalQuestions}</span></div><div class="progress-track"><div class="progress-fill" id="progFill"></div></div></div>`;
+
+  examData.scenarios.forEach(scenario => {
+    html += `<div class="scenario-header">Scenario ${scenario.id}</div>`;
+    html += `<div class="scenario-title">${scenario.title}</div>`;
+
+    scenario.blocks.forEach(block => {
+      if (block.text) {
+        html += `<div class="block-narrative">${block.text.replace(/\n/g, '<br><br>')}</div>`;
+      }
+      block.questions.forEach(q => {
+        html += renderQuestion(q);
+      });
+    });
+  });
+
+  html += `<div style="text-align:center;padding:2rem 0"><button class="btn-start" id="btnSubmit" onclick="submitExam()" style="display:none">Submit Exam</button></div>`;
+  c.innerHTML = html;
+}
+
+function renderQuestion(q) {
+  let h = `<div class="question-card" id="qcard-${q.id}">`;
+  h += `<div class="question-meta">`;
+  h += `<span class="q-badge q-number">Q${q.id}</span>`;
+  h += `<span class="q-badge q-type">${q.type}</span>`;
+  h += `<span class="q-badge q-format">${q.format}</span>`;
+  h += `</div>`;
+  h += `<div class="question-stem">${q.stem}</div>`;
+
+  if (q.format === 'combination' && q.subOptions) {
+    h += `<div class="sub-options">`;
+    q.subOptions.forEach(so => {
+      h += `<div class="sub-option"><span>${so.num}.</span> ${so.text}</div>`;
+    });
+    h += `</div>`;
+  }
+
+  h += `<div class="options-list" id="opts-${q.id}">`;
+  q.options.forEach(o => {
+    h += `<button class="option-btn" id="opt-${q.id}-${o.letter}" onclick="selectAnswer(${q.id},'${o.letter}')">`;
+    h += `<span class="option-letter">${o.letter}</span>`;
+    h += `<span>${o.text}</span>`;
+    h += `</button>`;
+  });
+  h += `</div>`;
+
+  h += `<div class="rationale" id="rat-${q.id}"><div class="rationale-label">Rationale</div>${q.rationale}</div>`;
+  h += `</div>`;
+  return h;
+}
+
+// ── SELECT ──
+function selectAnswer(qId, letter) {
+  if (answers[qId]) return;
+  answers[qId] = letter;
+
+  const q = getAllQuestions().find(x => x.id === qId);
+  const isCorrect = letter === q.correctAnswer;
+
+  // Style selected
+  const selBtn = document.getElementById(`opt-${qId}-${letter}`);
+  selBtn.classList.add(isCorrect ? 'selected-correct' : 'selected-incorrect');
+
+  // If wrong, show correct
+  if (!isCorrect) {
+    document.getElementById(`opt-${qId}-${q.correctAnswer}`).classList.add('show-correct');
+  }
+
+  // Disable all
+  q.options.forEach(o => {
+    document.getElementById(`opt-${qId}-${o.letter}`).classList.add('disabled');
+  });
+
+  // Show rationale
+  document.getElementById(`rat-${qId}`).style.display = 'block';
+
+  // Update progress
+  updateProgress();
+}
+
+function updateProgress() {
+  const answered = Object.keys(answers).length;
+  document.getElementById('progCount').textContent = `${answered} / ${totalQuestions}`;
+  document.getElementById('progFill').style.width = `${(answered / totalQuestions) * 100}%`;
+
+  if (answered === totalQuestions) {
+    document.getElementById('btnSubmit').style.display = 'inline-block';
+  }
+}
+
+// ── SUBMIT ──
+function submitExam() {
+  const allQ = getAllQuestions();
+  let correct = 0;
+  allQ.forEach(q => { if (answers[q.id] === q.correctAnswer) correct++; });
+
+  const pct = Math.round((correct / totalQuestions) * 100);
+  const pass = pct >= 70;
+
+  document.getElementById('examContainer').style.display = 'none';
+  const rp = document.getElementById('resultsPage');
+  rp.style.display = 'block';
+
+  document.getElementById('scorePct').textContent = pct + '%';
+  document.getElementById('statCorrect').textContent = correct;
+  document.getElementById('statIncorrect').textContent = totalQuestions - correct;
+  document.getElementById('statTotal').textContent = totalQuestions;
+
+  const pf = document.getElementById('passFail');
+  pf.textContent = pass ? 'PASS' : 'FAIL';
+  pf.className = 'pass-fail ' + (pass ? 'pass' : 'fail');
+
+  const ring = document.getElementById('ringFill');
+  ring.className = 'ring-fill ' + (pass ? 'pass' : 'fail');
+  const circumference = 2 * Math.PI * 78;
+  ring.style.strokeDasharray = circumference;
+  setTimeout(() => {
+    ring.style.strokeDashoffset = circumference - (circumference * pct / 100);
+  }, 100);
+
+  window.scrollTo(0, 0);
+}
+
+// ── REVIEW ──
+function reviewExam() {
+  document.getElementById('resultsPage').style.display = 'none';
+  document.getElementById('examContainer').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+// ── RESTART ──
+function restartExam() {
+  answers = {};
+  document.getElementById('resultsPage').style.display = 'none';
+  document.getElementById('introPage').style.display = 'flex';
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
