@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Med Legal: the boring stuff</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Notion palette */
+    --bg: #fbfbfa;
+    --card: #ffffff;
+    --ink: #37352f;
+    --ink-2: #5a5a55;
+    --mute: #787774;
+    --line: #ebebea;
+    --hover: #f1f1ef;
+
+    /* Notion callout colors */
+    --accent: #337ea9;
+    --accent-soft: #e7f3f8;
+    --good: #448361;
+    --good-soft: #edf3ec;
+    --bad: #d44c47;
+    --bad-soft: #fbe4e4;
+    --warn: #c29243;
+    --warn-soft: #fbf3db;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--ink);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+
+  .wrap {
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 40px 32px 96px;
+  }
+
+  header.bar {
+    background: rgba(251, 251, 250, 0.85);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  header.bar .inner {
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 14px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .brand {
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .brand .accent {
+    color: var(--mute);
+    font-weight: 500;
+  }
+
+  .progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.82rem;
+    color: var(--mute);
+  }
+  .progress select {
+    font: inherit;
+    font-size: 0.85rem;
+    padding: 5px 10px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--card);
+    color: var(--ink);
+    cursor: pointer;
+    max-width: 220px;
+    transition: background 0.12s;
+  }
+  .progress select:hover { background: var(--hover); }
+
+  .progress-bar {
+    height: 2px;
+    background: var(--line);
+    width: 100%;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--ink);
+    transition: width 0.3s ease;
+    width: 0%;
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 8px;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+  }
+  h2 {
+    font-size: 1.65rem;
+    font-weight: 700;
+    margin: 0 0 16px;
+    line-height: 1.25;
+    letter-spacing: -0.022em;
+  }
+  h3 {
+    font-size: 1.12rem;
+    font-weight: 600;
+    margin: 28px 0 10px;
+    letter-spacing: -0.01em;
+  }
+  h4 {
+    font-size: 0.96rem;
+    font-weight: 600;
+    margin: 16px 0 8px;
+    color: var(--ink-2);
+  }
+  p { margin: 0 0 14px; }
+  ul, ol { margin: 0 0 14px; padding-left: 24px; }
+  li { margin-bottom: 4px; }
+
+  a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(51, 126, 169, 0.25);
+    transition: border-color 0.15s;
+  }
+  a:hover { border-bottom-color: var(--accent); }
+
+  section.page { display: none; }
+  section.page.active { display: block; }
+
+  .section-tag {
+    display: inline-block;
+    font-size: 0.76rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--mute);
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  /* Cards. Notion: subtle by default, pastel for callouts (no left border) */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .card.accent { background: var(--accent-soft); border-color: transparent; }
+  .card.warn { background: var(--warn-soft); border-color: transparent; }
+  .card.good { background: var(--good-soft); border-color: transparent; }
+  .card.bad { background: var(--bad-soft); border-color: transparent; }
+
+  .lead {
+    font-size: 1.1rem;
+    color: var(--ink);
+    margin-bottom: 20px;
+    line-height: 1.55;
+  }
+  .mute { color: var(--mute); }
+
+  .pullquote {
+    border-left: 3px solid var(--ink);
+    padding: 4px 0 4px 16px;
+    margin: 16px 0;
+    color: var(--ink);
+    font-style: italic;
+  }
+
+  /* Buttons. Notion: dark primary, white secondary, soft hover */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ink);
+    color: white;
+    border: 1px solid var(--ink);
+    padding: 8px 18px;
+    border-radius: 5px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: opacity 0.15s, background 0.15s;
+    letter-spacing: -0.005em;
+  }
+  .btn:hover { opacity: 0.86; }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .btn.secondary {
+    background: var(--card);
+    color: var(--ink);
+    border: 1px solid var(--line);
+  }
+  .btn.secondary:hover { background: var(--hover); opacity: 1; }
+  .btn.ghost {
+    background: transparent;
+    color: var(--mute);
+    border: 1px solid var(--line);
+  }
+  .btn.ghost:hover { background: var(--hover); }
+  .btn.small { padding: 5px 12px; font-size: 0.85rem; }
+
+  .nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 36px;
+    gap: 10px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+  }
+  .nav-buttons .spacer { flex: 1; }
+
+  /* Two-column verbatim vs plain */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .two-col > div {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 18px 20px;
+  }
+  .two-col .label {
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--mute);
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .two-col .verbatim {
+    background: var(--hover);
+    border-color: transparent;
+  }
+  .two-col .plain {
+    background: var(--card);
+  }
+  .two-col .verbatim p {
+    font-style: italic;
+    color: var(--ink);
+  }
+  .two-col .bad-example {
+    background: var(--bad-soft);
+    border-color: transparent;
+  }
+  .two-col .good-example {
+    background: var(--good-soft);
+    border-color: transparent;
+  }
+  .two-col .bad-example .label,
+  .two-col .good-example .label {
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--mute);
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .two-col .bad-example .citation,
+  .two-col .good-example .citation {
+    margin-top: 12px;
+    font-size: 0.88rem;
+    color: var(--mute);
+  }
+  @media (max-width: 640px) {
+    .two-col { grid-template-columns: 1fr; }
+  }
+
+  /* Scenario decision blocks */
+  .decision { margin: 18px 0; }
+  .decision .prompt {
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--ink);
+  }
+  .choices, .kc-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .choice, .kc-option {
+    text-align: left;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 12px 16px;
+    cursor: pointer;
+    font: inherit;
+    color: var(--ink);
+    width: 100%;
+    transition: background 0.12s, border-color 0.12s;
+    line-height: 1.5;
+  }
+  .choice:hover, .kc-option:hover { background: var(--hover); }
+  .choice.disabled, .kc-option.disabled { cursor: default; opacity: 0.85; }
+  .choice.chosen { background: var(--hover); border-color: var(--ink); }
+  .kc-option.correct { background: var(--good-soft); border-color: var(--good); }
+  .kc-option.incorrect { background: var(--bad-soft); border-color: var(--bad); }
+  .kc-option .marker { font-weight: 600; margin-right: 6px; color: var(--mute); }
+  .kc-option.correct .marker { color: var(--good); }
+  .kc-option.incorrect .marker { color: var(--bad); }
+
+  /* Outcomes. Notion callout style (no left border, pastel bg only) */
+  .outcome {
+    margin-top: 14px;
+    padding: 16px 20px;
+    border-radius: 6px;
+    background: var(--hover);
+  }
+  .outcome.good { background: var(--good-soft); }
+  .outcome.bad { background: var(--bad-soft); }
+  .outcome.mixed { background: var(--warn-soft); }
+  .outcome .verdict {
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .outcome.good .verdict { color: var(--good); }
+  .outcome.bad .verdict { color: var(--bad); }
+  .outcome.mixed .verdict { color: var(--warn); }
+
+  .kc-rationale {
+    margin-top: 16px;
+    padding: 16px 20px;
+    border-radius: 6px;
+    background: var(--accent-soft);
+  }
+  .kc-rationale .heading {
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .kc-rationale ul {
+    margin: 0;
+    padding-left: 22px;
+  }
+  .kc-rationale li { margin-bottom: 8px; }
+  .kc-rationale li.right strong { color: var(--good); }
+  .kc-rationale li.wrong strong { color: var(--bad); }
+
+  details.standard {
+    margin-top: 20px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--card);
+  }
+  details.standard summary {
+    cursor: pointer;
+    padding: 12px 16px;
+    font-weight: 500;
+    color: var(--ink);
+    list-style: none;
+    user-select: none;
+    font-size: 0.92rem;
+    transition: background 0.12s;
+  }
+  details.standard summary::before {
+    content: "▸";
+    display: inline-block;
+    margin-right: 8px;
+    transition: transform 0.2s;
+    color: var(--mute);
+    font-size: 0.8em;
+  }
+  details.standard[open] summary::before { transform: rotate(90deg); }
+  details.standard summary::-webkit-details-marker { display: none; }
+  details.standard summary:hover { background: var(--hover); }
+  details.standard[open] summary { border-bottom: 1px solid var(--line); }
+  details.standard .body {
+    padding: 14px 16px;
+  }
+  details.standard blockquote {
+    margin: 0;
+    padding: 12px 14px;
+    background: var(--hover);
+    border-radius: 4px;
+    font-style: italic;
+    color: var(--ink);
+  }
+  details.standard .citation {
+    margin-top: 10px;
+    font-size: 0.85rem;
+    color: var(--mute);
+  }
+
+  /* Decision tree */
+  .tree { margin: 16px 0; }
+  .tree-node {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 14px 18px;
+    background: var(--card);
+    margin-bottom: 10px;
+  }
+  .tree-node.question {
+    background: var(--hover);
+    border-color: transparent;
+    font-weight: 600;
+  }
+  .tree-branch {
+    margin-left: 24px;
+    padding-left: 20px;
+    border-left: 2px solid var(--line);
+    margin-bottom: 16px;
+  }
+  .tree-branch .branch-label {
+    font-weight: 600;
+    color: var(--ink-2);
+    font-size: 0.88rem;
+    margin-bottom: 8px;
+    margin-top: -4px;
+  }
+  .tree-terminal {
+    background: var(--good-soft);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+  }
+  .tree-terminal.warn {
+    background: var(--warn-soft);
+  }
+
+  /* Documentation snippet */
+  .doc-tool {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 20px 24px;
+  }
+  .doc-tool textarea {
+    width: 100%;
+    min-height: 280px;
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    padding: 14px;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    background: var(--bg);
+    color: var(--ink);
+    resize: vertical;
+  }
+  .doc-tool .actions {
+    margin-top: 14px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .copied {
+    color: var(--good);
+    font-size: 0.88rem;
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+  .copied.show { opacity: 1; }
+
+  /* Summary card */
+  .summary-card {
+    background: var(--card);
+    border: 1px solid var(--ink);
+    border-radius: 6px;
+    padding: 28px 32px;
+  }
+  .summary-card h3 { margin-top: 0; }
+  .summary-card ol {
+    margin: 0;
+    padding-left: 24px;
+  }
+  .summary-card ol li {
+    margin-bottom: 10px;
+    font-size: 1.02rem;
+  }
+  .summary-card ol li strong { color: var(--ink); }
+
+  /* Cover */
+  .cover {
+    padding: 80px 0 32px;
+  }
+  .cover .title {
+    font-size: 3.2rem;
+    font-weight: 700;
+    line-height: 1.04;
+    margin-bottom: 14px;
+    letter-spacing: -0.035em;
+  }
+  .cover .subtitle {
+    font-size: 1.2rem;
+    color: var(--mute);
+    margin-bottom: 36px;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+  .cover .meta {
+    color: var(--mute);
+    font-size: 0.88rem;
+    margin-top: 24px;
+  }
+  @media (max-width: 640px) {
+    .cover .title { font-size: 2.2rem; }
+    .cover { padding: 48px 0 24px; }
+  }
+
+  /* Misc */
+  .kbd {
+    display: inline-block;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 1px 6px;
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.85em;
+    background: var(--hover);
+    color: var(--mute);
+  }
+  .footer-note {
+    margin-top: 48px;
+    text-align: center;
+    color: var(--mute);
+    font-size: 0.88rem;
+  }
+
+  /* Print: reveal everything, drop chrome */
+  @media print {
+    header.bar { display: none; }
+    section.page { display: block !important; page-break-before: always; }
+    section.page:first-of-type { page-break-before: auto; }
+    [hidden] { display: block !important; }
+    .outcome { display: block !important; }
+    .kc-rationale { display: block !important; }
+    .kc-rationale li { display: list-item !important; }
+    details.standard { display: block; }
+    details.standard summary { display: none; }
+    details.standard .body { padding-top: 0; border-top: 0; }
+    .nav-buttons,
+    .doc-tool .actions,
+    .copied,
+    .compare-btn,
+    .compare-kc-btn { display: none !important; }
+    .choice, .kc-option { background: #fff !important; border-color: #999 !important; cursor: default; }
+    .choice.chosen { background: #f0f0f0 !important; }
+    .kc-option.correct { background: #f5fbf6 !important; }
+    .kc-option.incorrect { background: #fbf5f5 !important; }
+    body { background: #fff !important; }
+    .wrap { max-width: 100%; padding: 0 12px; }
+    a { color: inherit; text-decoration: none; border: 0; }
+  }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="inner">
+    <div class="brand"><span class="accent">Med Legal ·</span> the boring stuff</div>
+    <div class="progress">
+      <span id="progressLabel">1 / 13</span>
+      <select id="jumpTo" aria-label="Jump to section"></select>
+      <button class="btn ghost small" id="printBtn" type="button" aria-label="Print module">Print</button>
+    </div>
+  </div>
+  <div class="progress-bar"><div class="progress-bar-fill" id="progressFill"></div></div>
+</header>
+
+<div class="wrap">
+
+<!-- ========== 1: COVER ========== -->
+<section class="page active" data-title="Welcome">
+  <div class="cover">
+    <div class="title">Med Legal 'the boring stuff'</div>
+
+    <div class="nav-buttons">
+      <div class="spacer"></div>
+      <button class="btn" onclick="next()">Start →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 2: COLD OPEN ========== -->
+<section class="page" data-title="Cold open: 1907, chest pain">
+  <div class="section-tag">Scenario · cold open</div>
+  <h2>1907, chest pain, "I just want to be checked out."</h2>
+
+  <div class="card">
+    <p>You enter the home. The patient tells you his name is Jim. He's 58, lives alone, works construction, heavy smoker.</p>
+    <p>The chest pain started at work around 1630. It went away for a bit, came back around 1904, and that's when he called. It's worse now than it was at work. He describes it as "pressure," and says maybe it's worse with a deep breath. He thinks it's from working in the sun all afternoon and the heavy lifting.</p>
+    <p>He had three beers and smoked a joint after the shift, then started feeling "anxious" at dinner. He says he's getting laid off at the end of the month.</p>
+    <p>You take his vitals: BP 158/94, HR 96, SpO2 95% room air, T 36.9.</p>
+    <p>You do a 12-lead: T-wave inversion V3–V5. Not a STEMI, but not normal.</p>
+    <p>Before you can ask about allergies, Jim says: <em>"Does that machine say I'm good? I just want to be checked out. I got work in the morning and I need this money."</em></p>
+  </div>
+
+  <div class="decision" data-scenario="cold">
+    <p class="prompt">What's your move?</p>
+    <div class="choices">
+      <button class="choice" data-choice="A">A. Tell him firmly that he has to go. His ECG isn't normal and he could die before morning.</button>
+      <button class="choice" data-choice="B">B. Sit down at the kitchen table and find out what "work in the morning" is actually doing in this decision.</button>
+      <button class="choice" data-choice="C">C. Request police code 3 for "patient that needs to go."</button>
+    </div>
+
+    <div class="outcome bad" data-outcome="A" hidden>
+      <div class="verdict">You can't actually make him.</div>
+      <p>A capable patient has the right to refuse. Telling him he "has to go" ends one of two ways: he comes resentful and you've eroded the trust he needs to call you back later, or he digs in and walks away angry. Neither is what you want, and neither is what the standard tells you to do.</p>
+    </div>
+    <div class="outcome good" data-outcome="B" hidden>
+      <div class="verdict">This is the play.</div>
+      <p>Understanding why a capable patient is refusing is the start of supporting an informed decision. Maybe a missed shift will cost him the runway he has left before the layoff. Maybe the beers and the joint are clouding his thinking and he doesn't want to say so. Maybe he's terrified and "I need this money" is a reason he can give that isn't "I'm scared." The reason matters: it shapes the capacity assessment, the solution he can live with, and the documentation you're going to write afterward.</p>
+    </div>
+    <div class="outcome bad" data-outcome="C" hidden>
+      <div class="verdict">Wrong on two fronts.</div>
+      <p>Police can't apprehend a capable adult refusing medical care. MHA s.17 doesn't fit a calm chest-pain refusal, and police know it. They'll arrive, decline to act, and you've burned trust with the patient and with police. And requesting code 3 for a non-emergency misuses emergency response. Dispatch and the responding officers know the call doesn't meet criteria. If you actually think MHA applies, say so plainly. If you don't, this isn't your tool.</p>
+    </div>
+  </div>
+
+  <div class="card accent" id="coldReveal" hidden>
+    <p>Every refusal you do gets audited by your service. The chart is what survives review.</p>
+    <p>And if Jim has a bad outcome (say he arrests on the jobsite the next morning), whoever investigates the call may say: <em>"The paramedics didn't tell him he could die. They didn't tell him this could be his heart. They just left."</em> You may have said all of those things on scene. You may even have said them well. But if the chart doesn't show it, the chart wins, and you're now answering questions about a call you barely remember.</p>
+    <p>So the documentation isn't box-ticking. It's your only record of what you actually did. Let's walk through the rules, then bring it back to what you say and write on scene.</p>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn secondary" onclick="prev()">← Back</button>
+    <div class="spacer"></div>
+    <button class="btn" onclick="next()">Next →</button>
+  </div>
+</section>
+
+<!-- ========== 3: THE STANDARD IN PLAIN ENGLISH ========== -->
+<section class="page" data-title="The standard, in plain English">
+  <div class="section-tag">What the standard actually says</div>
+  <h2>The standard, in plain English</h2>
+
+  <p class="lead">Two pieces of writing run this whole subject. They're both shorter than people remember. Here they are side-by-side with what they actually mean on a call.</p>
+
+  <h3>The refusal procedure</h3>
+  <div class="two-col">
+    <div class="verbatim">
+      <div class="label">Verbatim</div>
+      <p>Where a patient requires care and/or transport to a health care facility and the patient or substitute decision maker refuses such treatment and/or transport, the paramedic shall: make reasonable efforts to inform the patient or SDM that treatment and/or transport are recommended and explain the possible consequences of such refusal; confirm that the patient or SDM has capacity utilizing the Aid to Capacity Assessment as per the Ambulance Call Report Completion Manual; advise the patient or SDM to call 911 again if further concerns arise; and obtain signatures and complete additional documentation requirements as per the Ontario Documentation Standards.</p>
+      <div class="citation"><em>BLS PCS v3.4, Patient Refusal / Emergency Treatment Standard, p.17 (condensed)</em></div>
+    </div>
+    <div class="plain">
+      <div class="label">Plain English</div>
+      <p>Five things, in order:</p>
+      <ol>
+        <li>Tell them you think they should come.</li>
+        <li>Tell them what could happen if they don't, specifically. Not vaguely "something bad." Say the actual thing: "you could die tonight from this clot." Then name the alternatives: their GP in the morning, a walk-in, telehealth, calling 911 back if anything changes.</li>
+        <li>Confirm they actually have capacity (next page).</li>
+        <li>Tell them to call us back if anything changes.</li>
+        <li>Write it all down.</li>
+      </ol>
+      <p>The patient is not required to sign anything. If they refuse the signature, document that they refused and why.</p>
+    </div>
+  </div>
+
+  <div class="card warn">
+    <p><strong>"Reasonable efforts" is about content, not clock.</strong> The standard doesn't measure reasonable efforts in minutes on scene. It measures them by what got disclosed and whether the patient heard it. Cover the disclosure (recommendation, specific consequences of refusing, alternatives, answers to their questions) and listen for appreciation back in their own words.</p>
+    <p>Sometimes that takes two minutes. Sometimes it takes thirty, because there's an obstacle to solve (the dog, the daughter, the ER wait) or a stressed patient needs space to think. The minutes are incidental to the work. A short, content-complete refusal note with the patient's words quoted holds up. A long conversation with a thin chart doesn't.</p>
+  </div>
+
+  <h3>The capacity test</h3>
+  <div class="two-col">
+    <div class="verbatim">
+      <div class="label">Verbatim</div>
+      <p>A person is presumed to have the capacity to provide consent with respect to treatment and a paramedic may rely on that presumption unless the paramedic has reasonable grounds to believe that the person is incapable with respect to the treatment plan. A patient is capable with respect to the treatment plan if the patient is: (a) able to understand the information that is relevant to making a decision about the treatment or alternatives being proposed; and (b) able to appreciate the reasonably foreseeable consequences of a decision or lack of decision with respect to the treatment plan.</p>
+      <div class="citation"><em>ALS PCS v5.4, Preamble, p.6 (restating HCCA s.4)</em></div>
+    </div>
+    <div class="plain">
+      <div class="label">Plain English</div>
+      <p>Everybody is presumed capable until something gives you a reason to think otherwise. A serious refusal is usually enough reason to stop assuming and actually run the test.</p>
+      <p>Two parts:</p>
+      <ul>
+        <li><strong>Understanding</strong>: can they take in the information you're giving them?</li>
+        <li><strong>Appreciation</strong>: do they get what it means for them, in this specific decision, right now?</li>
+      </ul>
+      <p>Both halves matter. You can pass the first and fail the second.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <p><strong>"Refusal" isn't one thing.</strong> Three different decisions can be refused, and they're not the same:</p>
+    <ul>
+      <li><strong>Refusal of assessment</strong>: "don't touch me, don't ask me questions."</li>
+      <li><strong>Refusal of treatment</strong>: "no oxygen, no ASA, no IV."</li>
+      <li><strong>Refusal of transport</strong>: "I'm not going to the hospital."</li>
+    </ul>
+    <p>Capacity is assessed for each one separately. A patient can refuse a specific treatment but accept everything else; another can accept assessment but refuse transport. The chart should be clear about which decision was refused, not just "pt refused."</p>
+  </div>
+
+  <div class="card warn">
+    <p><strong>The mental-health side door.</strong> Capacity gets you most of the way through this subject. The other door is the Mental Health Act. Police can apprehend under MHA s.17 when the statutory criteria are met (the full list is in the decision-tree section). A Form 1 (signed by a physician) or Form 2 (signed by a Justice of the Peace) also authorizes transport without consent. The thing to remember: police decide whether to apprehend, not you. Your job is to give them an accurate picture.</p>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn secondary" onclick="prev()">← Back</button>
+    <div class="spacer"></div>
+    <button class="btn" onclick="next()">Next →</button>
+  </div>
+</section>
+
+<!-- ========== 5: CAPACITY IS THE WHOLE GAME ========== -->
+<section class="page" data-title="Capacity is the whole game">
+  <div class="section-tag">The capacity assessment</div>
+  <h2>Capacity is the whole game</h2>
+
+  <div class="card warn">
+    <p><strong>The trap.</strong> A&amp;Ox3 is not a capacity assessment. They sound related, but they're answering completely different questions.</p>
+    <p><strong>A&amp;Ox3 asks:</strong> "What's your name? Where are you right now? What day or year is it?" Three questions about basic orientation. Answering them correctly tells you the patient is awake and oriented. That's a level-of-consciousness check.</p>
+    <p><strong>Capacity asks different questions:</strong> "What's going on with you tonight? What do you think could happen if you don't come with us? How does that sit with you?" These tell you whether this patient can understand the clinical situation and appreciate the consequences of refusing.</p>
+    <p>You can pass the first and fail the second. The 80-year-old who knows the date and the Prime Minister but can't tell you why he feels so weak today or how he ended up on the floor beside his bed is the textbook example. He's oriented. He just can't appreciate what's happening to him right now. So when a reviewer reads "A&amp;Ox3" in your refusal note, they cannot tell whether you actually did the capacity test, because A&amp;Ox3 isn't it. Write both, separately, or your capacity assessment isn't visible in the chart.</p>
+  </div>
+
+  <h3>Three phrases you can actually use</h3>
+
+  <div class="card">
+    <p class="pullquote">"Tell me, in your own words, what you think is going on tonight."</p>
+    <p class="mute">Tests understanding. Listen for whether they can name the clinical situation in any language, not necessarily medical, just accurate to the picture.</p>
+
+    <p class="pullquote">"What do you think could happen if you don't come with us?"</p>
+    <p class="mute">Tests appreciation. Listen for whether the consequence they name matches the actual risk. "I might feel worse in the morning" is not the same answer as "I could have a heart attack and die." If you have to teach them the consequence before they can name it, fine. But then ask again and listen for whether it lands.</p>
+
+    <p class="pullquote">"And how does that sit with you?"</p>
+    <p class="mute">Confirms the decision is theirs, considered, and not coerced. It also gives them room to change their mind without losing face.</p>
+  </div>
+
+  <h3>Worked example</h3>
+
+  <div class="card accent">
+    <p><strong>Mrs. R is 82.</strong> You're there for a lift assist. Once you have her up and sitting on her walker, you notice she's working harder than she should be to breathe. HR 110, regular. T 37.4. She's been forgetting her medications. She's in the middle of moving out, and her pill organizer is packed away somewhere. She tells you she just needs a minute to catch her breath.</p>
+    <p>Twenty minutes later, she still hasn't. Still SOB, still tachy. She tells you she's too weak to get off the walker but she's not going to hospital: <em>"I'll be fine, I just need to rest."</em></p>
+    <p><em>Understanding test:</em> "Compared to a normal day, how are you right now?" She says, "I'm just tired from the move. I'll be okay once I sit a while."</p>
+    <p><em>Appreciation test:</em> "You've been short of breath for twenty minutes and your heart rate is up. What do you think could happen if this doesn't get better tonight?" She says, "It'll get better. It always does."</p>
+    <p>She's A&amp;Ox3, calm, articulate. But her response keeps coming back to "I just need to rest" even after you describe what you're seeing, sustained SOB, tachycardia, a low-grade temp, weak enough that she can't stand. The differential is wide: CHF, pneumonia, PE, sepsis. She can't appreciate that the picture in front of you is more than tired-from-the-move. <strong>That is incapacity for this decision.</strong> Not for everything, for this decision, right now. She might be perfectly capable of choosing what she wants for dinner.</p>
+    <p>Since she's incapable, you look for a substitute decision maker. If a spouse or adult child is reachable, they're on the HCCA hierarchy (more on this in the decision-tree section). You explain the picture and seek consent for transport.</p>
+  </div>
+
+  <h3>Refusal red flags: when to slow down and actually do the assessment</h3>
+  <div class="card warn">
+    <p>None of these <em>automatically</em> make a patient incapable. They are the findings that should pull you out of "presume capacity" mode and into "actually run the test." Any significant red flag means your documentation needs to show that you noticed it, and what you did about it.</p>
+    <ul>
+      <li>Intoxication (alcohol, opioids, stimulants, sedatives, polysubstance)</li>
+      <li>Recent hypoxia (post-arrest, post-overdose, post-strangulation, post-drowning)</li>
+      <li>Head injury, especially with witnessed LOC, repetition of questions, or amnesia for the event</li>
+      <li>Hypoglycemia or other metabolic derangement</li>
+      <li>Delirium (acute change in mentation from baseline, often fluctuating)</li>
+      <li>Psychosis (hallucinations, delusions, or paranoia driving the refusal)</li>
+      <li>Active suicidal ideation with plan, means, or recent attempt</li>
+      <li>Severe pain that prevents the patient from engaging with the conversation</li>
+      <li>Language or communication barrier without an interpreter</li>
+      <li>Coercion or family pressure the patient may be responding to (in either direction)</li>
+      <li>Inability to repeat back the consequences of refusal in any form, in any words</li>
+    </ul>
+  </div>
+
+  <details class="standard">
+    <summary>What the standard says about the capacity assessment</summary>
+    <div class="body">
+      <blockquote>"A paramedic must perform a capacity assessment if it is not reasonable in the circumstances to presume the person is capable of consenting to the treatment plan." A patient is capable if they are (a) able to understand the information that is relevant to making a decision about the treatment or alternatives being proposed; and (b) able to appreciate the reasonably foreseeable consequences of a decision or lack of decision.</blockquote>
+      <div class="citation">ALS PCS v5.4, Preamble, p.6. The Aid to Capacity Assessment is referenced in BLS PCS v3.4, Patient Refusal / Emergency Treatment Standard, p.17, by reference to the Ambulance Call Report Completion Manual.</div>
+    </div>
+  </details>
+
+  <div class="nav-buttons">
+    <button class="btn secondary" onclick="prev()">← Back</button>
+    <div class="spacer"></div>
+    <button class="btn" onclick="next()">Next →</button>
+  </div>
+</section>
+
+<!-- ========== 6: SCENARIO: CHEST PAIN ========== -->
+<section class="page" data-title="Scenario 1: Chest pain refusal">
+  <div class="section-tag">Scenario 1 · high-risk refusal, capable patient</div>
+  <h2>Chest pain, capable, still refusing</h2>
+
+  <div class="card">
+    <p>Back at the kitchen table with Jim. Capacity is intact: you've run both halves of the test, he repeats back the picture accurately, and he understands what could happen. He's still refusing. He's worried about missing his shift in the morning. He's getting laid off at the end of the month and he says he needs every shift he can get between now and then. He says: <em>"If I get worse, I promise I'll call you back."</em></p>
+    <p>You've informed him. You've explained consequences. Capacity is confirmed.</p>
+  </div>
+
+  <div class="decision" data-scenario="cp">
+    <p class="prompt">What do you do next?</p>
+    <div class="choices">
+      <button class="choice" data-choice="A">A. He is capable, so move to the refusal paperwork and clear.</button>
+      <button class="choice" data-choice="B">B. Address the real obstacle. Find out whether the missing shift, the money, or something else is actually between him and the care you're recommending, and try to solve it.</button>
+      <button class="choice" data-choice="C">C. Ask police to stand by on scene while you keep reassessing. You're worried he's not appreciating the risk.</button>
+    </div>
+
+    <div class="outcome mixed" data-outcome="A" hidden>
+      <div class="verdict">Maybe defensible, maybe thin.</div>
+      <p>If you've actually covered the disclosure (recommended transport, named the specific cardiac consequences, offered alternatives, confirmed capacity, advised re-call), you may be inside the standard. The question a reviewer will ask is whether the chart shows reasonable efforts as content (what you disclosed, what he said back in his own words) or whether you just reached for the signature. With chest pain like this, the better move is usually one more pass at the real obstacle before you call it. If there isn't one, signing off can be fine.</p>
+    </div>
+    <div class="outcome good" data-outcome="B" hidden>
+      <div class="verdict">This is usually the useful move.</div>
+      <p>Reasonable efforts often live here, not because more minutes equals more effort but because the obstacle is the work. Maybe a coworker can cover the shift. Maybe he can call the foreman from the back of the truck. Maybe the layoff anxiety, not the pain, is the thing he's really trying to manage tonight. The point isn't to argue him into it, and it isn't to clock-watch on scene. The point is to find out whether there's a fixable obstacle between him and the care you're recommending, and solve it if there is. If there isn't one, you're not obligated to manufacture more conversation.</p>
+    </div>
+    <div class="outcome mixed" data-outcome="C" hidden>
+      <div class="verdict">Easy to misuse.</div>
+      <p>Police on scene can be useful. They can witness the conversation, note the refusal in their own notebook, and apply MHA s.17 themselves if the picture changes. But asking them to stand there as quiet pressure on a capable chest-pain refusal is a different move, and it shows up in complaints. The MHA criteria are not met here (no apparent mental disorder, no threat of self-harm). If you genuinely think it's an MHA situation, say so plainly and let police decide. If you're using them as backup intimidation, that's coercion in a uniform.</p>
+    </div>
+  </div>
+
+  <div class="card" id="cpKcWrap" hidden>
+    <h3>Knowledge check</h3>
+    <div class="decision" data-kc="cp">
+      <p class="prompt">You've completed the disclosure (recommendation, specific cardiac consequences, alternatives offered, return precautions named), checked for and worked the obstacle, and confirmed capacity throughout. He's still refusing. ECG findings haven't changed. What's your legal obligation?</p>
+      <div class="kc-options">
+        <button class="kc-option" data-correct="false" data-key="A"><span class="marker">A.</span> Transport him under the emergency-treatment exception.</button>
+        <button class="kc-option" data-correct="false" data-key="B"><span class="marker">B.</span> Have police compel him under the Mental Health Act.</button>
+        <button class="kc-option" data-correct="true"  data-key="C"><span class="marker">C.</span> Document thoroughly and leave, advising him to call back if anything changes.</button>
+        <button class="kc-option" data-correct="false" data-key="D"><span class="marker">D.</span> Get his wife to consent on his behalf.</button>
+      </div>
+      <div class="kc-rationale" hidden>
+        <div class="heading">Why C, and why the others don't fit.</div>
+        <ul>
+          <li class="wrong"><strong>A.</strong> The emergency-treatment exception (HCCA s.25) applies when you believe the patient is incapable with respect to the treatment and there is an emergency. A capable adult refusing transport, no matter how serious the clinical picture, is not within that exception.</li>
+          <li class="wrong"><strong>B.</strong> MHA s.17 lets police apprehend on the specific criteria of disorderly conduct plus apparent mental disorder likely to result in serious bodily harm. A calm chest-pain refusal isn't a mental-health apprehension. Wrong tool.</li>
+          <li class="right"><strong>C.</strong> This is exactly what the standard requires. Inform, explain consequences, confirm capacity, advise re-call, document. (BLS PCS Patient Refusal Standard, p.17.)</li>
+          <li class="wrong"><strong>D.</strong> A spouse only becomes the SDM if the patient is incapable. While the patient is capable, the wife has no consent authority over his medical decisions.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <details class="standard">
+    <summary>What the standard says</summary>
+    <div class="body">
+      <blockquote>The paramedic shall make reasonable efforts to inform the patient or SDM that treatment and/or transport are recommended and explain the possible consequences of such refusal; confirm capacity utilizing the Aid to Capacity Assessment; advise the patient or SDM to call 911 again if further concerns arise; and obtain signatures and complete additional documentation requirements.</blockquote>
+      <div class="citation">BLS PCS v3.4, Patient Refusal / Emergency Treatment Standard, p.17.</div>
+    </div>
+  </details>
+
+  <div class="nav-buttons">
+    <button class="btn secondary" onclick="prev()">← Back</button>
+    <div class="spacer"></div>
+    <button class="btn" onclick="next()">Next →</button>
+  </div>
+</section>
+
+<!-- ========== 7: SCENARIO: POST-NALOXONE ========== -->
+<section class="page" data-title="Scenario 2: Post-naloxone walkaway">
+  <div class="section-tag">Scenario 2 · capacity in the moment</div>
+  <h2>"Get the fuck away from me."</h2>
+
+  <div class="card">
+    <p>Dispatched to a 7-Eleven parking lot, 0410. Police on scene first. Thirtyish male was found unresponsive on the ground behind the store next to the dumpster: RR 4, pinpoint pupils, fentanyl pipe on the asphalt beside him. Police gave 4 mg naloxone IN (Narcan nasal spray) before you arrived.</p>
+    <p>As you pull up you can see him starting to sit up. He's surrounded by three officers. He sees you and your partner and says: <em>"No, not you guys again. No, I'm not doing this. Get the fuck away from me."</em> He stands up unassisted and starts walking off down the alley.</p>
+  </div>
+
+  <div class="decision" data-scenario="nx">
+    <p class="prompt">What do you do?</p>
+    <div class="choices">
+      <button class="choice" data-choice="A">A. Let him go. He's awake, walking, and clearly intends to leave. Document and clear.</button>
+      <button class="choice" data-choice="B">B. Walk with him; don't block, don't grab. Ask him to sit a few minutes before he goes anywhere.</button>
+      <button class="choice" data-choice="C">C. Physically restrain him so he can't leave until he's been fully assessed.</button>
+    </div>
+
+    <div class="outcome mixed" data-outcome="A" hidden>
+      <div class="verdict">Realistic, and often what actually happens.</div>
+      <p>Putting hands on him would need a specific reason: a physician or police order, the patient becoming combative en route, or restraint to deliver emergency treatment. None of those apply right now. Absent one of those grounds, you can't stop him. So the work that's left is the chart. A bare "pt refused, walked off" note doesn't survive review of a high-risk refusal. What the chart needs to show:</p>
+      <ul>
+        <li>Time, dose, and route of the naloxone</li>
+        <li>His airway and breathing before and after</li>
+        <li>His exact words ("get the fuck away from me," verbatim)</li>
+        <li>His orientation and behaviour as he stood (oriented to whom, gait, balance)</li>
+        <li>The direction and manner of his departure ("ambulated NB on Main St, gait steady, no acute distress witnessed")</li>
+        <li>What you offered him (transport, continued monitoring, take-home naloxone), and that he refused each one</li>
+        <li>Whether police remained at scene</li>
+        <li>Your capacity concerns documented as observations, not as a conclusion</li>
+      </ul>
+      <p>A patient who walks off purposefully with no signs of distress is information that goes in the chart. So is "~5 minutes post-naloxone, refused engagement before formal assessment could be completed." Write what you saw; let it support whatever finding it supports.</p>
+    </div>
+    <div class="outcome good" data-outcome="B" hidden>
+      <div class="verdict">The play if he'll let you.</div>
+      <p>Walking with him doesn't restrain him; sitting on the curb doesn't restrain him. You're buying ten or fifteen minutes for him to re-orient before he makes a one-shot decision while still half-flooded with opioid. The ALS standard names this specifically: combative behaviour should be anticipated after naloxone. If you can get him to wait, you can do an actual capacity assessment when he's not in the middle of being narcanned.</p>
+      <p>If he won't wait, you did what you could; document and clear (see option A). The fact that you tried goes in the chart too.</p>
+    </div>
+    <div class="outcome bad" data-outcome="C" hidden>
+      <div class="verdict">Not your call.</div>
+      <p>Paramedic-initiated restraint requires specific grounds: a physician or police order, the patient becoming combative en route to hospital, or restraints being necessary to deliver emergency treatment. None apply at this moment. Putting hands on him here is assault. The fact that you think the refusal is unsafe doesn't change that.</p>
+    </div>
+  </div>
+
+  <div class="card" id="nxKcWrap" hidden>
+    <h3>Knowledge check</h3>
+    <div class="decision" data-kc="nx">
+      <p class="prompt">He's fifty metres up the street and not coming back. Your partner asks what to put in the chart. What does the chart need to show?</p>
+      <div class="kc-options">
+        <button class="kc-option" data-correct="false" data-key="A"><span class="marker">A.</span> "Pt refused further care post-naloxone, walked off scene." End of note.</button>
+        <button class="kc-option" data-correct="true"  data-key="B"><span class="marker">B.</span> Time/dose/route of naloxone, response observed, pt's exact words, behaviour and orientation, manner and direction of departure, specific offers made and refused, police status, and capacity concerns documented as observations.</button>
+        <button class="kc-option" data-correct="false" data-key="C"><span class="marker">C.</span> Document a "presumed capable refusal" because he was awake and walking.</button>
+        <button class="kc-option" data-correct="false" data-key="D"><span class="marker">D.</span> Call dispatch and have police flag him as a missing person.</button>
+      </div>
+      <div class="kc-rationale" hidden>
+        <div class="heading">Why B.</div>
+        <ul>
+          <li class="wrong"><strong>A.</strong> Not enough. "Pt refused" without context could describe any refusal of any patient. It doesn't show the assessment, the offers made, or what was actually clinically going on at the moment he left. It's the kind of note that looks complete and isn't.</li>
+          <li class="right"><strong>B.</strong> Yes. The chart's job is to let someone reading it later reconstruct what you saw and what you did. Specific observations are what survive review, and what protect you if he doesn't make it home.</li>
+          <li class="wrong"><strong>C.</strong> "Presumed capable" is a conclusion, not an observation. Declaring it about a patient who walked off ninety seconds after a respiratory-depression reversal doesn't hold up. Document the behaviour you saw; let the chart support whatever finding the facts support, rather than claiming one you can't defend.</li>
+          <li class="wrong"><strong>D.</strong> Missing-persons designation is a police decision and generally doesn't apply to a competent adult who has chosen to leave. It also isn't your call to make unilaterally.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <details class="standard">
+    <summary>What the standard says</summary>
+    <div class="body">
+      <blockquote>Combative behaviour should be anticipated following naloxone administration and paramedics should protect themselves accordingly.</blockquote>
+      <div class="citation">ALS PCS v5.4, Opioid Toxicity Medical Directive, clinical considerations.</div>
+      <p class="mute" style="margin-top:10px; font-size:0.9rem;">Your service may also have a specific post-naloxone disposition policy (e.g., recommended transport, minimum on-scene observation, take-home naloxone distribution). Check it; that policy lives on top of the standard, not under it.</p>
+    </div>
+  </details>
+
+  <div class="nav-buttons">
+    <button class="btn secondary" onclick="prev()">← Back</button>
+    <div class="spacer"></div>
+    <button class="btn" onclick="next()">Next →</button>
+  </div>
+</section>
+
+<!-- ========== 8: SCENARIO: SUICIDAL 15-YO ========== -->
+<section class="page" data-title="Scenario 3: Suicidal 15-year-old">
+  <div class="section-tag">Scenario 3 · the MHA door</div>
+  <h2>"I changed my mind. I'm not going."</h2>
+
+  <div class="card">
+    <p>Fifteen-year-old female. Her older sister called 911 because she found a half-empty bottle of acetaminophen and a goodbye note on the bedroom desk. When you arrive, the patient is calm, articulate, says: <em>"I changed my mind. I didn't take any. My sister is being dramatic. I have school in the morning. I'm not going to a hospital."</em></p>
+    <p>Vitals are normal. She makes eye contact. She does not appear acutely impaired.</p>
+  </div>
+
+  <div class="decision" data-scenario="su">
+    <p class="prompt">First move?</p>
+    <div class="choices">
+      <button class="choice" data-choice="A">A. She's fifteen. She can't refuse. Tell her she's coming.</button>
+      <button class="choice" data-choice="B">B. Assess capacity. In Ontario there's no age of consent. If she's capable, her refusal stands the same as an adult's.</button>
+      <button class="choice" data-choice="C">C. Engage police early under MHA s.17. Suicidal ideation is the parallel door, not the capacity door.</button>
+    </div>
+
+    <div class="outcome bad" data-outcome="A" hidden>
+      <div class="verdict">Wrong premise.</div>
+      <p>Ontario has no age-of-consent threshold in healthcare. Consent is capacity-based: a capable fifteen-year-old can consent or refuse, and an incapable forty-year-old cannot. "She's fifteen" is not by itself a reason to override her.</p>
+    </div>
+    <div class="outcome mixed" data-outcome="B" hidden>
+      <div class="verdict">Half right.</div>
+      <p>You do assess her capacity, and you respect it as far as the law allows. But, and this is the wrinkle, suicidal ideation isn't just a consent issue. It's also a mental-health risk issue. A patient may be capable for a treatment decision and still meet grounds for police apprehension if the MHA criteria are present. That's a parallel track, separate from the capacity question. You need to be thinking about both.</p>
+    </div>
+    <div class="outcome good" data-outcome="C" hidden>
+      <div class="verdict">Reasonable next move, given what you're walking into.</div>
+      <p>Get police on scene early, and give them an accurate picture: a goodbye note, a half-empty bottle, a minor refusing voluntary transport. <em>They</em> decide whether MHA s.17 criteria are met based on what they see and hear, not you. But with that history in the room, this is the kind of call where their assessment matters more than your conversation with her. Engaging police early isn't a threat to wave at her; it's the legal mechanism that allows her to be assessed if voluntary transport keeps failing. You can still treat her with respect, sit with her, ride with her.</p>
+    </div>
+  </div>
+
+  <div class="card" id="suKcWrap" hidden>
+    <h3>Knowledge check</h3>
+    <div class="decision" data-kc="su">
+      <p class="prompt">She now admits she did take roughly twenty acetaminophen tablets about ninety minutes ago. She's still saying no. What's the priority?</p>
+      <div class="kc-options">
+        <button class="kc-option" data-correct="false" data-key="A"><span class="marker">A.</span> Document her capable refusal and leave. She's fifteen but capable.</button>
+        <button class="kc-option" data-correct="false" data-key="B"><span class="marker">B.</span> She's now incapable because she's overdosing, so transport her under the emergency exception.</button>
+        <button class="kc-option" data-correct="true"  data-key="C"><span class="marker">C.</span> Engage police under MHA s.17; transport once apprehended.</button>
+        <button class="kc-option" data-correct="false" data-key="D"><span class="marker">D.</span> Wait for her parents to arrive and consent on her behalf.</button>
+      </div>
+      <div class="kc-rationale" hidden>
+        <div class="heading">Why C.</div>
+        <ul>
+          <li class="wrong"><strong>A.</strong> A capable refusal of a known-toxic acetaminophen overdose is the textbook "high-risk refusal," and in this case the MHA pathway applies in parallel. Walking off this call is not the answer.</li>
+          <li class="wrong"><strong>B.</strong> Acetaminophen at ninety minutes post-ingestion doesn't fog you. She may still be capable. HCCA s.25 is the right tool when a patient is incapable for a medical decision and waiting risks serious bodily harm (see the head-injury example below); it isn't the right tool here, where the issue is suicidal ideation in a patient who may still be capable. The mechanism for transport in the mental-health context is police apprehension under MHA s.17.</li>
+          <li class="right"><strong>C.</strong> Police may apprehend under MHA s.17 if they have reasonable cause to believe the four criteria are present. Once apprehended, transport is lawful per the BLS Mental Health Standard. On these facts, this is the mechanism you should be working toward. <em>Note on "disorderly":</em> the s.17 criterion of "acting in a disorderly manner" is interpreted by courts to capture the totality of the conduct, not just what the patient looks like at the door. A teen who has attempted an ingestion and is refusing assessment is acting in a statutorily disorderly manner even if she is quiet and articulate in the moment. Police apply this to everything they see and hear, which is why an accurate, complete handoff (the goodbye note, the bottle count, the ingestion timeline, the refusal) matters.</li>
+          <li class="wrong"><strong>D.</strong> Parents are not SDMs for a capable minor, and even if they were, this call cannot wait for them. The MHA pathway is faster and legally cleaner.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <details class="standard">
+    <summary>What the standard says</summary>
+    <div class="body">
+      <blockquote>In cases of patients with known or suspected suicide attempts or self-harm: assume that all attempts are of serious intent, and ask the patient directly whether they have ideation or intent of suicide or self-harm.</blockquote>
+      <div class="citation">BLS PCS v3.4, Mental Health Standard.</div>
+      <blockquote style="margin-top:10px;">A person taken into custody by a police officer under subsection 17 of the Mental Health Act may be transported without consent.</blockquote>
+      <div class="citation">BLS PCS v3.4, Mental Health Standard.</div>
+    </div>
+  </details>
+
+  <div class="nav-buttons">
+    <button class="btn secondary" onclick="prev()">← Back</button>
+    <div class="spacer"></div>
+    <button class="btn" onclick="next()">Next →</button>
+  </div>
+</section>
+
+<!-- ========== 9: SCENARIO: INTOXICATED HEAD INJURY ========== -->
+<section class="page" data-title="Scenario 4: Drunk, head injury, refusing">
+  <div class="section-tag">Scenario 4 · capacity impaired ≠ capacity absent</div>
+  <h2>"I'll sleep it off."</h2>
+
+  <div class="card">
+    <p>Forty-five-year-old male, witnessed fall down a flight of concrete steps at the shelter. Loss of consciousness for an estimated thirty seconds. Smells strongly of alcohol, slurring his words. Goose-egg over the right temple. No obvious other injury. GCS 14 (confused, obeys commands). He says: <em>"I'm fine. Leave me alone. I'll sleep it off."</em></p>
+  </div>
+
+  <div class="decision" data-scenario="hi">
+    <p class="prompt">Where do you start?</p>
+    <div class="choices">
+      <button class="choice" data-choice="A">A. He's drunk. He can't refuse. Load him.</button>
+      <button class="choice" data-choice="B">B. Run the capacity test. Intoxication impairs capacity but doesn't automatically remove it.</button>
+      <button class="choice" data-choice="C">C. Document the refusal and leave him with shelter staff to keep an eye on him.</button>
+    </div>
+
+    <div class="outcome bad" data-outcome="A" hidden>
+      <div class="verdict">Too blunt.</div>
+      <p>Being intoxicated is not the same as being incapable. Some intoxicated patients can still make this decision; some sober patients can't. You have to do the assessment and chart what made you land where you landed. "He was drunk" is not enough either way.</p>
+    </div>
+    <div class="outcome good" data-outcome="B" hidden>
+      <div class="verdict">Start here.</div>
+      <p>Run the two-part test on the actual decision in front of you: <em>refusing transport for a head injury with witnessed LOC</em>. "What do you think could happen if you sleep this off and there's bleeding inside your skull?" If he can articulate the risk and still chooses to stay, he may be capable (and you treat this as a capable high-risk refusal, with everything that means). If he says "nothing, I'm fine, I always sleep", that's failing appreciation. An incapable refusal is not a refusal. With no SDM present, you proceed under HCCA s.25 emergency treatment.</p>
+    </div>
+    <div class="outcome bad" data-outcome="C" hidden>
+      <div class="verdict">Too thin for this call.</div>
+      <p>Witnessed LOC plus intoxication plus a visible head injury is a high-risk refusal. "Shelter staff will keep an eye on him" might be useful context, but it is not a substitute for your capacity assessment. If the assessment supports incapacity, the emergency-treatment route may apply. If it supports capacity, the refusal needs a strong chart. Either way, you have more work to do before clearing.</p>
+    </div>
+  </div>
+
+  <div class="card" id="hiKcWrap" hidden>
+    <h3>Knowledge check</h3>
+    <div class="decision" data-kc="hi">
+      <p class="prompt">You run the test. He cannot articulate any consequence of a head injury and cannot describe any risk of refusing. No SDM is present on scene. What's the right action?</p>
+      <div class="kc-options">
+        <button class="kc-option" data-correct="false" data-key="A"><span class="marker">A.</span> He said no. Document and leave.</button>
+        <button class="kc-option" data-correct="true"  data-key="B"><span class="marker">B.</span> He lacks capacity for this decision. Transport under emergency treatment (HCCA s.25).</button>
+        <button class="kc-option" data-correct="false" data-key="C"><span class="marker">C.</span> Call police to force him into the truck under MHA s.17.</button>
+        <button class="kc-option" data-correct="false" data-key="D"><span class="marker">D.</span> Wait at scene until he sobers up enough to decide.</button>
+      </div>
+      <div class="kc-rationale" hidden>
+        <div class="heading">Why B.</div>
+        <ul>
+          <li class="wrong"><strong>A.</strong> A refusal from someone who lacks capacity is not a valid refusal. Documenting and leaving on an incapable refusal of a high-risk presentation is the textbook abandonment complaint.</li>
+          <li class="right"><strong>B.</strong> HCCA s.25 permits emergency treatment when you believe the patient is incapable with respect to this treatment, there's an emergency, and the delay required to obtain consent would prolong serious bodily harm. An intoxicated head-injury patient with witnessed LOC who cannot appreciate the risk of an intracranial bleed meets that test. With no SDM on scene, you proceed under the emergency exception and document the basis carefully.</li>
+          <li class="wrong"><strong>C.</strong> MHA s.17 is for risk to self/others <em>by reason of mental disorder</em>. "Won't accept treatment for a head injury" isn't a mental-health apprehension. Wrong tool.</li>
+          <li class="wrong"><strong>D.</strong> Waiting hours on scene for a possibly bleeding head injury to "sober up" is not a clinical plan. The HCCA s.25 emergency exception exists precisely because waiting is the harm.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <details class="standard">
+    <summary>What the standard says</summary>
+    <div class="body">
+      <blockquote>If a patient is incapable of consenting to the treatment plan being proposed by a paramedic, consent may be given or refused on his or her behalf by the patient's substitute decision-maker. Where consent cannot be obtained from a patient or SDM, and treatment is required to prevent serious bodily harm, emergency treatment may be provided.</blockquote>
+      <div class="citation">ALS PCS v5.4, Preamble, p.6, restating HCCA ss.20 &amp; 25.</div>
+    </div>
+  </details>
+
+  <div class="nav-buttons">
+    <button class="btn secondary" onclick="prev()">← Back</button>
+    <div class="spacer"></div>
+    <button class="btn" onclick="next()">Next →</button>
+  </div>
+</section>
+
+<!-- ========== 10: WHEN CAPACITY IS ABSENT ========== -->
+<section class="page" data-title="When capacity is absent">
+  <div class="section-tag">When capacity is absent</div>
+  <h2>When capacity is absent</h2>
+
+  <p class="lead">Most of this module has been about capable patients refusing. Here's the rest of the tree, what to do when capacity isn't there.</p>
+
+  <h3>Q1: Does the patient have capacity for <em>this</em> decision, right now?</h3>
+
+  <div class="card good">
+    <h4 style="margin-top:0;">Yes, capable</h4>
+    <p>Support the refusal. Run the five things from the standard:</p>
+    <ol>
+      <li>Tell them you think they should come.</li>
+      <li>Tell them what could happen specifically (not vaguely "something bad"). Say the actual thing.</li>
+      <li>Confirm capacity (understanding + appreciation).</li>
+      <li>Tell them to call back if anything changes.</li>
+      <li>Document.</li>
+    </ol>
+    <p>Then go write the chart while the call is still warm.</p>
+  </div>
+
+  <div class="card">
+    <h4 style="margin-top:0;">No, incapable for this decision</h4>
+    <p>Now the question is whether anyone else can decide for them.</p>
+  </div>
+
+  <h3>Q2: Is a Substitute Decision Maker reachable, on scene or by phone?</h3>
+
+  <div class="card">
+    <h4 style="margin-top:0;">Yes, SDM available</h4>
+    <p>Seek consent from the highest-ranked available SDM under HCCA s.20. On scene, that's almost always (in this order):</p>
+    <ol>
+      <li>POA-PC or court-appointed guardian (uncommon, but outrank everyone else)</li>
+      <li>Spouse or partner</li>
+      <li>Adult child, or parent with custody, or CAS for a kid in CAS care</li>
+      <li>Brother or sister</li>
+    </ol>
+    <p>The SDM must be capable, at least 16 (unless they're the patient's parent), reachable, willing, and not court-prohibited. They're required to follow the patient's prior known capable wishes; if those are unknown, they decide in the patient's best interests.</p>
+
+    <details class="standard" style="margin-top:14px;">
+      <summary>Full HCCA s.20 SDM hierarchy (all nine rungs)</summary>
+      <div class="body">
+        <ol>
+          <li>Court-appointed guardian of the person (with treatment authority)</li>
+          <li>Attorney for personal care under a Power of Attorney for Personal Care</li>
+          <li>Representative appointed by the Consent and Capacity Board</li>
+          <li>Spouse or partner</li>
+          <li>Child, parent (with custody), or Children's Aid Society / other entity lawfully entitled to consent in place of the parent</li>
+          <li>Parent with right of access only</li>
+          <li>Brother or sister</li>
+          <li>Any other relative</li>
+          <li>The Public Guardian and Trustee (statutory fallback; not a family rung)</li>
+        </ol>
+        <p><strong>For a pediatric patient in CAS care, CAS, not the biological parent, is the SDM at rung 5.</strong></p>
+      </div>
+    </details>
+  </div>
+
+  <div class="card warn">
+    <h4 style="margin-top:0;">SDM wrinkles that come up</h4>
+    <ul>
+      <li><strong>SDM refusal isn't unlimited.</strong> A SDM can refuse on the patient's behalf, but their authority is constrained by HCCA s.21: follow prior known capable wishes, or if none, decide in best interests (does the treatment improve the condition? does the condition worsen without it? does benefit outweigh harm?). An SDM refusing high-risk treatment against best interests doesn't trump the emergency framework. If the patient is incapable, an emergency exists, and delay risks serious bodily harm, you may proceed under HCCA s.25. Document the conflict and contact your supervisor for guidance before leaving scene.</li>
+      <li><strong>Same-rung disagreement.</strong> Two siblings disagreeing, two parents disagreeing. You can't pick the convenient one. Document the disagreement and contact your supervisor for direction. (Base hospital is the medical-acts line, not the family-conflict line, and "hospital arrival" doesn't apply if nobody's going.)</li>
+      <li><strong>Prior capable wishes.</strong> If the patient made a clear known wish about this kind of decision while capable (a DNR, a refusal of blood products), the SDM is supposed to follow it. If they're not, document the conflict and contact your supervisor.</li>
+      <li><strong>DNR plus a family demanding resuscitation.</strong> Specific case worth flagging: valid DNR Confirmation Form in hand, patient arrests, family on scene is screaming for you to resuscitate. The BLS DNR Standard allows you to initiate resuscitation despite a valid DNR if you have reasonable grounds to believe your personal safety is at risk by not initiating. If it gets there, run the code for scene-safety reasons, get your supervisor to scene, and call base hospital for direction (you're now in a medical act, which is base hospital's lane). Document the safety threat specifically.</li>
+      <li><strong>Best interests, not best convenience.</strong> When prior wishes aren't known, the SDM decides in the patient's best interests, not what's easiest for them. Document the SDM's stated reasoning.</li>
+    </ul>
+  </div>
+
+  <h3>Q3: Is this an emergency (would delay cause serious bodily harm)?</h3>
+
+  <div class="card good">
+    <h4 style="margin-top:0;">Yes, emergency</h4>
+    <p><strong>Emergency treatment under HCCA s.25.</strong> Two practical branches paramedics encounter:</p>
+    <ul>
+      <li><strong>Patient you believe is incapable with respect to this treatment, in an emergency.</strong> Treatment without consent may be provided when, in your judgement, there's an emergency (severe suffering or risk of serious bodily harm without prompt treatment) AND delay to get consent would prolong that suffering or risk. Classic field cases: the unconscious arrest, the hypoglycemic with altered mentation, the head-injured patient who can't engage with assessment.</li>
+      <li><strong>Patient already determined incapable, whose SDM can't be reached promptly.</strong> Emergency treatment may be provided pending the SDM's decision, under similar emergency conditions.</li>
+    </ul>
+    <p>A parallel branch under HCCA s.25(3) covers an emergency where an <em>apparently capable</em> patient cannot communicate (language barrier, disability, severe distress). Treatment may proceed only if you have taken reasonable steps to find a practical means of communication, none has been found, and delay would prolong suffering or risk serious bodily harm. Treatment under s.25(3) continues only as long as necessary to enable communication so the patient can give or refuse consent themselves. Document specifically: what the emergency was, what you did to try to communicate, who you tried to reach, why consent couldn't be obtained, and what was done. HCCA s.25 is not a general override. Each subsection has its own conditions.</p>
+  </div>
+
+  <div class="card warn">
+    <h4 style="margin-top:0;">No, not an emergency</h4>
+    <p>This is the rare quadrant: incapable patient, no SDM available, and no emergency justifying HCCA s.25. Think dementia patient with a benign complaint, or an intoxicated person with no urgent injury who refuses to engage. You can't proceed under s.25, and you have nobody to consent.</p>
+    <p>Practical options: keep working the phone for an SDM (family, friend with knowledge of the patient), wait if capacity is likely to return soon (intoxication wearing off, post-ictal clearing), and contact your supervisor for direction on the scene. Don't act outside the HCCA framework. Document why you couldn't proceed and what you did with the time.</p>
+  </div>
+
+  <h3>The parallel track: mental health</h3>
+  <div class="card warn">
+    <p>Capacity is the consent door. The Mental Health Act is a different door. It operates in parallel for patients at risk to themselves or others by reason of mental disorder.</p>
+    <ul>
+      <li><strong>MHA s.17, police apprehension.</strong> Police can apprehend a person who appears to have a mental disorder likely to cause serious bodily harm and who's acting disorderly with self-harm, violence, or inability to care for self, when waiting for a Form 2 would be dangerous. All four criteria must be present (full text in the dropdown). What this looks like on the call:
+        <ul>
+          <li><em>Self-harm</em>: post-attempt patient who admits to active intent, fresh self-inflicted injury, or patient saying they want to die from the ingestion that's already on board.</li>
+          <li><em>Violence</em>: patient who has assaulted a family member, threatened someone with a weapon, or is actively aggressive toward responders.</li>
+          <li><em>Inability to care for self</em>: psychotic patient wandering in winter weather with no shoes who doesn't recognize the cold; decompensated manic patient who hasn't slept or eaten in days and can't be redirected.</li>
+        </ul>
+      </li>
+      <li><strong>Form 1</strong>: application for psychiatric assessment signed by a physician (MHA s.15). Authorizes transport without consent.</li>
+      <li><strong>Form 2</strong>: order for examination signed by a Justice of the Peace (MHA s.16). Same effect.</li>
+    </ul>
+
+    <details class="standard" style="margin-top:10px;">
+      <summary>Full MHA s.17 four-element criteria (all four must be present)</summary>
+      <div class="body">
+        <p>A police officer may take a person into custody for examination by a physician when the officer has reasonable cause to believe:</p>
+        <ol>
+          <li>The person is acting (or has acted) in a disorderly manner; AND</li>
+          <li>The person has threatened or attempted to harm themselves, has been violent or caused another to fear bodily harm, OR has shown an inability to care for themselves; AND</li>
+          <li>The person is apparently suffering from a mental disorder of a nature or quality likely to result in serious bodily harm to self, serious bodily harm to another, or serious physical impairment of the person; AND</li>
+          <li>It would be dangerous to wait for a Justice of the Peace order (Form 2) under s.16.</li>
+        </ol>
+      </div>
+    </details>
+
+    <p style="margin-top:14px;">Paramedics don't sign Form 1s or Form 2s. But once police have apprehended under s.17, or once a Form 1 or 2 is in hand, the patient can be transported without their consent, regardless of whether they have capacity to refuse. The two tracks are independent: a person can be capable of refusing care <em>and</em> apprehendable under the MHA at the same time.</p>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn secondary" onclick="prev()">← Back</button>
+    <div class="spacer"></div>
+    <button class="btn" onclick="next()">Next →</button>
+  </div>
+</section>
+
+<!-- ========== 11: COMMUNICATION TOOLKIT ========== -->
+<section class="page" data-title="Communication toolkit">
+  <div class="section-tag">How to talk about it</div>
+  <h2>Communication that supports informed refusal</h2>
+
+  <div class="card accent">
+    <p>This is not "how to convince them to go." A capable patient has the right to refuse, and the job is to help them make that decision in a clear-eyed, informed way. The phrases below aren't manipulation. They're the same techniques used in motivational interviewing, because they take the patient seriously.</p>
+  </div>
+
+  <h3>Five phrases that work</h3>
+  <div class="card">
+    <p class="pullquote">"What's your concern about going?"</p>
+    <p class="mute"><strong>Curiosity, not pressure.</strong> You can't help solve an obstacle until you know what it is. People defend against pressure and open up to genuine questions.</p>
+
+    <p class="pullquote">"Sounds like you're worried about being stuck overnight and missing work."</p>
+    <p class="mute"><strong>Reflect what you hear.</strong> Trust is built by being heard, not told.</p>
+
+    <p class="pullquote">"If this is your heart, the treatments that limit the damage are time-sensitive. By morning, what's already happened is going to stay."</p>
+    <p class="mute"><strong>Name the consequence plainly.</strong> "It could be serious" means nothing. Everyone says that. Adults respond to specifics.</p>
+
+    <p class="pullquote">"Is there something I can help with that would make this easier, the dog, the kids, getting home after?"</p>
+    <p class="mute"><strong>Solve the actual problem.</strong> Most refusals aren't about medical care. They're about logistics. Five minutes here turns "no" into "okay if…"</p>
+
+    <p class="pullquote">"Before I go, call us back for worsening pain, SOB, dizziness. You can also see your GP, a walk-in, or telehealth in the morning."</p>
+    <p class="mute"><strong>Close the call.</strong> Return precautions in their words, alternative resources named, then go write the chart while it's still warm.</p>
+  </div>
+
+  <details class="standard">
+    <summary>Longer-form on each phrase</summary>
+    <div class="body">
+      <p><strong>Curiosity, not pressure.</strong> "Sir, you need to come to the hospital" lands as pressure and gets you a closed door. "What's your concern about going?" gets you the obstacle, and the obstacle is what you can actually work with.</p>
+      <p><strong>Reflection signals listening.</strong> "Sounds like you're worried about being stuck overnight" tells the patient you heard them, not just that you waited for your turn to talk. People refuse what they don't trust.</p>
+      <p><strong>Plain consequence, not "could be serious."</strong> Generalities are noise. Specifics give the patient something real to weigh: "treatments are time-sensitive, by morning what's already happened is going to stay."</p>
+      <p><strong>Most refusals are about logistics, not medical care.</strong> Childcare. The dog. The shift starting at 0600. The car parked illegally. Fear of a ten-hour hallway. Spend five minutes solving the logistics and a refusal often becomes a delay-then-go. Get the wife to feed the dog. Get the neighbour to pick up the daughter. Tell them what to expect from triage.</p>
+      <p><strong>Closing.</strong> Return precautions in their own words ("pain gets worse, SOB, dizziness, call back"). Alternative resources named (GP, walk-in, telehealth). Confirm they can reach 911. Then go write the chart.</p>
+    </div>
+  </details>
+
+  <div class="nav-buttons">
+    <button class="btn secondary" onclick="prev()">← Back</button>
+    <div class="spacer"></div>
+    <button class="btn" onclick="next()">Next →</button>
+  </div>
+</section>
+
+<!-- ========== 12: DOCUMENTATION SNIPPET ========== -->
+<section class="page" data-title="Documentation">
+  <div class="section-tag">The record that protects you</div>
+  <h2>Documentation</h2>
+
+  <p class="lead">The chart is what the next reader sees. Two habits to use every time, then four examples that hold up on review.</p>
+
+  <div class="card">
+    <h3>Two things worth doing every time</h3>
+    <ul>
+      <li><strong>Quote them.</strong> "Pt stated, 'I know I could die tonight, but I have to be at work in three hours.'" Direct quotation does work that paraphrasing can't.</li>
+      <li><strong>Note your reasoning, not just your conclusion.</strong> "Capable" by itself is a verdict. "Pt repeated back cardiac risk in own words, named consequence of refusing as 'I could die tonight,' weighed against work obligation, capable." is a finding.</li>
+    </ul>
+  </div>
+
+  <h3>What good refusal documentation looks like</h3>
+  <p>Four examples. Examples 1 and 2 are annotated fully and show the template. Example 3 adds only what's scenario-specific. Example 4 isn't a refusal note at all, it's documentation of an emergency transport after the patient was judged unable to make this decision, included to show how those calls are charted.</p>
+
+  <div class="card good">
+    <div class="label">Example 1. Chest pain refusal, capable patient</div>
+    <p>"Pt c/o substernal pressure x90 min, 4/10, radiating to L arm, no nausea/diaphoresis. ECG: nonspecific T-wave change lead III, no STEMI criteria; repeat ECG at 10 min unchanged. Pt offered ASA, declined, took own 81 mg this morning. Pt offered transport, declined. Pt able to verbalize in own words that the ECG does not rule out a heart attack and stated, 'I know this could be my heart and I could die before morning.' Pt's reason for refusal: 'I have a board meeting at 9 a.m. I'm not missing it.' Pt named return precautions in own words: worsening pain, SOB, jaw radiation, diaphoresis. Wife present, not pushing either way. Aid to Capacity Assessment performed, capable (understanding and appreciation prongs both met, supported by patient's quoted statements above). Advised re-call 911 for any return-precaution finding. Pt declined signature on refusal section; reason given: 'I just don't want to sign anything tonight.' Witness: Ptnr [name]. Cleared scene 0334."</p>
+
+    <h4 style="margin-top:14px;">What each part is doing</h4>
+    <ul>
+      <li><strong>Specific clinical picture</strong>: pain location, duration, intensity, radiation, associated symptoms. Tells a reviewer what you were actually looking at.</li>
+      <li><strong>ECG interpretation, both directions</strong>: names what it showed AND what it didn't ("no STEMI criteria"). Covers both ways the call could come back.</li>
+      <li><strong>Repeat ECG</strong>: shows you weren't done after the first one. Defensible.</li>
+      <li><strong>Offers made and refused</strong>: ASA and transport, each named, each refused. This is what "reasonable efforts" looks like in writing.</li>
+      <li><strong>Patient's exact words, quoted</strong>: "I know this could be my heart and I could die before morning." This is the appreciation prong made visible. Direct quotation does work paraphrasing can't.</li>
+      <li><strong>Reason for refusal</strong>: captures his actual rationale. A reviewer sees he was weighing something coherent, not refusing magically.</li>
+      <li><strong>Return precautions in his own words</strong>: proves he understood them, not just that you said them.</li>
+      <li><strong>Witness context</strong>: "wife present, not pushing either way", relevant because it documents absence of coercion in either direction.</li>
+      <li><strong>Capacity finding named</strong>: "Aid to Capacity Assessment performed" with both prongs explicit. Meets the standard.</li>
+      <li><strong>Re-call advice</strong>: the fourth bullet of the BLS refusal procedure, on the page.</li>
+      <li><strong>Signature handled</strong>: declined with stated reason. Closes the loop on the signature question.</li>
+      <li><strong>Time and witness</strong>: supports contemporaneity.</li>
+    </ul>
+  </div>
+
+  <div class="card good" style="margin-top:16px;">
+    <div class="label">Example 2. Post-naloxone walkaway, capacity assessment limited by patient cooperation</div>
+    <p>"Pt found by police supine on ground behind 7-Eleven (123 Main St) adjacent to dumpster, unresponsive, RR 4, pinpoint pupils, fentanyl pipe at side per police on scene. Police administered 4 mg naloxone IN (Narcan nasal spray) at 0408 prior to our arrival. On our arrival 0413, pt sat up unassisted, immediately stated 'no not you guys again, get the fuck away from me,' refused vitals, refused further assessment. Stood without assistance at 0414, no acute distress witnessed, ambulated NB down alley toward Main St, gait steady, no observed deterioration in the 30 seconds he remained visible. Offered transport, declined. Offered continued monitoring at scene, declined. Offered take-home naloxone, declined. Police advised of recurrent respiratory-depression risk and that pt was leaving before complete assessment; police observed departure, no apprehension made, police remained on scene briefly then cleared. Capacity not formally assessed, pt refused engagement in the time available. Concerns noted: pt was approximately 5 min post-respiratory-depression reversal at time of departure; behaviour consistent with precipitated withdrawal; insufficient time/cooperation for capacity assessment. No restraints applied. No further care provided. Cleared scene 0420."</p>
+
+    <h4 style="margin-top:14px;">What's scenario-specific here</h4>
+    <ul>
+      <li><strong>Honest capacity statement</strong>: does NOT claim "capable refusal." Documents what was observed and explicitly says why a capacity assessment wasn't completed. Claim only what the evidence supports.</li>
+      <li><strong>Observation of departure</strong>: "ambulated north on Main St, gait steady, no acute distress witnessed." If he deteriorates after leaving, the chart shows what you saw at the moment he left.</li>
+      <li><strong>Negative findings documented</strong>: "no restraints applied," "no further care provided." Closes those questions before anyone asks.</li>
+      <li><strong>Police context</strong>: who else was on scene, whether they observed the departure, whether they apprehended. Relevant in any call where police are present and a patient leaves.</li>
+    </ul>
+  </div>
+
+  <div class="card good" style="margin-top:16px;">
+    <div class="label">Example 3. Suicidal youth, MHA s.17 pathway</div>
+    <p>"15F. Sister called 911 after finding half-empty acetaminophen bottle and a goodbye note in pt's bedroom. On arrival pt was calm, alert, denied ingestion. Vitals normal. On direct questioning about suicidal ideation/intent, pt admitted ~20 acetaminophen tablets PO ~90 min prior. Pt refused voluntary transport: 'I changed my mind, I have school in the morning.' Police on scene throughout; advised of admitted ingestion, timeline, means, goodbye note, and pt's refusal of voluntary transport. Police apprehended under MHA s.17 at 0238. Pt transported with police escort to [hospital]; no restraints required for transport. Mother arrived during call and was advised of destination. Cleared scene 0245."</p>
+
+    <h4 style="margin-top:14px;">What's scenario-specific here</h4>
+    <ul>
+      <li><strong>How the picture changed</strong>: initial denial → admission on direct questioning. The BLS Mental Health Standard expects you to ask directly; document the question and the changed answer.</li>
+      <li><strong>What police were told</strong>: ingestion, timeline, means, refusal. Not just "police on scene." If police make an apprehension decision, the chart shows what facts they got.</li>
+      <li><strong>Police decision</strong>: apprehension under a specific MHA section, with time. Escort and restraint status follow.</li>
+    </ul>
+  </div>
+
+  <div class="card good" style="margin-top:16px;">
+    <div class="label">Example 4. Intoxicated head injury, judged incapable, emergency transport</div>
+    <p>"45M, witnessed fall down concrete steps at shelter, witnessed LOC ~30 sec per shelter staff. Strong odour of EtOH, slurred speech. Visible goose-egg over R temple, no other obvious injury. GCS 14 (E4 V4 M6: eyes open spontaneously, confused conversation, obeys commands). At 0145, risk of intracranial bleed explained in plain language. Pt unable to articulate any consequence of head injury or of refusing transport. Pt repeated 'I'm fine, leave me alone' x3 over 4 minutes. No family or known contacts reachable on scene; shelter staff present but no decision-making relationship to pt. Given mechanism, witnessed LOC, ongoing altered mentation, and pt's inability to appreciate the clinical risk, pt judged unable to make an informed decision regarding transport. Pt transported to [hospital] at 0152, no restraints required. Supervisor [name] advised by phone en route."</p>
+
+    <h4 style="margin-top:14px;">What's scenario-specific here</h4>
+    <ul>
+      <li><strong>GCS broken down by component</strong>: not just "A&amp;Ox3." Shows the actual neuro check.</li>
+      <li><strong>Capacity assessment with the patient's exact responses, over a defined time window</strong>: shows what running the test looked like, not just the conclusion.</li>
+      <li><strong>Absence of an SDM noted as a clinical observation, not a legal pronouncement</strong>: "no family or known contacts reachable; shelter staff present but no decision-making relationship to pt." That's the field statement. The statutory background (shelter staff are not statutory SDMs on the HCCA s.20 hierarchy) is interpretation a reviewer applies to those facts. You don't need to cite the statute in the chart for the finding to hold.</li>
+      <li><strong>Clinical reasoning that supports the emergency-consent framework</strong>: mechanism, witnessed LOC, ongoing altered mentation, and inability to appreciate the risk are all on the page. A reviewer reading this maps the facts onto HCCA s.25 (incapacity + emergency + harm-from-delay). The chart documents what you saw and decided; the legal authority is read off the documented facts, not asserted in the chart body.</li>
+      <li><strong>Supervisor notified</strong>: appropriate for any transport that proceeds without consent.</li>
+    </ul>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn secondary" onclick="prev()">← Back</button>
+    <div class="spacer"></div>
+    <button class="btn" onclick="next()">Next →</button>
+  </div>
+</section>
+
+<!-- ========== 13: FIELD PATTERNS ========== -->
+<section class="page" data-title="Other refusal patterns">
+  <div class="section-tag">Other patterns</div>
+  <h2>Other refusal patterns</h2>
+
+  <p class="lead">The four scenarios in this module teach the framework. Here are the patterns the framework gets applied to that aren't worked through above. Two-line guidance per pattern. The legal scaffolding is the same. These are the field shapes it takes.</p>
+
+  <div class="card">
+    <h3>Geriatric "I just slipped" post-fall refusal</h3>
+    <p>84F pressed her pendant after a bathroom fall. You lift her, she walks, no obvious injury, refuses transport. "I'm fine. I do this all the time."</p>
+    <p><strong>What's different:</strong> "She's A&amp;Ox3" is doing the work that a capacity assessment should be doing. Recurrent falls in someone living alone is a clinical picture, not a non-event: occult hip, occult head injury (especially on anticoagulant), UTI driving the fall, TIA. Capacity here is whether she can appreciate that <em>this</em> fall might be a different kind of fall.</p>
+    <p><strong>Chart focus:</strong> anticoagulant status, mechanism (witnessed? surface? head strike?), neuro check broken down by component (not "A&amp;Ox3"), specific return precautions in her words, falls-program referral if your service has one. If the chart could describe any 84-year-old who slipped, it isn't doing the work.</p>
+  </div>
+
+  <div class="card">
+    <h3>"I'll drive myself."</h3>
+    <p>The most common chest-pain refusal in walk-up clinics, gyms, and homes. Pt accepts assessment, declines your transport, says they'll drive or have someone drive them.</p>
+    <p><strong>What's different:</strong> this is refusal of <em>your</em> transport, not refusal of care. Capacity still applies to the consequence: "if this is your heart, driving means no defibrillator in the front seat, and arresting at the wheel is its own problem." Document the offer, the refusal, who's actually driving, the destination, and that the consequence was named and acknowledged. Don't claim more than that.</p>
+  </div>
+
+  <div class="card">
+    <h3>Hypoglycemic refusal post-oral-glucose</h3>
+    <p>BGL was 2.4. After oral glucose, BGL 5.8, pt fully oriented. "I'm fine, I'm not going."</p>
+    <p><strong>What's different:</strong> recurrence risk in the next few hours is the field issue, not current capacity. The <em>cause</em> question (missed meal, new dose, pump issue, infection) usually isn't answered on scene. Capacity is typically intact post-treatment, but the chart needs to show what triggered the low, what fix is in place to prevent the next one, and explicit return precautions ("if this happens again before your next meal, call us back"). A family member who can stay is part of the chart, not a substitute for it.</p>
+  </div>
+
+  <div class="card">
+    <h3>Partial refusals</h3>
+    <p>Pt accepts oxygen, refuses ASA. Pt accepts spinal motion restriction, refuses transport. Pt accepts the assessment, won't sign anything.</p>
+    <p><strong>What's different:</strong> each layer of consent is its own capacity question. The chart should name the <em>specific</em> decision refused. "Refused ASA citing prior GI bleed" is a different finding than "refused all treatment." Address the consequence of that specific refusal.</p>
+  </div>
+
+  <div class="card">
+    <h3>LTC / retirement-home dynamics</h3>
+    <p>You're called because staff say a resident "needs to go." The resident is fluent in their refusal: "I don't want to."</p>
+    <p><strong>What's different:</strong> staff are not SDMs. They give you collateral history and concerns; they don't consent or refuse on the resident's behalf. The resident is presumed capable until you have reason to think otherwise. If staff are pushing transport against the resident's wishes, the question is whether <em>you</em> think the resident is capable for this decision, same test as anywhere else. Check the chart at the desk for any documented SDM (POA-PC papers are usually there) and confirm them before relying on them.</p>
+  </div>
+
+  <div class="card">
+    <h3>Cancellation / patient gone on arrival / "I'm fine now" at the door</h3>
+    <p>Dispatch cancels en route. You arrive and the patient has left. Pt refuses contact at the door before any assessment.</p>
+    <p><strong>What's different:</strong> this isn't a refusal in the standard's sense, because there's no patient to assess. The chart documents what you arrived to (door answered? lights on? car in driveway?), any contact attempted, who you spoke with, and the disposition. Don't write "pt refused care" if you never had a patient. Write what you saw.</p>
+  </div>
+
+  <div class="card">
+    <h3>Parent refusing for a pediatric patient</h3>
+    <p>3-year-old with fever, parent declines transport. 9-year-old pedestrian struck at low speed with minor mechanism, parent declines transport.</p>
+    <p><strong>What's different:</strong> under HCCA, the parent is the SDM for an incapable minor, and an SDM must decide in the child's best interests, not their own convenience. Same five-step procedure as for an adult, but with consequences explained to the SDM. If the refusal raises a child-protection concern, CAS isn't a threat to wave at the parent. It's a parallel report you can make. Document the offer, the SDM's reasoning, and any CAS notification (or your reason for not notifying).</p>
+  </div>
+
+  <div class="card">
+    <h3>Fluctuating capacity</h3>
+    <p>The early-intoxication patient who keeps changing their mind. The post-ictal patient sundowning in their own kitchen. The post-delirium retirement-home resident who is "back" but slipping.</p>
+    <p><strong>What's different:</strong> capacity at minute 0 doesn't transfer to minute 30. If the picture is changing, the assessment has to be repeated, and the chart should show repeat assessments with time stamps, not a single "capable" finding applied to the whole call. The standard is per-decision-at-the-time, not per-call.</p>
+  </div>
+
+  <div class="card">
+    <h3>PHIPA in front of family</h3>
+    <p>Capable adult patient. Wife asks you in the kitchen: "What's wrong with him?" Patient hasn't given you permission to share anything.</p>
+    <p><strong>What's different:</strong> PHIPA governs disclosure of personal health information. Circle-of-care is presumed for clinicians; family aren't automatically inside that circle just because they're in the room. Answer <em>to</em> the patient in front of family rather than <em>about</em> the patient. That way the patient can correct or stop you. If the patient has explicitly said "don't tell my wife," don't. Chart what was said, by whom, and in whose presence, especially when family pressure might be shaping the refusal.</p>
+  </div>
+
+  <div class="card accent">
+    <p><strong>The shared move across all of these.</strong> Capacity isn't a one-time finding. It's a question about <em>this</em> decision, <em>this</em> patient, <em>right now</em>. The chart's job is to make that finding visible, with the observations that support it. Everything in this module collapses to that.</p>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn secondary" onclick="prev()">← Back</button>
+    <div class="spacer"></div>
+    <button class="btn" onclick="next()">Next →</button>
+  </div>
+</section>
+
+<!-- ========== 14: SUMMARY ========== -->
+<section class="page" data-title="Summary card">
+  <div class="section-tag">Summary</div>
+  <h2>Summary</h2>
+
+  <p class="lead">Practical version. What you're looking at on a refusal call, and what the chart needs to show.</p>
+
+  <div class="card good">
+    <h3>Green lights: capacity for refusal looks like</h3>
+    <p class="mute"><em>The framework behind Scenario 1 (Jim, chest pain).</em></p>
+    <ul>
+      <li>Pt can repeat back the clinical concern in their own words</li>
+      <li>Pt can name at least one specific consequence of refusing ("I could have a heart attack," "I could go back under," "my arm could be permanently weak")</li>
+      <li>There's a coherent reason for refusing: work, family, fear, distrust, prior bad experience</li>
+      <li>There's a plan B: GP in the morning, family staying with them, walk-in, telehealth, "I'll call back if it gets worse"</li>
+      <li>Behaviour matches the stated decision: oriented, walks purposefully, engages with the assessment</li>
+    </ul>
+  </div>
+
+  <div class="card warn">
+    <h3>Red flags: slow down before signing off</h3>
+    <p class="mute"><em>What pulled you off autopilot in Mrs. R (Slide 4), Scenario 3 (suicidal teen), and Scenario 4 (head injury).</em></p>
+    <ul>
+      <li>Intoxication, recent hypoxia, head injury with LOC, hypoglycemia, delirium, psychosis</li>
+      <li>Pt won't engage with the assessment ("I'm fine, leave me alone")</li>
+      <li>Pt can't name a consequence, or names the wrong one</li>
+      <li>Active suicidal ideation with plan or means</li>
+      <li>Family pressure the pt may be responding to (in either direction)</li>
+      <li>High-risk clinical picture (chest pain with ischemic ECG changes, focal stroke signs, witnessed LOC with head injury) with any of the above</li>
+    </ul>
+  </div>
+
+  <div class="card accent">
+    <h3>Calls you can sign off (when the assessment supports it)</h3>
+    <p class="mute"><em>The shape of Scenario 1 when the assessment supports the refusal.</em></p>
+    <ul>
+      <li>Low-risk presentations, capacity intact, plan B in place</li>
+      <li>Anxiety / panic that has resolved, return precautions named</li>
+      <li>Lift assists, falls without injury, clean assessment</li>
+      <li>Mild intoxication with minor mechanism, capacity passed</li>
+      <li>Chest pain assessed as lower-risk in the field, recommended transport, capacity confirmed, return precautions in their own words</li>
+    </ul>
+  </div>
+
+  <div class="card warn">
+    <h3>Walkaways and incomplete refusals: a category of their own</h3>
+    <p class="mute"><em>Scenario 2: post-naloxone walkaway.</em></p>
+    <ul>
+      <li>Post-naloxone patients who leave before a full assessment: these are not clean sign-offs. Document the observations, the offers made, the patient's exact words, the direction of departure, the capacity concerns as observations rather than as a conclusion.</li>
+      <li>Anyone who leaves before you can complete an assessment: the chart needs to show what was assessed, what wasn't, and why.</li>
+      <li>Don't claim "capable refusal" for a patient who never engaged with the capacity assessment. Document what you saw; let the chart support whatever finding the facts support.</li>
+    </ul>
+  </div>
+
+  <div class="card bad">
+    <h3>Calls where signing off is the wrong move (or where the chart has to do extra work)</h3>
+    <p class="mute"><em>Scenarios 3 (suicidal teen) and 4 (head injury).</em></p>
+    <ul>
+      <li>High-risk clinical picture (chest pain with ischemic ECG changes, focal stroke signs, witnessed LOC with head injury) with any capacity red flag</li>
+      <li>Suicidal patient at imminent risk: engage police early; the MHA pathway authorizes transport for examination when criteria or forms are in place, but consent for any specific treatment is still its own assessment</li>
+      <li>Patient who can't or won't engage with the assessment at all</li>
+      <li>Anyone where your gut says you're going to read about this person in the news</li>
+    </ul>
+  </div>
+
+  <div class="summary-card" style="margin-top:18px;">
+    <h3>The one-line rule</h3>
+    <p>Document what you saw, what you did, what was offered, what the patient said in their own words, and what you decided based on those. The chart's job is to let someone reading it later reconstruct the call from what you wrote.</p>
+  </div>
+
+  <div class="card" style="margin-top:24px;">
+    <h3>Sources &amp; further reading</h3>
+    <p>The standards and statutes this module is built on. Read the source when in doubt. These are the documents a reviewer will read against:</p>
+    <ul>
+      <li><a href="https://www.ontario.ca/document/patient-care-documents-reference/basic-life-support-patient-care-standards" target="_blank" rel="noopener">Ontario Basic Life Support Patient Care Standards v3.4</a>: Patient Refusal / Emergency Treatment Standard; Mental Health Standard; General Standard of Care.</li>
+      <li><a href="https://www.ontario.ca/document/patient-care-documents-reference/advanced-life-support-patient-care-standards" target="_blank" rel="noopener">Ontario Advanced Life Support Patient Care Standards v5.4</a>: Preamble (consent, capacity, refusal); Opioid Toxicity Medical Directive; ALS Companion Document.</li>
+      <li><a href="https://www.ontario.ca/laws/statute/96h02" target="_blank" rel="noopener">Health Care Consent Act, 1996</a> (S.O. 1996, c.2, Schedule A), ss.4 (capacity), 10–11 (consent), 20 (SDM hierarchy), 25 (emergency treatment).</li>
+      <li><a href="https://www.ontario.ca/laws/statute/90m07" target="_blank" rel="noopener">Mental Health Act</a> (R.S.O. 1990, c. M.7), s.15 (Form 1), s.16 (Form 2), s.17 (police apprehension), s.20 (involuntary admission, Forms 3 and 4).</li>
+      <li><a href="https://www.ontario.ca/document/patient-care-documents-reference/ontario-ambulance-documentation-standards" target="_blank" rel="noopener">Ontario Ambulance Documentation Standards</a>: ACR completion and refusal documentation.</li>
+      <li><a href="https://www.ontario.ca/laws/statute/04p03" target="_blank" rel="noopener">Personal Health Information Protection Act, 2004 (PHIPA)</a>, collection, use, disclosure, and security of personal health information.</li>
+      <li>Ambulance Call Report Completion Manual, referenced by the BLS PCS for the Aid to Capacity Assessment (obtain from your service / MOH).</li>
+    </ul>
+    <p class="mute" style="margin-top:10px;">This module is for self-study and new-hire orientation. It is not a substitute for the actual standards, your service's policies, your base hospital's direction, or legal counsel.</p>
+  </div>
+
+  <div class="footer-note">End of module.</div>
+
+  <div class="nav-buttons">
+    <button class="btn secondary" onclick="prev()">← Back</button>
+    <div class="spacer"></div>
+    <button class="btn ghost" onclick="goTo(0)">Back to start</button>
+  </div>
+</section>
+
+</div>
+
+<script>
+(function() {
+  const pages = Array.from(document.querySelectorAll('section.page'));
+  const jumpTo = document.getElementById('jumpTo');
+  const progressLabel = document.getElementById('progressLabel');
+  const progressFill = document.getElementById('progressFill');
+  const STORAGE_KEY = 'medLegal2026_currentPage';
+  let current = 0;
+
+  pages.forEach((p, i) => {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = `${i + 1}. ${p.dataset.title || 'Section ' + (i + 1)}`;
+    jumpTo.appendChild(opt);
+  });
+
+  function showPage(i) {
+    if (i < 0) i = 0;
+    if (i >= pages.length) i = pages.length - 1;
+    pages.forEach((p, idx) => p.classList.toggle('active', idx === i));
+    current = i;
+    jumpTo.value = i;
+    progressLabel.textContent = `${i + 1} / ${pages.length}`;
+    progressFill.style.width = `${((i + 1) / pages.length) * 100}%`;
+    if (location.hash !== '#s' + (i + 1)) {
+      history.replaceState(null, '', '#s' + (i + 1));
+    }
+    try { localStorage.setItem(STORAGE_KEY, String(i)); } catch (e) {}
+    window.scrollTo({ top: 0, behavior: 'instant' });
+
+    // Move focus to the new section's heading for accessibility
+    const heading = pages[i].querySelector('h1, h2, .title');
+    if (heading) {
+      if (!heading.hasAttribute('tabindex')) heading.setAttribute('tabindex', '-1');
+      setTimeout(() => heading.focus({ preventScroll: true }), 0);
+    }
+  }
+
+  window.next = () => showPage(current + 1);
+  window.prev = () => showPage(current - 1);
+  window.goTo = (i) => showPage(i);
+
+  jumpTo.addEventListener('change', (e) => showPage(parseInt(e.target.value, 10)));
+
+  // On load: prefer hash, then saved progress, then section 0
+  const hash = location.hash.match(/^#s(\d+)$/);
+  if (hash) {
+    showPage(Math.min(Math.max(parseInt(hash[1], 10) - 1, 0), pages.length - 1));
+  } else {
+    let saved = 0;
+    try {
+      const v = parseInt(localStorage.getItem(STORAGE_KEY), 10);
+      if (!isNaN(v) && v >= 0 && v < pages.length) saved = v;
+    } catch (e) {}
+    showPage(saved);
+  }
+
+  // Keyboard arrows for nav (skip if a form field is focused)
+  document.addEventListener('keydown', (e) => {
+    const tag = document.activeElement && document.activeElement.tagName;
+    if (tag === 'TEXTAREA' || tag === 'INPUT' || tag === 'SELECT') return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); window.next(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); window.prev(); }
+  });
+
+  // Insert a "compare others" reveal button if one isn't already there
+  function ensureCompareButton(decision, label, onReveal) {
+    if (decision.querySelector('.compare-btn')) return;
+    const btn = document.createElement('button');
+    btn.className = 'btn ghost small compare-btn';
+    btn.style.marginTop = '12px';
+    btn.textContent = label;
+    btn.type = 'button';
+    btn.addEventListener('click', () => {
+      onReveal();
+      btn.remove();
+    });
+    const outcomes = decision.querySelectorAll('.outcome');
+    if (outcomes.length) outcomes[outcomes.length - 1].after(btn);
+    else decision.appendChild(btn);
+  }
+
+  // Scenario / cold-open click logic
+  document.addEventListener('click', (e) => {
+    const choiceBtn = e.target.closest('.choice');
+    if (choiceBtn) {
+      const decision = choiceBtn.closest('.decision');
+      const scenario = decision.dataset.scenario;
+      const key = choiceBtn.dataset.choice;
+
+      // Re-selectable: only one choice marked chosen at a time
+      decision.querySelectorAll('.choice').forEach(b => b.classList.remove('chosen'));
+      choiceBtn.classList.add('chosen');
+
+      // Show only the chosen outcome unless "show all" has already been triggered
+      const allRevealed = decision.dataset.allRevealed === '1';
+      decision.querySelectorAll('.outcome').forEach(o => {
+        o.hidden = allRevealed ? false : (o.dataset.outcome !== key);
+      });
+
+      // Offer "show how the other options play out"
+      if (!allRevealed) {
+        ensureCompareButton(decision, 'Show how the other options play out', () => {
+          decision.dataset.allRevealed = '1';
+          decision.querySelectorAll('.outcome').forEach(o => o.hidden = false);
+        });
+      }
+
+      // Cold-open framing paragraph
+      if (scenario === 'cold') {
+        const reveal = document.getElementById('coldReveal');
+        if (reveal) reveal.hidden = false;
+      }
+
+      // Reveal the knowledge check tied to this scenario, if any
+      const kcWrapId = { cp: 'cpKcWrap', nx: 'nxKcWrap', su: 'suKcWrap', hi: 'hiKcWrap' }[scenario];
+      if (kcWrapId) {
+        const wrap = document.getElementById(kcWrapId);
+        if (wrap) wrap.hidden = false;
+      }
+      return;
+    }
+
+    const kcBtn = e.target.closest('.kc-option');
+    if (kcBtn) {
+      const decision = kcBtn.closest('.decision');
+      const key = kcBtn.dataset.key;
+      const isCorrect = kcBtn.dataset.correct === 'true';
+
+      // Clear previous marks; keep options re-selectable
+      decision.querySelectorAll('.kc-option').forEach(b => {
+        b.classList.remove('correct', 'incorrect');
+      });
+
+      if (isCorrect) {
+        kcBtn.classList.add('correct');
+      } else {
+        kcBtn.classList.add('incorrect');
+        const right = decision.querySelector('.kc-option[data-correct="true"]');
+        if (right) right.classList.add('correct');
+      }
+
+      // Reveal rationale, filtered to the selected option + the correct one
+      const rationale = decision.querySelector('.kc-rationale');
+      if (!rationale) return;
+      rationale.hidden = false;
+
+      const allRevealed = decision.dataset.kcRevealed === '1';
+      rationale.querySelectorAll('li').forEach(li => {
+        if (allRevealed) { li.style.display = ''; return; }
+        const strong = li.querySelector('strong');
+        const itemKey = strong ? strong.textContent.replace(/[^A-Z]/g, '') : '';
+        const isItemRight = li.classList.contains('right');
+        // Show what they chose, and also the correct one if they got it wrong
+        if (itemKey === key || (!isCorrect && isItemRight)) {
+          li.style.display = '';
+        } else {
+          li.style.display = 'none';
+        }
+      });
+
+      if (!allRevealed && !rationale.querySelector('.compare-kc-btn')) {
+        const btn = document.createElement('button');
+        btn.className = 'btn ghost small compare-kc-btn';
+        btn.type = 'button';
+        btn.style.marginTop = '10px';
+        btn.textContent = 'Compare all options';
+        btn.addEventListener('click', () => {
+          decision.dataset.kcRevealed = '1';
+          rationale.querySelectorAll('li').forEach(li => li.style.display = '');
+          btn.remove();
+        });
+        rationale.appendChild(btn);
+      }
+      return;
+    }
+  });
+
+  // Copy-to-clipboard for documentation snippet
+  const copyBtn = document.getElementById('copyBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const docTemplate = document.getElementById('docTemplate');
+  const copiedMsg = document.getElementById('copiedMsg');
+  const originalTemplate = docTemplate ? docTemplate.value : '';
+
+  if (copyBtn && docTemplate) {
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(docTemplate.value);
+        copiedMsg.classList.add('show');
+        setTimeout(() => copiedMsg.classList.remove('show'), 1800);
+      } catch (err) {
+        docTemplate.select();
+        document.execCommand && document.execCommand('copy');
+        copiedMsg.textContent = 'Selected, press ⌘C / Ctrl-C';
+        copiedMsg.classList.add('show');
+        setTimeout(() => {
+          copiedMsg.classList.remove('show');
+          copiedMsg.textContent = 'Copied ✓';
+        }, 2500);
+      }
+    });
+  }
+  if (resetBtn && docTemplate) {
+    resetBtn.addEventListener('click', () => {
+      docTemplate.value = originalTemplate;
+    });
+  }
+
+  // Print button
+  const printBtn = document.getElementById('printBtn');
+  if (printBtn) {
+    printBtn.addEventListener('click', () => window.print());
+  }
+})();
+</script>
+</body>
+</html>
